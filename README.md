@@ -1,6 +1,6 @@
 | | |
 | :---        |          ---: |
-| **DO NOT download this project via the ZIP file option on GitHub (i.e. largefiles are not included -- fbx, png -- and will be missing). Clone the project using git.** | ![DONT DOWNLOAD ZIP](../assets/dont-download-zip.png?raw=true) |
+| **DO NOT download this project via the ZIP file option on GitHub (i.e. largefiles are not included -- fbx, png, etc. files will be missing). Clone the project using git.** | ![DONT DOWNLOAD ZIP](../assets/dont-download-zip.png?raw=true) |
 
 # AI Planner: Samples
 Welcome to the samples repository for the [AI Planner](https://docs.unity3d.com/Packages/com.unity.ai.planner@latest/). The following samples are included in this repository:
