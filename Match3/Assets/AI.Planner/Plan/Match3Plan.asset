@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba34515fc82b64f37966f612cca1f4c9, type: 3}
+  m_Name: Match3Plan
+  m_EditorClassIdentifier: 
+  m_ActionDefinitions:
+  - {fileID: 11400000, guid: 0f60889f268144391835c34de8bc41de, type: 2}
+  - {fileID: 11400000, guid: ba19277f832d544a7ba606fc34c84ffc, type: 2}
+  m_StateTerminationDefinitions:
+  - {fileID: 11400000, guid: cc46ab33a753c4bf7a7e0942bccfa648, type: 2}
+  - {fileID: 11400000, guid: 69eef3493d9784697939906d4e2ec648, type: 2}
+  m_CustomHeuristic: 
+  m_DefaultHeuristicLower: -5
+  m_DefaultHeuristicAverage: 0
+  m_DefaultHeuristicUpper: 5

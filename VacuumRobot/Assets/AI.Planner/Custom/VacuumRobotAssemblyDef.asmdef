@@ -1,0 +1,20 @@
+{
+    "name": "VacuumRobotAssemblyDef",
+    "references": [
+        "Unity.AI.Planner.Custom",
+        "Unity.AI.Planner",
+        "Unity.Mathematics",
+        "Unity.Collections",
+        "Unity.Entities",
+        "AI.Planner.Domains"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

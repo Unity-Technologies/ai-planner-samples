@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00e16f0575d73480ebe7b76bb4ae3939, type: 3}
+  m_Name: PickupKey
+  m_EditorClassIdentifier: 
+  m_Parameters:
+  - m_Name: Character
+    m_RequiredTraits:
+    - {fileID: 11400000, guid: 891aa1f303be24bd9b2d2990867f57ef, type: 2}
+    - {fileID: 11400000, guid: 2acde6b1fa18c41e88367e3c31ce67b8, type: 2}
+    m_ProhibitedTraits: []
+  - m_Name: Item
+    m_RequiredTraits:
+    - {fileID: 11400000, guid: e9f2520952cec4b7d82b6575469aed4d, type: 2}
+    - {fileID: 11400000, guid: d9efbf4e9a1c6468b91a68edc69b16a9, type: 2}
+    - {fileID: 11400000, guid: 2974ee5f13afc48199f17227b507cc85, type: 2}
+    m_ProhibitedTraits: []
+  m_Preconditions:
+  - m_Operator: ==
+    m_OperandA:
+      m_Parameter: Character
+      m_Trait: {fileID: 11400000, guid: 2acde6b1fa18c41e88367e3c31ce67b8, type: 2}
+      m_TraitFieldId: 100
+      m_Enum: {fileID: 0}
+      m_Value: 
+    m_OperandB:
+      m_Parameter: Item
+      m_Trait: {fileID: 11400000, guid: d9efbf4e9a1c6468b91a68edc69b16a9, type: 2}
+      m_TraitFieldId: 100
+      m_Enum: {fileID: 0}
+      m_Value: 
+  - m_Operator: ==
+    m_OperandA:
+      m_Parameter: Item
+      m_Trait: {fileID: 11400000, guid: e9f2520952cec4b7d82b6575469aed4d, type: 2}
+      m_TraitFieldId: 100
+      m_Enum: {fileID: 0}
+      m_Value: 
+    m_OperandB:
+      m_Parameter: 
+      m_Trait: {fileID: 0}
+      m_TraitFieldId: 0
+      m_Enum: {fileID: 0}
+      m_Value: TraitBasedObjectId.None
+  - m_Operator: ==
+    m_OperandA:
+      m_Parameter: Character
+      m_Trait: {fileID: 11400000, guid: 891aa1f303be24bd9b2d2990867f57ef, type: 2}
+      m_TraitFieldId: 100
+      m_Enum: {fileID: 0}
+      m_Value: 
+    m_OperandB:
+      m_Parameter: 
+      m_Trait: {fileID: 0}
+      m_TraitFieldId: 0
+      m_Enum: {fileID: 0}
+      m_Value: TraitBasedObjectId.None
+  m_CreatedObjects: []
+  m_RemovedObjects: []
+  m_ObjectModifiers:
+  - m_Operator: =
+    m_OperandA:
+      m_Parameter: Item
+      m_Trait: {fileID: 11400000, guid: e9f2520952cec4b7d82b6575469aed4d, type: 2}
+      m_TraitFieldId: 100
+      m_Enum: {fileID: 0}
+      m_Value: 
+    m_OperandB:
+      m_Parameter: Character
+      m_Trait: {fileID: 0}
+      m_TraitFieldId: 0
+      m_Enum: {fileID: 0}
+      m_Value: 
+  - m_Operator: =
+    m_OperandA:
+      m_Parameter: Character
+      m_Trait: {fileID: 11400000, guid: 891aa1f303be24bd9b2d2990867f57ef, type: 2}
+      m_TraitFieldId: 100
+      m_Enum: {fileID: 0}
+      m_Value: 
+    m_OperandB:
+      m_Parameter: Item
+      m_Trait: {fileID: 0}
+      m_TraitFieldId: 0
+      m_Enum: {fileID: 0}
+      m_Value: 
+  m_Reward: 1
+  m_CustomRewards: []

@@ -1,0 +1,124 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 701c5d8bd1c704db8b5f6d23b982b4f4, type: 3}
+  m_Name: EscapeGoal
+  m_EditorClassIdentifier: 
+  m_Namespace: 
+  m_Parameters:
+  - m_Name: Character1
+    m_RequiredTraits:
+    - {fileID: 11400000, guid: 2acde6b1fa18c41e88367e3c31ce67b8, type: 2}
+    m_ProhibitedTraits: []
+  - m_Name: Character2
+    m_RequiredTraits:
+    - {fileID: 11400000, guid: 2acde6b1fa18c41e88367e3c31ce67b8, type: 2}
+    m_ProhibitedTraits: []
+  - m_Name: Character3
+    m_RequiredTraits:
+    - {fileID: 11400000, guid: 2acde6b1fa18c41e88367e3c31ce67b8, type: 2}
+    m_ProhibitedTraits: []
+  - m_Name: Waypoint1
+    m_RequiredTraits:
+    - {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
+    - {fileID: 11400000, guid: c8020f9c38860425b80c8b84a62f492e, type: 2}
+    m_ProhibitedTraits: []
+  - m_Name: Waypoint2
+    m_RequiredTraits:
+    - {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
+    - {fileID: 11400000, guid: c8020f9c38860425b80c8b84a62f492e, type: 2}
+    m_ProhibitedTraits: []
+  - m_Name: Waypoint3
+    m_RequiredTraits:
+    - {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
+    - {fileID: 11400000, guid: c8020f9c38860425b80c8b84a62f492e, type: 2}
+    m_ProhibitedTraits: []
+  m_Criteria:
+  - m_Operator: '!='
+    m_OperandA:
+      m_Parameter: Character1
+      m_Trait: {fileID: 0}
+      m_TraitFieldId: 0
+      m_Enum: {fileID: 0}
+      m_Value: 
+    m_OperandB:
+      m_Parameter: Character2
+      m_Trait: {fileID: 0}
+      m_TraitFieldId: 0
+      m_Enum: {fileID: 0}
+      m_Value: 
+  - m_Operator: '!='
+    m_OperandA:
+      m_Parameter: Character2
+      m_Trait: {fileID: 0}
+      m_TraitFieldId: 0
+      m_Enum: {fileID: 0}
+      m_Value: 
+    m_OperandB:
+      m_Parameter: Character3
+      m_Trait: {fileID: 0}
+      m_TraitFieldId: 0
+      m_Enum: {fileID: 0}
+      m_Value: 
+  - m_Operator: '!='
+    m_OperandA:
+      m_Parameter: Character1
+      m_Trait: {fileID: 0}
+      m_TraitFieldId: 0
+      m_Enum: {fileID: 0}
+      m_Value: 
+    m_OperandB:
+      m_Parameter: Character3
+      m_Trait: {fileID: 0}
+      m_TraitFieldId: 0
+      m_Enum: {fileID: 0}
+      m_Value: 
+  - m_Operator: ==
+    m_OperandA:
+      m_Parameter: Character1
+      m_Trait: {fileID: 11400000, guid: 2acde6b1fa18c41e88367e3c31ce67b8, type: 2}
+      m_TraitFieldId: 100
+      m_Enum: {fileID: 0}
+      m_Value: 
+    m_OperandB:
+      m_Parameter: Waypoint1
+      m_Trait: {fileID: 0}
+      m_TraitFieldId: 0
+      m_Enum: {fileID: 0}
+      m_Value: 
+  - m_Operator: ==
+    m_OperandA:
+      m_Parameter: Character2
+      m_Trait: {fileID: 11400000, guid: 2acde6b1fa18c41e88367e3c31ce67b8, type: 2}
+      m_TraitFieldId: 100
+      m_Enum: {fileID: 0}
+      m_Value: 
+    m_OperandB:
+      m_Parameter: Waypoint2
+      m_Trait: {fileID: 0}
+      m_TraitFieldId: 0
+      m_Enum: {fileID: 0}
+      m_Value: 
+  - m_Operator: ==
+    m_OperandA:
+      m_Parameter: Character3
+      m_Trait: {fileID: 11400000, guid: 2acde6b1fa18c41e88367e3c31ce67b8, type: 2}
+      m_TraitFieldId: 100
+      m_Enum: {fileID: 0}
+      m_Value: 
+    m_OperandB:
+      m_Parameter: Waypoint3
+      m_Trait: {fileID: 0}
+      m_TraitFieldId: 0
+      m_Enum: {fileID: 0}
+      m_Value: 
+  m_TerminalReward: 50
+  m_CustomTerminalRewards: []

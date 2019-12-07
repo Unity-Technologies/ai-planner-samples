@@ -1,0 +1,138 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8911585954784531722
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6147689073543749167}
+  - component: {fileID: 7139565120353775435}
+  m_Layer: 0
+  m_Name: CellObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6147689073543749167
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8911585954784531722}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7139565120353775435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8911585954784531722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ObjectData:
+    m_Name: GridCell
+    m_TraitData:
+    - m_TraitDefinition: {fileID: 11400000, guid: 19c88bf78931d4c20986199ecf2b9a27,
+        type: 2}
+      m_FieldValues:
+      - m_Name: Y
+        m_BoolValue: 0
+        m_FloatValue: 0
+        m_IntValue: 0
+        m_StringValue: 
+        m_ObjectValue: {fileID: 0}
+      - m_Name: X
+        m_BoolValue: 0
+        m_FloatValue: 0
+        m_IntValue: 0
+        m_StringValue: 
+        m_ObjectValue: {fileID: 0}
+      - m_Name: Bottom
+        m_BoolValue: 0
+        m_FloatValue: 0
+        m_IntValue: 0
+        m_StringValue: 
+        m_ObjectValue: {fileID: 0}
+      - m_Name: Top
+        m_BoolValue: 0
+        m_FloatValue: 0
+        m_IntValue: 0
+        m_StringValue: 
+        m_ObjectValue: {fileID: 0}
+      - m_Name: Right
+        m_BoolValue: 0
+        m_FloatValue: 0
+        m_IntValue: 0
+        m_StringValue: 
+        m_ObjectValue: {fileID: 0}
+      - m_Name: Left
+        m_BoolValue: 0
+        m_FloatValue: 0
+        m_IntValue: 0
+        m_StringValue: 
+        m_ObjectValue: {fileID: 0}
+      - m_Name: Type
+        m_BoolValue: 0
+        m_FloatValue: 0
+        m_IntValue: 0
+        m_StringValue: 
+        m_ObjectValue: {fileID: 0}
+    - m_TraitDefinition: {fileID: 11400000, guid: adfe9bd08fc85481299fc94e70faed69,
+        type: 2}
+      m_FieldValues:
+      - m_Name: Y
+        m_BoolValue: 0
+        m_FloatValue: 0
+        m_IntValue: 0
+        m_StringValue: 
+        m_ObjectValue: {fileID: 0}
+      - m_Name: X
+        m_BoolValue: 0
+        m_FloatValue: 0
+        m_IntValue: 0
+        m_StringValue: 
+        m_ObjectValue: {fileID: 0}
+      - m_Name: Bottom
+        m_BoolValue: 0
+        m_FloatValue: 0
+        m_IntValue: 0
+        m_StringValue: 
+        m_ObjectValue: {fileID: 0}
+      - m_Name: Top
+        m_BoolValue: 0
+        m_FloatValue: 0
+        m_IntValue: 0
+        m_StringValue: 
+        m_ObjectValue: {fileID: 0}
+      - m_Name: Right
+        m_BoolValue: 0
+        m_FloatValue: 0
+        m_IntValue: 0
+        m_StringValue: 
+        m_ObjectValue: {fileID: 0}
+      - m_Name: Left
+        m_BoolValue: 0
+        m_FloatValue: 0
+        m_IntValue: 0
+        m_StringValue: 
+        m_ObjectValue: {fileID: 0}
+      - m_Name: Type
+        m_BoolValue: 0
+        m_FloatValue: 0
+        m_IntValue: 0
+        m_StringValue: 
+        m_ObjectValue: {fileID: 0}
