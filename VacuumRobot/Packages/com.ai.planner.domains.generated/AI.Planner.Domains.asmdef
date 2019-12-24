@@ -1,0 +1,10 @@
+{
+    "name": "AI.Planner.Domains",
+    "references": [
+        "Unity.AI.Planner",
+        "Unity.Entities",
+        "Unity.Jobs",
+        "Unity.Collections",
+        "Unity.FullDotNet"
+    ]
+}

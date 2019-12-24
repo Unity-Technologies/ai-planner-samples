@@ -16,6 +16,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 15b31357b16eb431ab185e64731408de, type: 2}
   - {fileID: 11400000, guid: d6f17f5fbfa610c48a675f78ee316418, type: 2}
   m_StateTerminationDefinitions: []
-  m_minSearchIteration: 20
-  m_minSearchTime: 0
-  m_CustomHeuristic: CustomVacuumRobotHeuristic
+  m_CustomHeuristic: AI.Planner.Actions.Clean.CustomVacuumRobotHeuristic
+  m_DefaultHeuristicLower: -100
+  m_DefaultHeuristicAverage: 0
+  m_DefaultHeuristicUpper: 100
+  DiscountFactor: 0.95

@@ -1,0 +1,32 @@
+{
+    "name": "Match3",
+    "references": [
+        "Unity.AI.Planner",
+        "Unity.Entities",
+        "Unity.Collections",
+        "AI.Planner.Domains",
+        "Match3.Custom"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "PLANNER_DOMAINS_GENERATED"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.ai.planner.domains.generated",
+            "expression": "0.0",
+            "define": "PLANNER_DOMAINS_GENERATED"
+        },
+        {
+            "name": "com.unity.ai.planner.actions.generated",
+            "expression": "0.0",
+            "define": "PLANNER_ACTIONS_GENERATED"
+        }
+    ],
+    "noEngineReferences": false
+}

@@ -34,7 +34,7 @@ namespace VacuumGame
             if (Time.realtimeSinceStartup < m_LastSpawnTime + m_DirtSpawnFrequency)
                 return;
 
-            Instantiate(m_DirtPrefab, new Vector3(m_RangeX.Random, 0, m_RangeZ.Random), Quaternion.identity, transform);
+            Instantiate(m_DirtPrefab, transform.TransformPoint(new Vector3(m_RangeX.Random, 0, m_RangeZ.Random)), Quaternion.identity, transform);
             m_LastSpawnTime = Time.realtimeSinceStartup;
         }
     }

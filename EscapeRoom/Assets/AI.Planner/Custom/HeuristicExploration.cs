@@ -1,8 +1,9 @@
 ﻿using Unity.AI.Planner;
 using Unity.Collections;
+using Unity.Entities;
 using UnityEngine;
 
-#if PLANNER_DOMAIN_GENERATED
+#if PLANNER_DOMAINS_GENERATED
 using AI.Planner.Domains;
 
 namespace AI.Planner.Custom.Escape
@@ -14,7 +15,10 @@ namespace AI.Planner.Custom.Escape
             float estimatedValue = 0;
             
             var waypointIndices = new NativeList<int>(stateData.TraitBasedObjects.Length, Allocator.Temp);
-            stateData.GetTraitBasedObjectIndices(waypointIndices, typeof(Waypoint));
+            
+            var waypointFilter = new NativeArray<ComponentType>(1, Allocator.Temp){ [0] = ComponentType.ReadWrite<Waypoint>()};
+            stateData.GetTraitBasedObjectIndices(waypointIndices, waypointFilter);
+            waypointFilter.Dispose();
             
             for (int i = 0; i < waypointIndices.Length; i++)
             {

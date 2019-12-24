@@ -9,22 +9,24 @@ namespace Match3
         Player = 0,
         Planner
     }
-    
+
     [Serializable]
     public class Player : MonoBehaviour
     {
         [SerializeField]
         ControllerType m_controller = ControllerType.Player;
-        
+
         GemObject m_SelectedGem;
-        
+
         public Match3Grid Grid { get; set; }
-        
+
         protected void Update()
         {
+#if PLANNER_ACTIONS_GENERATED
             if ( Grid.Goals[0].GemCount <= 0)
                 return;
-            
+#endif
+
             if (m_controller == ControllerType.Player)
             {
                 if (m_SelectedGem != null)
@@ -42,11 +44,11 @@ namespace Match3
                         m_SelectedGem = null;
                     }
                 }
-		
+
                 Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
-                {	
+                {
                     var hitGameObject = hit.collider.gameObject;
                     GemObject gem = hitGameObject.GetComponent<GemObject>();
 
@@ -65,15 +67,15 @@ namespace Match3
                         {
                             Grid.ResetGemPosition(m_SelectedGem);
                         }
-				
+
                         m_SelectedGem = null;
                         gem.Highlight(true);
                     }
                 }
             }
         }
-        
-#if PLANNER_DOMAIN_GENERATED
+
+#if PLANNER_DOMAINS_GENERATED
         // Used implicitly via Decision Controller
         public IEnumerator SwapCells(AI.Planner.Domains.Coordinate cell1, AI.Planner.Domains.Coordinate cell2)
         {

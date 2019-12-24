@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections;
-#if PLANNER_DOMAIN_GENERATED
-using AI.Planner.Domains;
-#endif
-using Unity.AI.Planner;
+using System.Linq;
 using Unity.AI.Planner.Controller;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
-using Unity.Collections;
-using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.AI.Planner.DomainLanguage.TraitBased;
 
 namespace VacuumGame
 {
@@ -26,8 +21,9 @@ namespace VacuumGame
 #pragma warning restore 0649
 
         GameObject m_Target;
-        IDecisionController m_PlannerController;
+        IDecisionController m_Controller;
         Coroutine m_NavigateTo;
+        bool m_UpdateStateWithWorldQuery;
 
         public IEnumerator NavigateTo(GameObject target)
         {
@@ -39,7 +35,9 @@ namespace VacuumGame
                 transform.LookAt(m_Target.transform.position);
                 yield return null;
             }
-            transform.position = m_Target.transform.position;
+
+            if (m_Target != null)
+                transform.position = m_Target.transform.position;
 
             m_NavigateTo = null;
         }
@@ -53,7 +51,7 @@ namespace VacuumGame
 
         void Start()
         {
-            m_PlannerController = GetComponent<IDecisionController>();
+            m_Controller = GetComponent<IDecisionController>();
         }
 
         void Update()
@@ -91,8 +89,20 @@ namespace VacuumGame
             }
             else
             {
-                m_PlannerController.AutoUpdate = true;
+                m_Controller.AutoUpdate = true;
+                if (m_UpdateStateWithWorldQuery && m_Controller.IsIdle)
+                {
+                    m_Controller.UpdateStateWithWorldQuery();
+                    m_UpdateStateWithWorldQuery = false;
+                }
             }
+        }
+
+        void OnTriggerEnter(Collider other)
+        {
+            var traitComponent = other.gameObject.GetComponent<TraitComponent>();
+            if (traitComponent && traitComponent.TraitData.Any(td => td.TraitDefinitionName == "Dirt"))
+                m_UpdateStateWithWorldQuery = true;
         }
     }
 }

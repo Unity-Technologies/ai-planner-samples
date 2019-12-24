@@ -23,7 +23,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6ffd55e736f674dfbbf8a24cdb8aad37, type: 2}
   m_StateTerminationDefinitions:
   - {fileID: 11400000, guid: b16e00e08c51d4b49a1dc060cfbbfa11, type: 2}
-  m_CustomHeuristic: HeuristicExploration
+  m_CustomHeuristic: AI.Planner.Custom.Escape.HeuristicExploration
   m_DefaultHeuristicLower: -50
   m_DefaultHeuristicAverage: 0
   m_DefaultHeuristicUpper: 100

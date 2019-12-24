@@ -1,22 +1,27 @@
 {
     "name": "AI.Planner.Custom.Escape",
     "references": [
-        "GUID:df56457dd50432f4f8563fab188a1774",
-        "GUID:5d7abd49047cd6749bac9593cc354ad1",
-        "GUID:734d92eba21c94caba915361bd5ac177",
-        "GUID:e0cd26848372d4e5c891c569017e11f1",
-        "GUID:1ea5bf11b32ee4245b249fdfddaebaaf",
-        "GUID:709ad14d46d5da64e85df98a3dcd10b2"
+        "Unity.AI.Planner.Custom",
+        "Unity.AI.Planner",
+        "Unity.Entities",
+        "Unity.Collections",
+        "AI.Planner.Domains"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": true,
     "overrideReferences": true,
-    "precompiledReferences": [
-        "AI.Planner.Domains.dll"
-    ],
+    "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
+    "defineConstraints": [
+        "PLANNER_DOMAINS_GENERATED"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.ai.planner.domains.generated",
+            "expression": "0.0",
+            "define": "PLANNER_DOMAINS_GENERATED"
+        }
+    ],
     "noEngineReferences": false
 }

@@ -1,91 +1,89 @@
-﻿using System.Linq;
-using UnityEngine;
-using UnityEngine.AI.Planner.DomainLanguage.TraitBased;
-#if PLANNER_DOMAIN_GENERATED
+﻿#if PLANNER_DOMAINS_GENERATED
 using AI.Planner.Domains.Enums;
 #endif
+using UnityEngine;
 
 public class GemObject : MonoBehaviour
 {
 #pragma warning disable 0649
-#if PLANNER_DOMAIN_GENERATED
-	[SerializeField]
-	CellType m_Type;
+#if PLANNER_DOMAINS_GENERATED
+    [SerializeField]
+    CellType m_Type;
 #endif
 #pragma warning restore 0649
-	
-	MeshRenderer m_Renderer;
-	Color m_DefaulColor;
 
-	Vector3? m_Destination;
-	float m_Speed;
-	int m_X; 
-	int m_Y;
-	bool m_Destroyed;
+    MeshRenderer m_Renderer;
+    Color m_DefaulColor;
 
-	public int X => m_X;
-	public int Y => m_Y;
-	
-#if PLANNER_DOMAIN_GENERATED
-	public CellType Type => m_Type;
+    Vector3? m_Destination;
+    float m_Speed;
+    int m_X;
+    int m_Y;
+    bool m_Destroyed;
+
+    public int X => m_X;
+    public int Y => m_Y;
+
+#if PLANNER_DOMAINS_GENERATED
+    public CellType Type => m_Type;
 #endif
-	
-	public bool Destroyed => m_Destroyed;
 
-	public void Start()
-	{
-		m_Renderer = GetComponent<MeshRenderer>();
-		Color c = m_Renderer.material.color;
-		m_DefaulColor = c;
-	}
-	
-	public void Initialize(int x, int y)
-	{
-		m_X = x;
-		m_Y = y;
-	}
-	
+    public bool Destroyed => m_Destroyed;
+
+    public void Start()
+    {
+        m_Renderer = GetComponent<MeshRenderer>();
+        Color c = m_Renderer.material.color;
+        m_DefaulColor = c;
+    }
+
+    public void Initialize(int x, int y)
+    {
+        m_X = x;
+        m_Y = y;
+    }
+
     void Update()
     {
-	    m_Renderer.material.color = Color.Lerp(m_Renderer.material.color, m_DefaulColor, 0.2f);
+        m_Renderer.material.color = Color.Lerp(m_Renderer.material.color, m_DefaulColor, 0.2f);
 
-	    if (m_Destination.HasValue)
-	    {
-		    transform.position = Vector3.Lerp(transform.position, m_Destination.Value, m_Speed);
+        if (m_Destination.HasValue)
+        {
+            transform.position = Vector3.Lerp(transform.position, m_Destination.Value, m_Speed);
 
-		    if (Vector3.Distance(transform.position, m_Destination.Value) < 0.1f)
-		    {
-			    var groundDestination = m_Destination.Value;
-			    groundDestination.y = 0;
-			    
-			    transform.position = groundDestination;
-			    m_Destination = null;
-		    }
-	    }
-	    else if (Destroyed && m_DefaulColor.a != 0)
-	    {
-		    m_Renderer.material.color = m_DefaulColor * 3;
-		    m_DefaulColor = new Color(0,0,0,0);
-	    }
+            if (Vector3.Distance(transform.position, m_Destination.Value) < 0.1f)
+            {
+                var groundDestination = m_Destination.Value;
+                groundDestination.y = 0;
+
+                transform.position = groundDestination;
+                m_Destination = null;
+            }
+        }
+        else if (Destroyed && m_DefaulColor.a != 0)
+        {
+            m_Renderer.material.color = m_DefaulColor * 3;
+            m_DefaulColor = new Color(0, 0, 0, 0);
+        }
     }
 
     public void Highlight(bool selected)
     {
-	    m_Renderer.material.color = m_DefaulColor * 1.5f;
+        m_Renderer.material.color = m_DefaulColor * 1.5f;
     }
 
     public void SetDestination(int newX, int newY, Vector3 destination, float speed = 0.2f)
     {
-	    m_X = newX;
-	    m_Y = newY;
-	    
-	    m_Destination = destination;
-	    m_Speed = speed;
+        m_X = newX;
+        m_Y = newY;
+
+        m_Destination = destination;
+        m_Speed = speed;
     }
 
     public void Explode()
     {
-	    m_Destroyed = true;
-		Destroy(gameObject, 0.25f);
+        m_Destroyed = true;
+        Destroy(gameObject, 0.25f);
     }
 }

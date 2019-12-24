@@ -1,0 +1,23 @@
+{
+    "name": "AI.Planner.Actions",
+    "references": [
+        "Unity.AI.Planner",
+        "Unity.Entities",
+        "Unity.Jobs",
+        "Unity.Burst",
+        "Unity.Collections",
+        "Unity.FullDotNet",
+        "AI.Planner.Domains"
+        ,"VacuumRobotAssemblyDef"
+    ],
+    "defineConstraints": [
+        "PLANNER_DOMAINS_GENERATED"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.ai.planner.domains.generated",
+            "expression": "0.0",
+            "define": "PLANNER_DOMAINS_GENERATED"
+        }
+    ]
+}

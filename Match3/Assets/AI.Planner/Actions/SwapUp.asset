@@ -101,5 +101,5 @@ MonoBehaviour:
   m_Reward: 0
   m_CustomRewards:
   - m_Operator: +=
-    m_Typename: AI.Planner.Actions.Match3Plan.CustomSwapReward,Player.Custom
+    m_Typename: AI.Planner.Actions.Match3Plan.CustomSwapReward,Match3.Custom
     m_Parameters: []
