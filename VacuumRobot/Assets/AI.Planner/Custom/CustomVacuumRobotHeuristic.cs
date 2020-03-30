@@ -61,7 +61,7 @@ namespace AI.Planner.Actions.Clean
             
             dirtIndices.Dispose();
           
-            return new BoundedValue(collectAllReward - worstCaseDistances, collectAllReward - avgCaseDistances, collectAllReward + bestCaseDistances);
+            return new BoundedValue(collectAllReward - worstCaseDistances, collectAllReward - avgCaseDistances, collectAllReward - bestCaseDistances);
         }
     }
 #endif
