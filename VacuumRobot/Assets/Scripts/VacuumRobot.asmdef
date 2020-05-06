@@ -1,0 +1,23 @@
+{
+    "name": "VacuumRobot",
+    "references": [
+        "GUID:5d7abd49047cd6749bac9593cc354ad1",
+        "GUID:734d92eba21c94caba915361bd5ac177",
+        "GUID:bb2fc44994a144e598ea6d2eaa2918fd"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "generated.ai.planner.staterepresentation",
+            "expression": "0.0",
+            "define": "PLANNER_STATEREPRESENTATION_GENERATED"
+        }
+    ],
+    "noEngineReferences": false
+}

@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4733c0880a5a0ce4f94cc97cb9b0049b, type: 3}
   m_Name: Game
   m_EditorClassIdentifier: 
+  m_Namespace: 
   m_Fields:
-  - m_Name: MoveCount
+  - m_UniqueId: 100
+    m_Name: MoveCount
     m_Type: System.Int64
     m_DefaultValue:
       m_Name: 
@@ -22,8 +24,9 @@ MonoBehaviour:
       m_IntValue: 0
       m_StringValue: 
       m_ObjectValue: {fileID: 0}
-    m_restriction: 0
-  - m_Name: Score
+    m_Restriction: 0
+  - m_UniqueId: 101
+    m_Name: Score
     m_Type: System.Int64
     m_DefaultValue:
       m_Name: 
@@ -32,4 +35,27 @@ MonoBehaviour:
       m_IntValue: 0
       m_StringValue: 
       m_ObjectValue: {fileID: 0}
-    m_restriction: 0
+    m_Restriction: 0
+  - m_UniqueId: 102
+    m_Name: GoalType
+    m_Type: Generated.AI.Planner.StateRepresentation.Enums.CellType
+    m_DefaultValue:
+      m_Name: 
+      m_BoolValue: 0
+      m_FloatValue: 0
+      m_IntValue: 2
+      m_StringValue: 
+      m_ObjectValue: {fileID: 0}
+    m_Restriction: 0
+  - m_UniqueId: 103
+    m_Name: GoalCount
+    m_Type: System.Int32
+    m_DefaultValue:
+      m_Name: 
+      m_BoolValue: 0
+      m_FloatValue: 0
+      m_IntValue: 25
+      m_StringValue: 
+      m_ObjectValue: {fileID: 0}
+    m_Restriction: 0
+  m_NextFieldUniqueId: 104

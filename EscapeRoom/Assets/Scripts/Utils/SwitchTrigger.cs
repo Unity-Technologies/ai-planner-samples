@@ -1,24 +1,36 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public class SwitchTrigger : MonoBehaviour
 {
-	bool m_Activated;
+#pragma warning disable 0649
+    [SerializeField]
+    Transform m_SwitchVisual;
 
-	public bool Activated
-	{
-		get { return m_Activated; }
-		set { m_Activated = value; }
-	}
+    [SerializeField]
+    float m_ActivatedHeight;
+#pragma warning restore 0649
 
-	void OnTriggerEnter(Collider other)
+    float m_DefaultHeight;
+
+	public bool Activated { get; set; }
+
+    public void Start()
+    {
+        m_DefaultHeight = m_SwitchVisual.localPosition.y;
+    }
+
+    void OnTriggerEnter(Collider other)
 	{
-		m_Activated = true;
+		Activated = true;
+        
+        m_SwitchVisual.localPosition = new Vector3(m_SwitchVisual.localPosition.x, m_ActivatedHeight, m_SwitchVisual.localPosition.z);
 	}
     
 	void OnTriggerExit(Collider other)
 	{
-		m_Activated = false;
+		Activated = false;
+        
+        m_SwitchVisual.localPosition = new Vector3(m_SwitchVisual.localPosition.x, m_DefaultHeight, m_SwitchVisual.localPosition.z);
 	}
 }

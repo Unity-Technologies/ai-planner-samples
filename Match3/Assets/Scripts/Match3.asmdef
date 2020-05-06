@@ -4,8 +4,8 @@
         "Unity.AI.Planner",
         "Unity.Entities",
         "Unity.Collections",
-        "AI.Planner.Domains",
-        "Match3.Custom"
+        "AI.Planner.Custom",
+        "Generated.AI.Planner.StateRepresentation"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -13,19 +13,12 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [
-        "PLANNER_DOMAINS_GENERATED"
-    ],
+    "defineConstraints": [],
     "versionDefines": [
         {
-            "name": "com.unity.ai.planner.domains.generated",
+            "name": "generated.ai.planner.staterepresentation",
             "expression": "0.0",
-            "define": "PLANNER_DOMAINS_GENERATED"
-        },
-        {
-            "name": "com.unity.ai.planner.actions.generated",
-            "expression": "0.0",
-            "define": "PLANNER_ACTIONS_GENERATED"
+            "define": "PLANNER_STATEREPRESENTATION_GENERATED"
         }
     ],
     "noEngineReferences": false

@@ -12,18 +12,35 @@ public class Match3UI : MonoBehaviour
 
     [SerializeField]
     Match3Grid m_Grid;
+    
+    [SerializeField]
+    GameObject m_SuccessPanel;
 #pragma warning restore 0649
 
-    public void Start()
+    public void Awake()
     {
-        m_Grid.gameDataUpdated = UpdateUI;
+        m_SuccessPanel.SetActive(false);
+        
+        m_Grid.MoveCountChanged += UpdateMoveCount;
+        m_Grid.GoalCountChanged += UpdateGoal;
+    }
+    
+    public void OnDestroy()
+    {
+        m_Grid.MoveCountChanged -= UpdateMoveCount;
+        m_Grid.GoalCountChanged -= UpdateGoal;
     }
 
-    void UpdateUI()
+    void UpdateMoveCount(int moveCount)
     {
-        m_UIText.text = m_Grid.MoveCount.ToString();
-#if PLANNER_ACTIONS_GENERATED
-        m_UITextGoal.text = m_Grid.Goals[0].GemCount.ToString();
-#endif
+        m_UIText.text = moveCount.ToString();
+    }
+    
+    void UpdateGoal(int remainingGoal)
+    {
+        m_UITextGoal.text = remainingGoal.ToString();
+        
+        if (remainingGoal == 0)
+            m_SuccessPanel.SetActive(true);
     }
 }

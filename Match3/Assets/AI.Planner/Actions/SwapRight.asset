@@ -17,20 +17,30 @@ MonoBehaviour:
     m_RequiredTraits:
     - {fileID: 11400000, guid: f0443c10ffc6c43d58c33424c809f475, type: 2}
     m_ProhibitedTraits: []
+    m_LimitCount: 0
+    m_LimitComparerType: 
+    m_LimitComparerReference: 
   - m_Name: Source
     m_RequiredTraits:
     - {fileID: 11400000, guid: adfe9bd08fc85481299fc94e70faed69, type: 2}
     - {fileID: 11400000, guid: 19c88bf78931d4c20986199ecf2b9a27, type: 2}
     m_ProhibitedTraits:
     - {fileID: 11400000, guid: 21258737886f6450b9d0ff16f92e308b, type: 2}
+    m_LimitCount: 0
+    m_LimitComparerType: 
+    m_LimitComparerReference: 
   - m_Name: Target
     m_RequiredTraits:
     - {fileID: 11400000, guid: adfe9bd08fc85481299fc94e70faed69, type: 2}
     - {fileID: 11400000, guid: 19c88bf78931d4c20986199ecf2b9a27, type: 2}
     m_ProhibitedTraits:
     - {fileID: 11400000, guid: 21258737886f6450b9d0ff16f92e308b, type: 2}
+    m_LimitCount: 0
+    m_LimitComparerType: 
+    m_LimitComparerReference: 
   m_Preconditions:
   - m_Operator: ==
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: Source
       m_Trait: {fileID: 11400000, guid: 19c88bf78931d4c20986199ecf2b9a27, type: 2}
@@ -44,6 +54,7 @@ MonoBehaviour:
       m_Enum: {fileID: 0}
       m_Value: 
   - m_Operator: '!='
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: Source
       m_Trait: {fileID: 11400000, guid: 19c88bf78931d4c20986199ecf2b9a27, type: 2}
@@ -57,6 +68,7 @@ MonoBehaviour:
       m_Enum: {fileID: 11400000, guid: fc0b23ee093e5455caa36dac73e98e8c, type: 2}
       m_Value: None
   - m_Operator: '!='
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: Target
       m_Trait: {fileID: 11400000, guid: 19c88bf78931d4c20986199ecf2b9a27, type: 2}
@@ -73,6 +85,7 @@ MonoBehaviour:
   m_RemovedObjects: []
   m_ObjectModifiers:
   - m_Operator: +=
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: Game
       m_Trait: {fileID: 11400000, guid: f0443c10ffc6c43d58c33424c809f475, type: 2}
@@ -85,7 +98,8 @@ MonoBehaviour:
       m_TraitFieldId: 0
       m_Enum: {fileID: 0}
       m_Value: 1
-  - m_Operator: CUSTOM.CustomSwapEffect
+  - m_Operator: Custom
+    m_CustomOperatorType: AI.Planner.Custom.Match3Plan.CustomSwapEffect
     m_OperandA:
       m_Parameter: 
       m_Trait: {fileID: 0}
@@ -101,5 +115,5 @@ MonoBehaviour:
   m_Reward: 0
   m_CustomRewards:
   - m_Operator: +=
-    m_Typename: AI.Planner.Actions.Match3Plan.CustomSwapReward,Match3.Custom
+    m_Typename: AI.Planner.Custom.Match3Plan.CustomSwapReward
     m_Parameters: []

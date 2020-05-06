@@ -57,29 +57,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd8ac131c09d04008af565adfda708ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_LocalObjectData:
-  - m_Name: GameData
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: f0443c10ffc6c43d58c33424c809f475,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Score
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
   m_PlanDefinition: {fileID: 11400000, guid: b64da0180756b46eb8961d391e2b5d2e, type: 2}
   m_InitializeOnStart: 1
-  m_AutoUpdate: 1
   m_SearchSettings:
+    SearchIterationsPerUpdate: 1
     StateExpansionBudgetPerIteration: 1
     UseCustomSearchFrequency: 1
-    FramesPerSearchIteration: 0
+    MinFramesPerSearchUpdate: 0
     CapPlanSize: 0
     MaxStatesInPlan: 0
     StopPlanningWhenToleranceAchieved: 0
     RootPolicyValueTolerance: 0
+    CapPlanUpdates: 0
+    MaxUpdates: 2147483647
     GraphSelectionJobMode: 0
     GraphBackpropagationJobMode: 0
   m_ExecutionSettings:
@@ -91,7 +81,7 @@ MonoBehaviour:
     m_Filters: []
   m_ActionExecuteInfos:
   - m_ActionName: SwapRight
-    m_OnActionComplete: 1
+    m_PlanExecutorStateUpdateMode: 1
     m_Method: SwapCells
     m_SourceGameObject: {fileID: 3114786095242188510}
     m_Source: {fileID: 4186567151366303934}
@@ -107,7 +97,7 @@ MonoBehaviour:
       m_Enum: {fileID: 0}
       m_Value: 
   - m_ActionName: SwapUp
-    m_OnActionComplete: 1
+    m_PlanExecutorStateUpdateMode: 1
     m_Method: SwapCells
     m_SourceGameObject: {fileID: 3114786095242188510}
     m_Source: {fileID: 4186567151366303934}
@@ -122,3 +112,4 @@ MonoBehaviour:
       m_TraitFieldId: 0
       m_Enum: {fileID: 0}
       m_Value: 
+  m_AutoUpdate: 1

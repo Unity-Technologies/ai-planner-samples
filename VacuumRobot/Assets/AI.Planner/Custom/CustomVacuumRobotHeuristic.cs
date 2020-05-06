@@ -3,23 +3,21 @@ using Unity.AI.Planner.DomainLanguage.TraitBased;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
-#if PLANNER_DOMAINS_GENERATED
-using AI.Planner.Domains;
-#endif
+using Generated.AI.Planner.StateRepresentation;
+using Generated.AI.Planner.StateRepresentation.Clean;
 
 namespace AI.Planner.Actions.Clean
 {
-#if PLANNER_DOMAINS_GENERATED
     public struct CustomVacuumRobotHeuristic : ICustomHeuristic<StateData>
     {
         public BoundedValue Evaluate(StateData stateData)
         {
             var dirtIndices = new NativeList<int>(stateData.TraitBasedObjects.Length, Allocator.Temp);
-            
+
             var dirtFilter = new NativeArray<ComponentType>(2, Allocator.Temp){ [0] = ComponentType.ReadWrite<Dirt>(), [1] = ComponentType.ReadWrite<Location>()};
             stateData.GetTraitBasedObjectIndices(dirtIndices, dirtFilter);
             dirtFilter.Dispose();
-            
+
             if (dirtIndices.Length == 0) // no dirt remaining
                 return new BoundedValue(0,0,0);
 
@@ -58,11 +56,10 @@ namespace AI.Planner.Actions.Clean
             float bestCaseDistances = (numberOfDirtPiles - 1) * minDistance; // can also assume robot is already at a dirt pile
             float worstCaseDistances = numberOfDirtPiles * maxDistance;
             float avgCaseDistances = numberOfDirtPiles * (totalDistances / totalCount);
-            
+
             dirtIndices.Dispose();
-          
+
             return new BoundedValue(collectAllReward - worstCaseDistances, collectAllReward - avgCaseDistances, collectAllReward - bestCaseDistances);
         }
     }
-#endif
 }

@@ -1,15 +1,12 @@
-﻿#if PLANNER_DOMAINS_GENERATED
-using AI.Planner.Domains;
-using AI.Planner.Domains.Enums;
-#endif
+﻿#if PLANNER_STATEREPRESENTATION_GENERATED
 using System;
 using System.Linq;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
 using UnityEditor;
 using UnityEngine;
+using Generated.AI.Planner.StateRepresentation;
+using Generated.AI.Planner.StateRepresentation.Enums;
 using UnityEngine.AI.Planner.DomainLanguage.TraitBased;
 
-#if PLANNER_DOMAINS_GENERATED
 [CustomEditor(typeof(Match3Grid), true)]
 public class GridEditor : Editor
 {
@@ -46,10 +43,10 @@ public class GridEditor : Editor
             {
                 var cell = Instantiate(grid.CellPrefab, new Vector3(x, 0, y), Quaternion.identity, grid.transform);
                 cell.name = $"{x}_{y}";
-                var traitHolder = cell.GetComponent<ITraitBasedObjectData>();
+                var traitHolder = cell.GetComponent<TraitComponent>();
                 traitHolder.Name = $"Cell{x}_{y}";
 
-                var cellData = traitHolder.GetTraitData<AI.Planner.Domains.Cell>();
+                var cellData = traitHolder.GetTraitData<Cell>();
                 if (cellData != null)
                 {
                     cellData.InitializeFieldValues();

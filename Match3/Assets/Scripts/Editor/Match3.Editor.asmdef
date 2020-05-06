@@ -3,8 +3,8 @@
     "references": [
         "Unity.AI.Planner",
         "Match3",
-        "AI.Planner.Domains",
-        "Unity.Entities"
+        "Unity.Entities",
+        "Generated.AI.Planner.StateRepresentation"
     ],
     "includePlatforms": [
         "Editor"
@@ -15,13 +15,13 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [
-        "PLANNER_DOMAINS_GENERATED"
+        "PLANNER_STATEREPRESENTATION_GENERATED"
     ],
     "versionDefines": [
         {
-            "name": "com.unity.ai.planner.domains.generated",
+            "name": "generated.ai.planner.staterepresentation",
             "expression": "0.0",
-            "define": "PLANNER_DOMAINS_GENERATED"
+            "define": "PLANNER_STATEREPRESENTATION_GENERATED"
         }
     ],
     "noEngineReferences": false

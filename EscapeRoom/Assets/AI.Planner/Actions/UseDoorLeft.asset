@@ -18,15 +18,24 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 891aa1f303be24bd9b2d2990867f57ef, type: 2}
     - {fileID: 11400000, guid: 2acde6b1fa18c41e88367e3c31ce67b8, type: 2}
     m_ProhibitedTraits: []
+    m_LimitCount: 0
+    m_LimitComparerType: 
+    m_LimitComparerReference: 
   - m_Name: To
     m_RequiredTraits:
     - {fileID: 11400000, guid: 23b7cc4f4f3fc424b90dfa28a524fc9b, type: 2}
     - {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
     m_ProhibitedTraits: []
+    m_LimitCount: 0
+    m_LimitComparerType: 
+    m_LimitComparerReference: 
   - m_Name: From
     m_RequiredTraits:
     - {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
     m_ProhibitedTraits: []
+    m_LimitCount: 0
+    m_LimitComparerType: 
+    m_LimitComparerReference: 
   m_Preconditions:
   - m_Operator: ==
     m_OperandA:
@@ -138,6 +147,6 @@ MonoBehaviour:
   m_Reward: 0
   m_CustomRewards:
   - m_Operator: +=
-    m_Typename: AI.Planner.Custom.Escape.OneTimeModifier,AI.Planner.Custom.Escape
+    m_Typename: AI.Planner.Custom.Escape.OneTimeModifier
     m_Parameters:
     - To

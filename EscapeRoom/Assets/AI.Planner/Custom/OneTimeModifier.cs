@@ -1,8 +1,6 @@
-﻿using Unity.AI.Planner.DomainLanguage.TraitBased;
+﻿using Generated.AI.Planner.StateRepresentation;
+using Unity.AI.Planner.DomainLanguage.TraitBased;
 using UnityEngine;
-
-#if PLANNER_DOMAINS_GENERATED
-using AI.Planner.Domains;
 
 namespace AI.Planner.Custom.Escape
 {
@@ -14,4 +12,3 @@ namespace AI.Planner.Custom.Escape
 		}
 	}
 }
-#endif

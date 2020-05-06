@@ -61,51 +61,9 @@ MonoBehaviour:
         m_IntValue: 0
         m_StringValue: 
         m_ObjectValue: {fileID: 0}
-      - m_Name: Bottom
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Top
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Type
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
     - m_TraitDefinition: {fileID: 11400000, guid: adfe9bd08fc85481299fc94e70faed69,
         type: 2}
       m_FieldValues:
-      - m_Name: Y
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: X
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
       - m_Name: Bottom
         m_BoolValue: 0
         m_FloatValue: 0

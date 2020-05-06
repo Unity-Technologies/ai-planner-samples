@@ -1,50 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AI.Planner.Actions.Match3Plan;
-#if PLANNER_DOMAINS_GENERATED
-using AI.Planner.Domains;
-using AI.Planner.Domains.Enums;
-#endif
 using Match3;
-using Unity.AI.Planner.Controller;
 using Unity.AI.Planner.DomainLanguage.TraitBased;
 using Unity.Collections;
 using UnityEngine;
-
-[Serializable]
-public class Match3Goal
-#if PLANNER_ACTIONS_GENERATED
-        : IMatch3Goal
+using UnityEngine.AI.Planner.Controller;
+using UnityEngine.AI.Planner.DomainLanguage.TraitBased;
+#if PLANNER_STATEREPRESENTATION_GENERATED
+using Generated.AI.Planner.StateRepresentation;
+using Generated.AI.Planner.StateRepresentation.Enums;
+using Generated.AI.Planner.StateRepresentation.Match3Plan;
 #endif
-{
-#pragma warning disable 0649
-#if PLANNER_DOMAINS_GENERATED
-    [SerializeField]
-    CellType m_GemType;
-#endif
-    [SerializeField]
-    int m_GemCount;
-#pragma warning restore 0649
-
-    public int GemCount
-    {
-        get => m_GemCount;
-        set => m_GemCount = value;
-    }
-#if PLANNER_DOMAINS_GENERATED
-    public CellType GemType
-    {
-        get => m_GemType;
-        set => m_GemType = value;
-    }
-#endif
-}
 
 public class Match3Grid : MonoBehaviour
-#if PLANNER_ACTIONS_GENERATED
-    , IMatch3GoalProvider
-#endif
 {
     const float k_DelayFillNewCells = 0.5f;
     const float k_DelayCellsToCheck = 0.3f;
@@ -62,13 +31,10 @@ public class Match3Grid : MonoBehaviour
 
     [SerializeField]
     GemObject[] m_GemTypes;
-
-    [SerializeField]
-    Match3Goal[] m_Goals;
-
 #pragma warning restore 0649
 
-    public Action gameDataUpdated;
+    public Action<int> MoveCountChanged;
+    public Action<int> GoalCountChanged;
 
     GemObject[,] m_GemObjects;
     ITraitData[,] m_CellsData;
@@ -76,15 +42,12 @@ public class Match3Grid : MonoBehaviour
     float m_NextBoardUpdate;
     List<(int, int)> m_CellToCheckNextUpdate = new List<(int, int)>();
 
-    IDecisionController m_DecisionController;
-
-#if PLANNER_ACTIONS_GENERATED
-    public IMatch3Goal[] Goals => m_Goals;
-#endif
+    DecisionController m_DecisionController;
 
     public GameObject CellPrefab => m_CellPrefab;
-
-    public int MoveCount { get; set; }
+    
+    ITraitData m_GameTraitData;
+    int TotalMoveCount { get; set; }
 
     protected void Start()
     {
@@ -93,23 +56,24 @@ public class Match3Grid : MonoBehaviour
         InitializeWorldState();
         InitializeVisualGems();
 
-#if PLANNER_ACTIONS_GENERATED
-        Match3Utility.GoalProvider = this;
-#endif
-
         var player = Instantiate(m_PlayerPrefab);
         player.Grid = this;
-        m_DecisionController = player.GetComponent<IDecisionController>();
+        m_DecisionController = player.GetComponent<DecisionController>();
+        
+#if PLANNER_STATEREPRESENTATION_GENERATED
+        m_GameTraitData = GetComponent<TraitComponent>().GetTraitData<Game>();
+        GoalCountChanged?.Invoke((int)m_GameTraitData.GetValue(Game.FieldGoalCount));
+#endif
     }
 
-    public bool ReadyToAct()
+    public bool ReadyToPlay()
     {
         return Time.realtimeSinceStartup > m_NextBoardUpdate + k_DelayNextTurn;
     }
 
     void InitializeWorldState()
     {
-#if PLANNER_DOMAINS_GENERATED
+#if PLANNER_STATEREPRESENTATION_GENERATED
         m_CellsData = new ITraitData[m_GridSize, m_GridSize];
         for (int x = 0; x < m_GridSize; x++)
         {
@@ -124,7 +88,7 @@ public class Match3Grid : MonoBehaviour
 
     void InitializeVisualGems()
     {
-#if PLANNER_DOMAINS_GENERATED
+#if PLANNER_STATEREPRESENTATION_GENERATED
 
         m_GemObjects = new GemObject[m_GridSize, m_GridSize];
         for (int x = 0; x < m_GridSize; x++)
@@ -188,8 +152,8 @@ public class Match3Grid : MonoBehaviour
 
     void SwapGems(GemObject gem1, GemObject gem2)
     {
-        MoveCount++;
-        gameDataUpdated?.Invoke();
+        TotalMoveCount++;
+        MoveCountChanged?.Invoke(TotalMoveCount);
 
         int oldX = gem1.X;
         int oldY = gem1.Y;
@@ -199,7 +163,7 @@ public class Match3Grid : MonoBehaviour
         m_GemObjects[gem1.X, gem1.Y] = gem1;
         m_GemObjects[gem2.X, gem2.Y] = gem2;
 
-#if PLANNER_DOMAINS_GENERATED
+#if PLANNER_STATEREPRESENTATION_GENERATED
         m_CellsData[gem1.X, gem1.Y].SetValue(Cell.FieldType, gem1.Type);
         m_CellsData[gem2.X, gem2.Y].SetValue(Cell.FieldType, gem2.Type);
 #endif
@@ -210,7 +174,7 @@ public class Match3Grid : MonoBehaviour
         m_NextBoardUpdate = Time.realtimeSinceStartup + k_DelayCellsToCheck;
     }
 
-#if PLANNER_DOMAINS_GENERATED
+#if PLANNER_STATEREPRESENTATION_GENERATED
     protected void Update()
     {
         if (Time.realtimeSinceStartup > m_NextBoardUpdate)
@@ -322,15 +286,26 @@ public class Match3Grid : MonoBehaviour
 
     void DestroyGem(GemObject gemObject)
     {
-        var goal = m_Goals.FirstOrDefault(g => g.GemType == gemObject.Type);
-        if (goal != null)
+        var goalType = (CellType)(long)m_GameTraitData.GetValue(Game.FieldGoalType);
+        if (goalType == gemObject.Type)
         {
-            goal.GemCount = Math.Max(0, goal.GemCount - 1);
-            gameDataUpdated?.Invoke();
+            int currentGoal = (int)m_GameTraitData.GetValue(Game.FieldGoalCount);
+            currentGoal = Math.Max(0, currentGoal - 1);
+            
+            m_GameTraitData.SetValue(Game.FieldGoalCount, currentGoal);
+            GoalCountChanged?.Invoke(currentGoal);
+
+            if (currentGoal == 0)
+                FinishGame();
         }
 
         m_GemObjects[gemObject.X, gemObject.Y] = null;
         gemObject.Explode();
+    }
+
+    void FinishGame()
+    {
+        m_DecisionController.AutoUpdate = false;
     }
 
     List<GemObject> ConsecutiveGem(int x, int y, CellType sourceType, int offsetX, int offsetY)
@@ -351,11 +326,11 @@ public class Match3Grid : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        if (m_DecisionController?.GetPlannerState() == null)
+        if (m_DecisionController == null || m_DecisionController.CurrentStateData == default)
             return;
 
-        var stateData = (StateData)m_DecisionController.GetPlannerState();
-
+        var stateData = (StateData)m_DecisionController.CurrentStateData;
+        
         var cellObjects = new NativeList<int>(64, Allocator.Temp);
         foreach (var traitBasedObjectIndex in stateData.GetTraitBasedObjectIndices(cellObjects, typeof(Cell)))
         {

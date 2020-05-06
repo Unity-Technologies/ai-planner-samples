@@ -1,10 +1,9 @@
-﻿using Unity.AI.Planner;
+﻿using Generated.AI.Planner.StateRepresentation;
+using Generated.AI.Planner.StateRepresentation.Escape;
+using Unity.AI.Planner;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
-
-#if PLANNER_DOMAINS_GENERATED
-using AI.Planner.Domains;
 
 namespace AI.Planner.Custom.Escape
 {
@@ -33,4 +32,3 @@ namespace AI.Planner.Custom.Escape
         }
     }
 }
-#endif

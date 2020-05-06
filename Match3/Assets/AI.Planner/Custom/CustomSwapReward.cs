@@ -1,13 +1,11 @@
-#if PLANNER_DOMAINS_GENERATED
-using AI.Planner.Domains;
-#endif
 using System;
+using Generated.AI.Planner.StateRepresentation;
+using Generated.AI.Planner.StateRepresentation.Match3Plan;
 using Unity.AI.Planner.DomainLanguage.TraitBased;
 
-namespace AI.Planner.Actions.Match3Plan
+namespace AI.Planner.Custom.Match3Plan
 {
-#if PLANNER_DOMAINS_GENERATED
-    public struct CustomSwapReward : ICustomReward<StateData>
+    public struct CustomSwapReward : ICustomActionReward<StateData>
     {
         public const int GoalReward = 8;
         public const int BasicReward = 1;
@@ -24,5 +22,4 @@ namespace AI.Planner.Actions.Match3Plan
             return -1;
         }
     }
-#endif
 }

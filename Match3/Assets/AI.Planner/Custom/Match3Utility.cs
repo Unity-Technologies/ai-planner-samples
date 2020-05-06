@@ -1,39 +1,24 @@
-using System;
-using System.Linq;
-using UnityEngine;
-using Unity.Collections;
-#if PLANNER_DOMAINS_GENERATED
-using AI.Planner.Domains;
-using AI.Planner.Domains.Enums;
+using Generated.AI.Planner.StateRepresentation;
+using Generated.AI.Planner.StateRepresentation.Enums;
+using Generated.AI.Planner.StateRepresentation.Match3Plan;
 using Unity.AI.Planner.DomainLanguage.TraitBased;
-#endif
+using Unity.Collections;
 
-namespace AI.Planner.Actions.Match3Plan {
-
-	public interface IMatch3GoalProvider
-	{
-		IMatch3Goal[] Goals { get; }
-	}
-
-	public interface IMatch3Goal
-	{
-#if PLANNER_DOMAINS_GENERATED
-		CellType GemType { get; set; }
-#endif
-
-		int GemCount { get; set; }
-	}
-
+namespace AI.Planner.Custom.Match3Plan 
+{
 	public static class Match3Utility
 	{
-		public static IMatch3GoalProvider GoalProvider;
 		public const int GameIndex = 0;
 		public const int Cell1Index = 1;
 		public const int Cell2Index = 2;
-#if PLANNER_DOMAINS_GENERATED
 
 		public static void SwapCellAndUpdateBoard(ActionKey action, StateData state, Cell cell1, Cell cell2)
 		{
+            // Retrieve Game trait data
+            var gameId = state.GetTraitBasedObjectId(action[GameIndex]);
+            var game = state.GetTraitBasedObject(gameId);
+            var gameTrait = state.GetTraitOnObject<Game>(game);
+            
 			// Swap cell types
 			(cell1.Type, cell2.Type) = (cell2.Type, cell1.Type);
 
@@ -63,7 +48,11 @@ namespace AI.Planner.Actions.Match3Plan {
 							continue;
 
 						var cellTrait = state.GetTraitOnObjectAtIndex<Cell>(cellIndex);
-						newScore += GetScore(cellTrait.Type);
+                        
+                        if (cellTrait.Type == gameTrait.GoalType)
+						    newScore += CustomSwapReward.GoalReward;
+                        else
+                            newScore += CustomSwapReward.BasicReward;
 
 						cellTrait.Type = CellType.None;
 						state.SetTraitOnObjectAtIndex(cellTrait, cellIndex);
@@ -144,11 +133,6 @@ namespace AI.Planner.Actions.Match3Plan {
 				cellsQueued.Dispose();
 				cellChanged.Dispose();
 			}
-
-			// Store information in Game state
-			var gameId = state.GetTraitBasedObjectId(action[GameIndex]);
-			var game = state.GetTraitBasedObject(gameId);
-			var gameTrait = state.GetTraitOnObject<Game>(game);
 
 			// Score is stored in the Game Object and apply later in the reward function
 			gameTrait.Score = newScore;
@@ -290,16 +274,5 @@ namespace AI.Planner.Actions.Match3Plan {
 				cellsToDestroy.Add(state.GetTraitBasedObjectIndex(cell));
 			}
 		}
-
-		static int GetScore(CellType type)
-		{
-//			for (int i = 0; i < GoalProvider.Goals.Length; i++)
-//			{
-//				if (GoalProvider.Goals[i].GemType == type)
-//					return CustomSwapReward.GoalReward;
-//			}
-			return CustomSwapReward.BasicReward;
-		}
-#endif
 	}
 }

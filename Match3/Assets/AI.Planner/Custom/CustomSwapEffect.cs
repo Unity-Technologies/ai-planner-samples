@@ -1,13 +1,11 @@
-﻿#if PLANNER_DOMAINS_GENERATED
-using AI.Planner.Domains;
-#endif
-using System;
+﻿using System;
+using Generated.AI.Planner.StateRepresentation;
+using Generated.AI.Planner.StateRepresentation.Match3Plan;
 using UnityEngine;
 using Unity.AI.Planner.DomainLanguage.TraitBased;
 
-namespace AI.Planner.Actions.Match3Plan
+namespace AI.Planner.Custom.Match3Plan
 {
-#if PLANNER_DOMAINS_GENERATED
     public struct CustomSwapEffect : ICustomActionEffect<StateData>
     {
         public void ApplyCustomActionEffectsToState(StateData originalState, ActionKey action, StateData newState)
@@ -23,5 +21,4 @@ namespace AI.Planner.Actions.Match3Plan
             Match3Utility.SwapCellAndUpdateBoard(action, newState, cell1, cell2);
         }
     }
-#endif
 }

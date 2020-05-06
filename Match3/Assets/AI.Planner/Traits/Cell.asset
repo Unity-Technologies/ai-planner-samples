@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4733c0880a5a0ce4f94cc97cb9b0049b, type: 3}
   m_Name: Cell
   m_EditorClassIdentifier: 
+  m_Namespace: 
   m_Fields:
-  - m_Name: Type
-    m_Type: AI.Planner.Domains.Enums.CellType
+  - m_UniqueId: 100
+    m_Name: Type
+    m_Type: Generated.AI.Planner.StateRepresentation.Enums.CellType
     m_DefaultValue:
       m_Name: 
       m_BoolValue: 0
@@ -22,8 +24,9 @@ MonoBehaviour:
       m_IntValue: 0
       m_StringValue: 
       m_ObjectValue: {fileID: 0}
-    m_restriction: 0
-  - m_Name: Left
+    m_Restriction: 0
+  - m_UniqueId: 101
+    m_Name: Left
     m_Type: Unity.AI.Planner.DomainLanguage.TraitBased.TraitBasedObjectId
     m_DefaultValue:
       m_Name: 
@@ -32,8 +35,9 @@ MonoBehaviour:
       m_IntValue: 0
       m_StringValue: 
       m_ObjectValue: {fileID: 0}
-    m_restriction: 0
-  - m_Name: Right
+    m_Restriction: 0
+  - m_UniqueId: 102
+    m_Name: Right
     m_Type: Unity.AI.Planner.DomainLanguage.TraitBased.TraitBasedObjectId
     m_DefaultValue:
       m_Name: 
@@ -42,8 +46,9 @@ MonoBehaviour:
       m_IntValue: 0
       m_StringValue: 
       m_ObjectValue: {fileID: 0}
-    m_restriction: 0
-  - m_Name: Top
+    m_Restriction: 0
+  - m_UniqueId: 103
+    m_Name: Top
     m_Type: Unity.AI.Planner.DomainLanguage.TraitBased.TraitBasedObjectId
     m_DefaultValue:
       m_Name: 
@@ -52,8 +57,9 @@ MonoBehaviour:
       m_IntValue: 0
       m_StringValue: 
       m_ObjectValue: {fileID: 0}
-    m_restriction: 0
-  - m_Name: Bottom
+    m_Restriction: 0
+  - m_UniqueId: 104
+    m_Name: Bottom
     m_Type: Unity.AI.Planner.DomainLanguage.TraitBased.TraitBasedObjectId
     m_DefaultValue:
       m_Name: 
@@ -62,4 +68,5 @@ MonoBehaviour:
       m_IntValue: 0
       m_StringValue: 
       m_ObjectValue: {fileID: 0}
-    m_restriction: 0
+    m_Restriction: 0
+  m_NextFieldUniqueId: 105

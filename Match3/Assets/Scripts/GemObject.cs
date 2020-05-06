@@ -1,19 +1,22 @@
-﻿#if PLANNER_DOMAINS_GENERATED
-using AI.Planner.Domains.Enums;
+﻿using UnityEngine;
+#if PLANNER_STATEREPRESENTATION_GENERATED
+using Generated.AI.Planner.StateRepresentation.Enums;
 #endif
-using UnityEngine;
 
 public class GemObject : MonoBehaviour
 {
 #pragma warning disable 0649
-#if PLANNER_DOMAINS_GENERATED
+#if PLANNER_STATEREPRESENTATION_GENERATED
     [SerializeField]
     CellType m_Type;
+#else
+    [SerializeField]
+    int m_Type;
 #endif
 #pragma warning restore 0649
 
     MeshRenderer m_Renderer;
-    Color m_DefaulColor;
+    Color m_DefaultColor;
 
     Vector3? m_Destination;
     float m_Speed;
@@ -24,7 +27,7 @@ public class GemObject : MonoBehaviour
     public int X => m_X;
     public int Y => m_Y;
 
-#if PLANNER_DOMAINS_GENERATED
+#if PLANNER_STATEREPRESENTATION_GENERATED
     public CellType Type => m_Type;
 #endif
 
@@ -33,8 +36,7 @@ public class GemObject : MonoBehaviour
     public void Start()
     {
         m_Renderer = GetComponent<MeshRenderer>();
-        Color c = m_Renderer.material.color;
-        m_DefaulColor = c;
+        m_DefaultColor = m_Renderer.material.color;
     }
 
     public void Initialize(int x, int y)
@@ -45,7 +47,7 @@ public class GemObject : MonoBehaviour
 
     void Update()
     {
-        m_Renderer.material.color = Color.Lerp(m_Renderer.material.color, m_DefaulColor, 0.2f);
+        m_Renderer.material.color = Color.Lerp(m_Renderer.material.color, m_DefaultColor, 0.2f);
 
         if (m_Destination.HasValue)
         {
@@ -60,16 +62,11 @@ public class GemObject : MonoBehaviour
                 m_Destination = null;
             }
         }
-        else if (Destroyed && m_DefaulColor.a != 0)
+        else if (Destroyed && m_DefaultColor.a != 0)
         {
-            m_Renderer.material.color = m_DefaulColor * 3;
-            m_DefaulColor = new Color(0, 0, 0, 0);
+            m_Renderer.material.color = m_DefaultColor * 3;
+            m_DefaultColor = new Color(0, 0, 0, 0);
         }
-    }
-
-    public void Highlight(bool selected)
-    {
-        m_Renderer.material.color = m_DefaulColor * 1.5f;
     }
 
     public void SetDestination(int newX, int newY, Vector3 destination, float speed = 0.2f)

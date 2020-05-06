@@ -17,19 +17,29 @@ MonoBehaviour:
     m_RequiredTraits:
     - {fileID: 11400000, guid: 2acde6b1fa18c41e88367e3c31ce67b8, type: 2}
     m_ProhibitedTraits: []
+    m_LimitCount: 0
+    m_LimitComparerType: 
+    m_LimitComparerReference: 
   - m_Name: To
     m_RequiredTraits:
     - {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
     m_ProhibitedTraits:
     - {fileID: 11400000, guid: d5456278475a14ba497fda710c7b1497, type: 2}
     - {fileID: 11400000, guid: 23b7cc4f4f3fc424b90dfa28a524fc9b, type: 2}
+    m_LimitCount: 0
+    m_LimitComparerType: 
+    m_LimitComparerReference: 
   - m_Name: From
     m_RequiredTraits:
     - {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
     m_ProhibitedTraits:
     - {fileID: 11400000, guid: d5456278475a14ba497fda710c7b1497, type: 2}
+    m_LimitCount: 0
+    m_LimitComparerType: 
+    m_LimitComparerReference: 
   m_Preconditions:
   - m_Operator: ==
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: To
       m_Trait: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
@@ -43,6 +53,7 @@ MonoBehaviour:
       m_Enum: {fileID: 0}
       m_Value: false
   - m_Operator: ==
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: To
       m_Trait: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
@@ -56,6 +67,7 @@ MonoBehaviour:
       m_Enum: {fileID: 0}
       m_Value: 
   - m_Operator: ==
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: Character
       m_Trait: {fileID: 11400000, guid: 2acde6b1fa18c41e88367e3c31ce67b8, type: 2}
@@ -72,6 +84,7 @@ MonoBehaviour:
   m_RemovedObjects: []
   m_ObjectModifiers:
   - m_Operator: =
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: Character
       m_Trait: {fileID: 11400000, guid: 2acde6b1fa18c41e88367e3c31ce67b8, type: 2}
@@ -85,6 +98,7 @@ MonoBehaviour:
       m_Enum: {fileID: 0}
       m_Value: 
   - m_Operator: =
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: To
       m_Trait: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
@@ -98,6 +112,7 @@ MonoBehaviour:
       m_Enum: {fileID: 0}
       m_Value: true
   - m_Operator: =
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: From
       m_Trait: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
@@ -111,6 +126,7 @@ MonoBehaviour:
       m_Enum: {fileID: 0}
       m_Value: false
   - m_Operator: +=
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: To
       m_Trait: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}

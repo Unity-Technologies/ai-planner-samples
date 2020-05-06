@@ -4,23 +4,20 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    public IEnumerator MoveTo(ITraitBasedObjectData character, ITraitBasedObjectData target)
+    public IEnumerator MoveTo(GameObject character, GameObject destination)
     {
-	    var characterObject = (character.ParentObject as GameObject);
-	    var targetObject = (target.ParentObject as GameObject);
-	    
-	    characterObject.transform.LookAt(targetObject.transform);
+	    character.transform.LookAt(destination.transform);
 
-	    while (Vector3.Distance(characterObject.transform.position, targetObject.transform.position) > 0.1f)
+	    while (Vector3.Distance(character.transform.position, destination.transform.position) > 0.1f)
 	    {
-		    characterObject.transform.position = Vector3.Lerp(characterObject.transform.position, targetObject.transform.position, 12 * Time.deltaTime);
+		    character.transform.position = Vector3.Lerp(character.transform.position, destination.transform.position, 12 * Time.deltaTime);
 		    yield return null;
 	    }
     }
-    
-    public void PickItem(ITraitBasedObjectData character, ITraitBasedObjectData item)
+
+    public void PickItem(GameObject character, GameObject item)
     {
-	    (item.ParentObject as GameObject)?.SetActive(false);
-	    (character.ParentObject as GameObject)?.transform.Find("Key").gameObject.SetActive(true);
+	    item.SetActive(false);
+	    character.transform.Find("Key").gameObject.SetActive(true);
     }
 }
