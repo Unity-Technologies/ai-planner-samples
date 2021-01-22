@@ -1,7 +1,7 @@
 using System;
 using Generated.AI.Planner.StateRepresentation;
 using Generated.AI.Planner.StateRepresentation.Match3Plan;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
+using Unity.AI.Planner.Traits;
 
 namespace AI.Planner.Custom.Match3Plan
 {
@@ -12,14 +12,11 @@ namespace AI.Planner.Custom.Match3Plan
 
         public float RewardModifier(StateData originalState, ActionKey action, StateData newState)
         {
-            var gameId = newState.GetTraitBasedObjectId(action[Match3Utility.GameIndex]);
-            var game = newState.GetTraitBasedObject(gameId);
-            var gameTrait = newState.GetTraitOnObject<Game>(game);
+            var oldScore = originalState.GetTraitOnObjectAtIndex<Game>(action[Match3Utility.GameIndex]).Score;
+            var newScore = newState.GetTraitOnObjectAtIndex<Game>(action[Match3Utility.GameIndex]).Score;
+            var gain = newScore - oldScore;
 
-            if (gameTrait.Score > 0)
-                return gameTrait.Score;
-
-            return -1;
+            return gain > 0 ? gain : -1;
         }
     }
 }

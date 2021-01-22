@@ -3,10 +3,12 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.AI.Planner;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
+using Unity.AI.Planner.Traits;
 using Unity.Burst;
 using Generated.AI.Planner.StateRepresentation;
 using Generated.AI.Planner.StateRepresentation.Clean;
+using Unity.Collections.LowLevel.Unsafe;
+using Unity.Mathematics;
 
 namespace Generated.AI.Planner.Plans.Clean
 {
@@ -27,11 +29,39 @@ namespace Generated.AI.Planner.Plans.Clean
         [ReadOnly] NativeArray<StateEntityKey> m_StatesToExpand;
         StateDataContext m_StateDataContext;
 
+        // local allocations
+        [NativeDisableContainerSafetyRestriction] NativeArray<ComponentType> MoverFilter;
+        [NativeDisableContainerSafetyRestriction] NativeList<int> MoverObjectIndices;
+        [NativeDisableContainerSafetyRestriction] NativeArray<ComponentType> DestinationFilter;
+        [NativeDisableContainerSafetyRestriction] NativeList<int> DestinationObjectIndices;
+
+        [NativeDisableContainerSafetyRestriction] NativeList<ActionKey> ArgumentPermutations;
+        [NativeDisableContainerSafetyRestriction] NativeList<NavigateFixupReference> TransitionInfo;
+
+        bool LocalContainersInitialized => ArgumentPermutations.IsCreated;
+
         internal Navigate(Guid guid, NativeList<StateEntityKey> statesToExpand, StateDataContext stateDataContext)
         {
             ActionGuid = guid;
             m_StatesToExpand = statesToExpand.AsDeferredJobArray();
             m_StateDataContext = stateDataContext;
+            MoverFilter = default;
+            MoverObjectIndices = default;
+            DestinationFilter = default;
+            DestinationObjectIndices = default;
+            ArgumentPermutations = default;
+            TransitionInfo = default;
+        }
+
+        void InitializeLocalContainers()
+        {
+            MoverFilter = new NativeArray<ComponentType>(2, Allocator.Temp){[0] = ComponentType.ReadWrite<Moveable>(),[1] = ComponentType.ReadWrite<Location>(),  };
+            MoverObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            DestinationFilter = new NativeArray<ComponentType>(1, Allocator.Temp){[0] = ComponentType.ReadWrite<Location>(),  };
+            DestinationObjectIndices = new NativeList<int>(2, Allocator.Temp);
+
+            ArgumentPermutations = new NativeList<ActionKey>(4, Allocator.Temp);
+            TransitionInfo = new NativeList<NavigateFixupReference>(ArgumentPermutations.Length, Allocator.Temp);
         }
 
         public static int GetIndexForParameterName(string parameterName)
@@ -47,12 +77,10 @@ namespace Generated.AI.Planner.Plans.Clean
 
         void GenerateArgumentPermutations(StateData stateData, NativeList<ActionKey> argumentPermutations)
         {
-            var MoverFilter = new NativeArray<ComponentType>(2, Allocator.Temp){[0] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.Moveable>(),[1] = ComponentType.ReadWrite<Unity.AI.Planner.DomainLanguage.TraitBased.Location>(),  };
-            var DestinationFilter = new NativeArray<ComponentType>(2, Allocator.Temp){[0] = ComponentType.ReadWrite<Unity.AI.Planner.DomainLanguage.TraitBased.Location>(), [1] = ComponentType.Exclude<Generated.AI.Planner.StateRepresentation.Moveable>(),  };
-            var MoverObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            MoverObjectIndices.Clear();
             stateData.GetTraitBasedObjectIndices(MoverObjectIndices, MoverFilter);
             
-            var DestinationObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            DestinationObjectIndices.Clear();
             stateData.GetTraitBasedObjectIndices(DestinationObjectIndices, DestinationFilter);
             
             var LocationBuffer = stateData.LocationBuffer;
@@ -89,10 +117,6 @@ namespace Generated.AI.Planner.Plans.Clean
             }
             
             }
-            MoverObjectIndices.Dispose();
-            DestinationObjectIndices.Dispose();
-            MoverFilter.Dispose();
-            DestinationFilter.Dispose();
         }
 
         StateTransitionInfoPair<StateEntityKey, ActionKey, StateTransitionInfo> ApplyEffects(ActionKey action, StateEntityKey originalStateEntityKey)
@@ -123,8 +147,8 @@ namespace Generated.AI.Planner.Plans.Clean
         {
             var reward = 0f;
             {
-                var param0 = originalState.GetTraitOnObjectAtIndex<Unity.AI.Planner.DomainLanguage.TraitBased.Location>(action[0]);
-                var param1 = originalState.GetTraitOnObjectAtIndex<Unity.AI.Planner.DomainLanguage.TraitBased.Location>(action[1]);
+                var param0 = originalState.GetTraitOnObjectAtIndex<Unity.AI.Planner.Traits.Location>(action[0]);
+                var param1 = originalState.GetTraitOnObjectAtIndex<Unity.AI.Planner.Traits.Location>(action[1]);
                 reward -= new global::Unity.AI.Planner.Navigation.LocationDistance().RewardModifier( param0, param1);
             }
 
@@ -133,27 +157,28 @@ namespace Generated.AI.Planner.Plans.Clean
 
         public void Execute(int jobIndex)
         {
+            if (!LocalContainersInitialized)
+                InitializeLocalContainers();
+
             m_StateDataContext.JobIndex = jobIndex;
 
             var stateEntityKey = m_StatesToExpand[jobIndex];
             var stateData = m_StateDataContext.GetStateData(stateEntityKey);
 
-            var argumentPermutations = new NativeList<ActionKey>(4, Allocator.Temp);
-            GenerateArgumentPermutations(stateData, argumentPermutations);
+            ArgumentPermutations.Clear();
+            GenerateArgumentPermutations(stateData, ArgumentPermutations);
 
-            var transitionInfo = new NativeArray<NavigateFixupReference>(argumentPermutations.Length, Allocator.Temp);
-            for (var i = 0; i < argumentPermutations.Length; i++)
+            TransitionInfo.Clear();
+            TransitionInfo.Capacity = math.max(TransitionInfo.Capacity, ArgumentPermutations.Length);
+            for (var i = 0; i < ArgumentPermutations.Length; i++)
             {
-                transitionInfo[i] = new NavigateFixupReference { TransitionInfo = ApplyEffects(argumentPermutations[i], stateEntityKey) };
+                TransitionInfo.Add(new NavigateFixupReference { TransitionInfo = ApplyEffects(ArgumentPermutations[i], stateEntityKey) });
             }
 
             // fixups
             var stateEntity = stateEntityKey.Entity;
             var fixupBuffer = m_StateDataContext.EntityCommandBuffer.AddBuffer<NavigateFixupReference>(jobIndex, stateEntity);
-            fixupBuffer.CopyFrom(transitionInfo);
-
-            transitionInfo.Dispose();
-            argumentPermutations.Dispose();
+            fixupBuffer.CopyFrom(TransitionInfo);
         }
 
         

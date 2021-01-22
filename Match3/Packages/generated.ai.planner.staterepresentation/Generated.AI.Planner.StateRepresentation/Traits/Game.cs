@@ -1,20 +1,22 @@
 using System;
+using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
-using Generated.AI.Planner.StateRepresentation.Enums;
+using Unity.AI.Planner.Traits;
+using Generated.Semantic.Traits.Enums;
 
 namespace Generated.AI.Planner.StateRepresentation
 {
     [Serializable]
-    public struct Game : ITrait, IEquatable<Game>
+    public struct Game : ITrait, IBufferElementData, IEquatable<Game>
     {
         public const string FieldMoveCount = "MoveCount";
         public const string FieldScore = "Score";
         public const string FieldGoalType = "GoalType";
         public const string FieldGoalCount = "GoalCount";
-        public System.Int64 MoveCount;
-        public System.Int64 Score;
-        public Generated.AI.Planner.StateRepresentation.Enums.CellType GoalType;
+        public System.Int32 MoveCount;
+        public System.Int32 Score;
+        public Generated.Semantic.Traits.Enums.CellType GoalType;
         public System.Int32 GoalCount;
 
         public void SetField(string fieldName, object value)
@@ -22,13 +24,13 @@ namespace Generated.AI.Planner.StateRepresentation
             switch (fieldName)
             {
                 case nameof(MoveCount):
-                    MoveCount = (System.Int64)value;
+                    MoveCount = (System.Int32)value;
                     break;
                 case nameof(Score):
-                    Score = (System.Int64)value;
+                    Score = (System.Int32)value;
                     break;
                 case nameof(GoalType):
-                    GoalType = (Generated.AI.Planner.StateRepresentation.Enums.CellType)Enum.ToObject(typeof(Generated.AI.Planner.StateRepresentation.Enums.CellType), value);
+                    GoalType = (Generated.Semantic.Traits.Enums.CellType)Enum.ToObject(typeof(Generated.Semantic.Traits.Enums.CellType), value);
                     break;
                 case nameof(GoalCount):
                     GoalCount = (System.Int32)value;

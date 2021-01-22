@@ -3,11 +3,13 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.AI.Planner;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
+using Unity.AI.Planner.Traits;
 using Unity.Burst;
 using Generated.AI.Planner.StateRepresentation;
 using Generated.AI.Planner.StateRepresentation.Escape;
-using Generated.AI.Planner.StateRepresentation.Enums;
+using Generated.Semantic.Traits.Enums;
+using Unity.Collections.LowLevel.Unsafe;
+using Unity.Mathematics;
 
 namespace Generated.AI.Planner.Plans.Escape
 {
@@ -28,11 +30,39 @@ namespace Generated.AI.Planner.Plans.Escape
         [ReadOnly] NativeArray<StateEntityKey> m_StatesToExpand;
         StateDataContext m_StateDataContext;
 
+        // local allocations
+        [NativeDisableContainerSafetyRestriction] NativeArray<ComponentType> CharacterFilter;
+        [NativeDisableContainerSafetyRestriction] NativeList<int> CharacterObjectIndices;
+        [NativeDisableContainerSafetyRestriction] NativeArray<ComponentType> ItemFilter;
+        [NativeDisableContainerSafetyRestriction] NativeList<int> ItemObjectIndices;
+
+        [NativeDisableContainerSafetyRestriction] NativeList<ActionKey> ArgumentPermutations;
+        [NativeDisableContainerSafetyRestriction] NativeList<PickupKeyFixupReference> TransitionInfo;
+
+        bool LocalContainersInitialized => ArgumentPermutations.IsCreated;
+
         internal PickupKey(Guid guid, NativeList<StateEntityKey> statesToExpand, StateDataContext stateDataContext)
         {
             ActionGuid = guid;
             m_StatesToExpand = statesToExpand.AsDeferredJobArray();
             m_StateDataContext = stateDataContext;
+            CharacterFilter = default;
+            CharacterObjectIndices = default;
+            ItemFilter = default;
+            ItemObjectIndices = default;
+            ArgumentPermutations = default;
+            TransitionInfo = default;
+        }
+
+        void InitializeLocalContainers()
+        {
+            CharacterFilter = new NativeArray<ComponentType>(2, Allocator.Temp){[0] = ComponentType.ReadWrite<Character>(),[1] = ComponentType.ReadWrite<Carrier>(),  };
+            CharacterObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            ItemFilter = new NativeArray<ComponentType>(3, Allocator.Temp){[0] = ComponentType.ReadWrite<Item>(),[1] = ComponentType.ReadWrite<Position>(),[2] = ComponentType.ReadWrite<Carriable>(),  };
+            ItemObjectIndices = new NativeList<int>(2, Allocator.Temp);
+
+            ArgumentPermutations = new NativeList<ActionKey>(4, Allocator.Temp);
+            TransitionInfo = new NativeList<PickupKeyFixupReference>(ArgumentPermutations.Length, Allocator.Temp);
         }
 
         public static int GetIndexForParameterName(string parameterName)
@@ -48,12 +78,10 @@ namespace Generated.AI.Planner.Plans.Escape
 
         void GenerateArgumentPermutations(StateData stateData, NativeList<ActionKey> argumentPermutations)
         {
-            var CharacterFilter = new NativeArray<ComponentType>(2, Allocator.Temp){[0] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.Carrier>(),[1] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.Character>(),  };
-            var ItemFilter = new NativeArray<ComponentType>(3, Allocator.Temp){[0] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.Carriable>(),[1] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.Position>(),[2] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.Item>(),  };
-            var CharacterObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            CharacterObjectIndices.Clear();
             stateData.GetTraitBasedObjectIndices(CharacterObjectIndices, CharacterFilter);
             
-            var ItemObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            ItemObjectIndices.Clear();
             stateData.GetTraitBasedObjectIndices(ItemObjectIndices, ItemFilter);
             
             var CharacterBuffer = stateData.CharacterBuffer;
@@ -101,10 +129,6 @@ namespace Generated.AI.Planner.Plans.Escape
             }
             
             }
-            CharacterObjectIndices.Dispose();
-            ItemObjectIndices.Dispose();
-            CharacterFilter.Dispose();
-            ItemFilter.Dispose();
         }
 
         StateTransitionInfoPair<StateEntityKey, ActionKey, StateTransitionInfo> ApplyEffects(ActionKey action, StateEntityKey originalStateEntityKey)
@@ -146,27 +170,28 @@ namespace Generated.AI.Planner.Plans.Escape
 
         public void Execute(int jobIndex)
         {
+            if (!LocalContainersInitialized)
+                InitializeLocalContainers();
+
             m_StateDataContext.JobIndex = jobIndex;
 
             var stateEntityKey = m_StatesToExpand[jobIndex];
             var stateData = m_StateDataContext.GetStateData(stateEntityKey);
 
-            var argumentPermutations = new NativeList<ActionKey>(4, Allocator.Temp);
-            GenerateArgumentPermutations(stateData, argumentPermutations);
+            ArgumentPermutations.Clear();
+            GenerateArgumentPermutations(stateData, ArgumentPermutations);
 
-            var transitionInfo = new NativeArray<PickupKeyFixupReference>(argumentPermutations.Length, Allocator.Temp);
-            for (var i = 0; i < argumentPermutations.Length; i++)
+            TransitionInfo.Clear();
+            TransitionInfo.Capacity = math.max(TransitionInfo.Capacity, ArgumentPermutations.Length);
+            for (var i = 0; i < ArgumentPermutations.Length; i++)
             {
-                transitionInfo[i] = new PickupKeyFixupReference { TransitionInfo = ApplyEffects(argumentPermutations[i], stateEntityKey) };
+                TransitionInfo.Add(new PickupKeyFixupReference { TransitionInfo = ApplyEffects(ArgumentPermutations[i], stateEntityKey) });
             }
 
             // fixups
             var stateEntity = stateEntityKey.Entity;
             var fixupBuffer = m_StateDataContext.EntityCommandBuffer.AddBuffer<PickupKeyFixupReference>(jobIndex, stateEntity);
-            fixupBuffer.CopyFrom(transitionInfo);
-
-            transitionInfo.Dispose();
-            argumentPermutations.Dispose();
+            fixupBuffer.CopyFrom(TransitionInfo);
         }
 
         

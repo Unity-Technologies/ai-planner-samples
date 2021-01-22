@@ -1,11 +1,10 @@
-﻿#if PLANNER_STATEREPRESENTATION_GENERATED
-using System;
+﻿using System;
 using System.Linq;
+using Generated.Semantic.Traits;
+using Generated.Semantic.Traits.Enums;
 using UnityEditor;
 using UnityEngine;
-using Generated.AI.Planner.StateRepresentation;
-using Generated.AI.Planner.StateRepresentation.Enums;
-using UnityEngine.AI.Planner.DomainLanguage.TraitBased;
+using Random = UnityEngine.Random;
 
 [CustomEditor(typeof(Match3Grid), true)]
 public class GridEditor : Editor
@@ -21,7 +20,7 @@ public class GridEditor : Editor
 
         if (GUILayout.Button("Generate new Grid"))
         {
-            UnityEngine.Random.InitState(m_RandomSeed);
+            Random.InitState(m_RandomSeed);
 
             InitializeGrid(grid);
         }
@@ -43,18 +42,22 @@ public class GridEditor : Editor
             {
                 var cell = Instantiate(grid.CellPrefab, new Vector3(x, 0, y), Quaternion.identity, grid.transform);
                 cell.name = $"{x}_{y}";
-                var traitHolder = cell.GetComponent<TraitComponent>();
-                traitHolder.Name = $"Cell{x}_{y}";
+            }
+        }
 
-                var cellData = traitHolder.GetTraitData<Cell>();
+        for (var x = 0; x < m_GridSize; x++)
+        {
+            for (var y = 0; y < m_GridSize; y++)
+            {
+                var cell = GameObject.Find($"{x}_{y}");
+                var cellData = cell.GetComponent<Cell>();
                 if (cellData != null)
                 {
-                    cellData.InitializeFieldValues();
-                    cellData.SetValue(Cell.FieldType, (CellType)UnityEngine.Random.Range(1, Enum.GetNames(typeof(CellType)).Length));
-                    cellData.SetValue(Cell.FieldLeft, $"Cell{x - 1}_{y}");
-                    cellData.SetValue(Cell.FieldRight, $"Cell{x + 1}_{y}");
-                    cellData.SetValue(Cell.FieldTop, $"Cell{x}_{y + 1}");
-                    cellData.SetValue(Cell.FieldBottom, $"Cell{x}_{y - 1}");
+                    cellData.Type = (CellType)Random.Range(1, Enum.GetNames(typeof(CellType)).Length);
+                    cellData.Left = GameObject.Find($"{x - 1}_{y}");
+                    cellData.Right = GameObject.Find($"{x + 1}_{y}");
+                    cellData.Top = GameObject.Find($"{x}_{y + 1}");
+                    cellData.Bottom = GameObject.Find($"{x}_{y - 1}");
                 }
                 else
                 {
@@ -62,13 +65,11 @@ public class GridEditor : Editor
                     continue;
                 }
 
-                var coordinateData = traitHolder.GetTraitData<Coordinate>();
+                var coordinateData = cell.GetComponent<Coordinate>();
                 if (coordinateData != null)
                 {
-                    coordinateData.InitializeFieldValues();
-
-                    coordinateData.SetValue(Coordinate.FieldX, (long)x);
-                    coordinateData.SetValue(Coordinate.FieldY, (long)y);
+                    coordinateData.X = x;
+                    coordinateData.Y = y;
                 }
                 else
                 {
@@ -79,4 +80,3 @@ public class GridEditor : Editor
         }
     }
 }
-#endif

@@ -43,7 +43,7 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 11
+  serializedVersion: 12
   m_GIWorkflowMode: 0
   m_GISettings:
     serializedVersion: 2
@@ -98,7 +98,8 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_LightingSettings: {fileID: 4890085278179872738, guid: a432861e822514ee6baf8bece2eaa116,
+    type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -118,6 +119,8 @@ NavMeshSettings:
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
+    maxJobWorkers: 0
+    preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
@@ -128,6 +131,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 533157543}
     m_Modifications:
+    - target: {fileID: -4216859302048453862, guid: a0fcbabf2ba0b4a3dbd6933a628ba435,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: a0fcbabf2ba0b4a3dbd6933a628ba435,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -145,6 +153,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: a0fcbabf2ba0b4a3dbd6933a628ba435,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: a0fcbabf2ba0b4a3dbd6933a628ba435,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
@@ -157,16 +170,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: a0fcbabf2ba0b4a3dbd6933a628ba435,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: a0fcbabf2ba0b4a3dbd6933a628ba435,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: a0fcbabf2ba0b4a3dbd6933a628ba435,
         type: 3}
@@ -222,42 +225,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 157553112}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: 465049d75e85b4cc988788b31cb267ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: character3
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2acde6b1fa18c41e88367e3c31ce67b8,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Waypoint
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point3
-        m_ObjectValue: {fileID: 0}
-      - m_Name: ID
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 3
-        m_StringValue: Point3
-        m_ObjectValue: {fileID: 0}
-    - m_TraitDefinition: {fileID: 11400000, guid: 891aa1f303be24bd9b2d2990867f57ef,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Waypoint
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point3
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Carried
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+  m_p0: {fileID: 1924034690}
+  m_p1: 3
 --- !u!54 &157553114
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -287,6 +259,44 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.3
   m_Center: {x: 0, y: 0.2, z: 0}
+--- !u!114 &157553116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 157553112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 323950eab4fd9419a9074f6ef7b05274, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_p0: {fileID: 0}
+--- !u!114 &157553117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 157553112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &157553118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 157553112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &176387971
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -294,6 +304,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -311,6 +326,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.2170342
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
@@ -323,16 +343,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.2170342
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
         type: 3}
@@ -469,6 +479,7 @@ GameObject:
   - component: {fileID: 204135146}
   - component: {fileID: 204135145}
   - component: {fileID: 204135147}
+  - component: {fileID: 204135148}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -488,17 +499,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd8ac131c09d04008af565adfda708ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlanDefinition: {fileID: 11400000, guid: 6a1c413460b324b92ae2dd57c9ae2382, type: 2}
+  m_ProblemDefinition: {fileID: 11400000, guid: c12c45797171f8b4887b36e7b2b7f493,
+    type: 2}
   m_InitializeOnStart: 1
-  m_SearchSettings:
-    SearchIterationsPerUpdate: 2
-    StateExpansionBudgetPerIteration: 5
-    UseCustomSearchFrequency: 0
-    MinFramesPerSearchUpdate: 0
+  m_PlannerSettings:
+    PlanningIterationsPerUpdate: 10
+    StateExpansionBudgetPerIteration: 1
+    UseCustomPlanningFrequency: 0
+    MinFramesPerPlanningUpdate: 0
     CapPlanSize: 0
     MaxStatesInPlan: 0
     StopPlanningWhenToleranceAchieved: 0
-    RootPolicyValueTolerance: 0
+    RootEstimatedRewardTolerance: 0
     CapPlanUpdates: 0
     MaxUpdates: 2147483647
     GraphSelectionJobMode: 0
@@ -506,10 +518,9 @@ MonoBehaviour:
   m_ExecutionSettings:
     ExecutionMode: 4
     MaximumDecisionTolerance: 0
-    MinimumPlanSize: 3000
-    MinimumSearchTime: 0.75
-  m_WorldObjectQuery:
-    m_Filters: []
+    MinimumPlanSize: 1000
+    MinimumPlanningTime: 0
+  m_WorldObjectQuery: {fileID: 204135148}
   m_ActionExecuteInfos:
   - m_ActionName: MoveUp
     m_PlanExecutorStateUpdateMode: 0
@@ -519,12 +530,12 @@ MonoBehaviour:
     m_Arguments:
     - m_Parameter: Character
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
     - m_Parameter: To
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
   - m_ActionName: MoveDown
@@ -535,12 +546,12 @@ MonoBehaviour:
     m_Arguments:
     - m_Parameter: Character
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
     - m_Parameter: To
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
   - m_ActionName: MoveLeft
@@ -551,12 +562,12 @@ MonoBehaviour:
     m_Arguments:
     - m_Parameter: Character
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
     - m_Parameter: To
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
   - m_ActionName: MoveRight
@@ -567,12 +578,12 @@ MonoBehaviour:
     m_Arguments:
     - m_Parameter: Character
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
     - m_Parameter: To
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
   - m_ActionName: PickupKey
@@ -583,12 +594,12 @@ MonoBehaviour:
     m_Arguments:
     - m_Parameter: Character
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
     - m_Parameter: Item
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
   - m_ActionName: UseDoorLeft
@@ -599,12 +610,12 @@ MonoBehaviour:
     m_Arguments:
     - m_Parameter: Character
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
     - m_Parameter: To
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
   - m_ActionName: UseGateUp
@@ -615,12 +626,12 @@ MonoBehaviour:
     m_Arguments:
     - m_Parameter: Character
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
     - m_Parameter: To
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
   - m_ActionName: UseDoorRight
@@ -631,12 +642,140 @@ MonoBehaviour:
     m_Arguments:
     - m_Parameter: Character
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
     - m_Parameter: To
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+  - m_ActionName: MoveUp
+    m_PlanExecutorStateUpdateMode: 0
+    m_Method: MoveTo
+    m_SourceGameObject: {fileID: 204135144}
+    m_Source: {fileID: 204135147}
+    m_Arguments:
+    - m_Parameter: Character
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+    - m_Parameter: To
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+  - m_ActionName: MoveDown
+    m_PlanExecutorStateUpdateMode: 0
+    m_Method: MoveTo
+    m_SourceGameObject: {fileID: 204135144}
+    m_Source: {fileID: 204135147}
+    m_Arguments:
+    - m_Parameter: Character
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+    - m_Parameter: To
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+  - m_ActionName: MoveLeft
+    m_PlanExecutorStateUpdateMode: 0
+    m_Method: MoveTo
+    m_SourceGameObject: {fileID: 204135144}
+    m_Source: {fileID: 204135147}
+    m_Arguments:
+    - m_Parameter: Character
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+    - m_Parameter: To
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+  - m_ActionName: MoveRight
+    m_PlanExecutorStateUpdateMode: 0
+    m_Method: MoveTo
+    m_SourceGameObject: {fileID: 204135144}
+    m_Source: {fileID: 204135147}
+    m_Arguments:
+    - m_Parameter: Character
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+    - m_Parameter: To
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+  - m_ActionName: PickupKey
+    m_PlanExecutorStateUpdateMode: 0
+    m_Method: PickItem
+    m_SourceGameObject: {fileID: 204135144}
+    m_Source: {fileID: 204135147}
+    m_Arguments:
+    - m_Parameter: Character
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+    - m_Parameter: Item
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+  - m_ActionName: UseDoorLeft
+    m_PlanExecutorStateUpdateMode: 0
+    m_Method: MoveTo
+    m_SourceGameObject: {fileID: 204135144}
+    m_Source: {fileID: 204135147}
+    m_Arguments:
+    - m_Parameter: Character
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+    - m_Parameter: To
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+  - m_ActionName: UseGateUp
+    m_PlanExecutorStateUpdateMode: 0
+    m_Method: MoveTo
+    m_SourceGameObject: {fileID: 204135144}
+    m_Source: {fileID: 204135147}
+    m_Arguments:
+    - m_Parameter: Character
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+    - m_Parameter: To
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+  - m_ActionName: UseDoorRight
+    m_PlanExecutorStateUpdateMode: 0
+    m_Method: MoveTo
+    m_SourceGameObject: {fileID: 204135144}
+    m_Source: {fileID: 204135147}
+    m_Arguments:
+    - m_Parameter: Character
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+    - m_Parameter: To
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
   m_AutoUpdate: 1
@@ -666,6 +805,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e73a89a7432e4398a13c1d6cbd18456, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &204135148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204135144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f222baf27330f49959caf266f2f6b851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Query:
+    m_QueryGroups:
+    - m_Filters: []
+      m_Quantifier: 0
+      m_QuantifierLimit: 0
+      m_QuantifierScorer:
+        id: 0
+      m_RequiredTraits:
+        m_Traits: []
+      m_ProhibitedTraits:
+        m_Traits: []
+  references:
+    version: 1
+    00000000:
+      type: {class: , ns: , asm: }
 --- !u!1 &244205181
 GameObject:
   m_ObjectHideFlags: 0
@@ -675,6 +841,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 244205182}
+  - component: {fileID: 244205185}
+  - component: {fileID: 244205184}
   - component: {fileID: 244205183}
   m_Layer: 0
   m_Name: Point8
@@ -706,51 +874,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 244205181}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: af9cf1b1028744e17b0a7680850e0e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Point8
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point11
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point9
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point4
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+  m_p0: {fileID: 770547777}
+  m_p1: {fileID: 644861466}
+  m_p2: {fileID: 0}
+  m_p3: {fileID: 1681663150}
+  m_p4: 0
+  m_p5: 4
+--- !u!114 &244205184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 244205181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &244205185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 244205181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &285191587 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 38b514e9acdfe4f98a2f8899aa840b02,
@@ -766,42 +923,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 285191587}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: 465049d75e85b4cc988788b31cb267ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: character1
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2acde6b1fa18c41e88367e3c31ce67b8,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Waypoint
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point1
-        m_ObjectValue: {fileID: 0}
-      - m_Name: ID
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 1
-        m_StringValue: Point1
-        m_ObjectValue: {fileID: 0}
-    - m_TraitDefinition: {fileID: 11400000, guid: 891aa1f303be24bd9b2d2990867f57ef,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Waypoint
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point1
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Carried
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+  m_p0: {fileID: 1950432493}
+  m_p1: 1
 --- !u!54 &285191589
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -831,6 +957,44 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.3
   m_Center: {x: 0, y: 0.2, z: 0}
+--- !u!114 &285191591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 285191587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 323950eab4fd9419a9074f6ef7b05274, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_p0: {fileID: 0}
+--- !u!114 &285191592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 285191587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &285191593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 285191587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &377051209
 GameObject:
   m_ObjectHideFlags: 0
@@ -889,6 +1053,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 401945783}
+  - component: {fileID: 401945786}
+  - component: {fileID: 401945785}
   - component: {fileID: 401945784}
   m_Layer: 0
   m_Name: Point14
@@ -920,51 +1086,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 401945782}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: af9cf1b1028744e17b0a7680850e0e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Point14
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point13
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point16
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point15
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point19
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+  m_p0: {fileID: 638063218}
+  m_p1: {fileID: 1101976516}
+  m_p2: {fileID: 938408482}
+  m_p3: {fileID: 1801448893}
+  m_p4: 0
+  m_p5: 1
+--- !u!114 &401945785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401945782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &401945786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401945782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &474947135
 GameObject:
   m_ObjectHideFlags: 0
@@ -974,6 +1129,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 474947136}
+  - component: {fileID: 474947140}
+  - component: {fileID: 474947139}
+  - component: {fileID: 474947138}
   - component: {fileID: 474947137}
   m_Layer: 0
   m_Name: Point18
@@ -1005,66 +1163,52 @@ MonoBehaviour:
   m_GameObject: {fileID: 474947135}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: 18145362355144ba1b76e2eb0ad83dee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Point18
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point15
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-    - m_TraitDefinition: {fileID: 11400000, guid: c8020f9c38860425b80c8b84a62f492e,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point15
-        m_ObjectValue: {fileID: 0}
+--- !u!114 &474947138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 474947135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af9cf1b1028744e17b0a7680850e0e02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_p0: {fileID: 0}
+  m_p1: {fileID: 0}
+  m_p2: {fileID: 0}
+  m_p3: {fileID: 638063218}
+  m_p4: 0
+  m_p5: 0
+--- !u!114 &474947139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 474947135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &474947140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 474947135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &533157541
 GameObject:
   m_ObjectHideFlags: 0
@@ -1134,7 +1278,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 594884024}
+  - component: {fileID: 594884028}
+  - component: {fileID: 594884027}
   - component: {fileID: 594884025}
+  - component: {fileID: 594884026}
   m_Layer: 0
   m_Name: Point10-BlueSwitch
   m_TagString: Untagged
@@ -1165,96 +1312,53 @@ MonoBehaviour:
   m_GameObject: {fileID: 594884023}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: af9cf1b1028744e17b0a7680850e0e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Point10
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point9
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-    - m_TraitDefinition: {fileID: 11400000, guid: 3cb0b465f2b314d278ac7e7e7d2559c3,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point9
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Type
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+  m_p0: {fileID: 644861466}
+  m_p1: {fileID: 0}
+  m_p2: {fileID: 0}
+  m_p3: {fileID: 0}
+  m_p4: 0
+  m_p5: 4
+--- !u!114 &594884026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 594884023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e3dcd37f6f124d628fd41f893648e3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_p0: 0
+--- !u!114 &594884027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 594884023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &594884028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 594884023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &617296021 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 38b514e9acdfe4f98a2f8899aa840b02,
@@ -1270,42 +1374,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 617296021}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: 465049d75e85b4cc988788b31cb267ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: character2
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2acde6b1fa18c41e88367e3c31ce67b8,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Waypoint
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point2
-        m_ObjectValue: {fileID: 0}
-      - m_Name: ID
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 2
-        m_StringValue: Point2
-        m_ObjectValue: {fileID: 0}
-    - m_TraitDefinition: {fileID: 11400000, guid: 891aa1f303be24bd9b2d2990867f57ef,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Waypoint
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point2
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Carried
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+  m_p0: {fileID: 696609034}
+  m_p1: 2
 --- !u!54 &617296023
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1335,6 +1408,44 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.3
   m_Center: {x: 0, y: 0.2, z: 0}
+--- !u!114 &617296025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617296021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 323950eab4fd9419a9074f6ef7b05274, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_p0: {fileID: 0}
+--- !u!114 &617296026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617296021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &617296027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617296021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &638063218
 GameObject:
   m_ObjectHideFlags: 0
@@ -1344,6 +1455,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 638063219}
+  - component: {fileID: 638063223}
+  - component: {fileID: 638063222}
+  - component: {fileID: 638063221}
   - component: {fileID: 638063220}
   m_Layer: 0
   m_Name: Point15-BlueSwitch
@@ -1375,96 +1489,53 @@ MonoBehaviour:
   m_GameObject: {fileID: 638063218}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e3dcd37f6f124d628fd41f893648e3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Point15
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point14
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point18
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-    - m_TraitDefinition: {fileID: 11400000, guid: 3cb0b465f2b314d278ac7e7e7d2559c3,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point14
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point18
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Type
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+  m_p0: 0
+--- !u!114 &638063221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638063218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af9cf1b1028744e17b0a7680850e0e02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_p0: {fileID: 0}
+  m_p1: {fileID: 401945782}
+  m_p2: {fileID: 474947135}
+  m_p3: {fileID: 0}
+  m_p4: 0
+  m_p5: 1
+--- !u!114 &638063222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638063218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &638063223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638063218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &644861466
 GameObject:
   m_ObjectHideFlags: 0
@@ -1474,6 +1545,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 644861467}
+  - component: {fileID: 644861470}
+  - component: {fileID: 644861469}
   - component: {fileID: 644861468}
   m_Layer: 0
   m_Name: Point9
@@ -1505,51 +1578,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 644861466}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: af9cf1b1028744e17b0a7680850e0e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Point9
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point8
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point10
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point13
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point5
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+  m_p0: {fileID: 244205181}
+  m_p1: {fileID: 594884023}
+  m_p2: {fileID: 1801448893}
+  m_p3: {fileID: 2140503903}
+  m_p4: 0
+  m_p5: 3
+--- !u!114 &644861469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 644861466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &644861470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 644861466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &696609034
 GameObject:
   m_ObjectHideFlags: 0
@@ -1559,6 +1621,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 696609035}
+  - component: {fileID: 696609038}
+  - component: {fileID: 696609037}
   - component: {fileID: 696609036}
   m_Layer: 0
   m_Name: Point2
@@ -1590,51 +1654,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 696609034}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: af9cf1b1028744e17b0a7680850e0e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Point2
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point1
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point3
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point5
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Occupied
-        m_BoolValue: 1
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 5
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+  m_p0: {fileID: 1950432493}
+  m_p1: {fileID: 1924034690}
+  m_p2: {fileID: 2140503903}
+  m_p3: {fileID: 0}
+  m_p4: 1
+  m_p5: 5
+--- !u!114 &696609037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696609034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &696609038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696609034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1736,7 +1789,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 770547778}
+  - component: {fileID: 770547782}
+  - component: {fileID: 770547781}
   - component: {fileID: 770547779}
+  - component: {fileID: 770547780}
   m_Layer: 0
   m_Name: Point11-Door
   m_TagString: Untagged
@@ -1767,72 +1823,52 @@ MonoBehaviour:
   m_GameObject: {fileID: 770547777}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: af9cf1b1028744e17b0a7680850e0e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Point11
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point12
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point8
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-    - m_TraitDefinition: {fileID: 11400000, guid: 23b7cc4f4f3fc424b90dfa28a524fc9b,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point12
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point8
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+  m_p0: {fileID: 1638208229}
+  m_p1: {fileID: 244205181}
+  m_p2: {fileID: 0}
+  m_p3: {fileID: 0}
+  m_p4: 0
+  m_p5: 5
+--- !u!114 &770547780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 770547777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57da923e56cfe44c6810e9adaad76157, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &770547781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 770547777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &770547782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 770547777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &801669774
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1840,6 +1876,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4216859302048453862, guid: d3b1e630e01ff41cdaf56c3fcf143c31,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: d3b1e630e01ff41cdaf56c3fcf143c31,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1857,6 +1898,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: d3b1e630e01ff41cdaf56c3fcf143c31,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.68074375
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: d3b1e630e01ff41cdaf56c3fcf143c31,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0.36019793
       objectReference: {fileID: 0}
@@ -1869,16 +1915,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0.012068854
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: d3b1e630e01ff41cdaf56c3fcf143c31,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.68074375
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: d3b1e630e01ff41cdaf56c3fcf143c31,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: d3b1e630e01ff41cdaf56c3fcf143c31,
         type: 3}
@@ -1975,6 +2011,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
         type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.97
       objectReference: {fileID: 0}
@@ -1990,6 +2031,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.2170342
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
@@ -2002,16 +2048,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.2170342
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
         type: 3}
@@ -2049,6 +2085,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 850321844}
+  - component: {fileID: 850321848}
+  - component: {fileID: 850321847}
+  - component: {fileID: 850321846}
   - component: {fileID: 850321845}
   m_Layer: 0
   m_Name: Point17
@@ -2080,66 +2119,52 @@ MonoBehaviour:
   m_GameObject: {fileID: 850321843}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: 18145362355144ba1b76e2eb0ad83dee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Point17
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point16
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-    - m_TraitDefinition: {fileID: 11400000, guid: c8020f9c38860425b80c8b84a62f492e,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point16
-        m_ObjectValue: {fileID: 0}
+--- !u!114 &850321846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850321843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af9cf1b1028744e17b0a7680850e0e02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_p0: {fileID: 0}
+  m_p1: {fileID: 0}
+  m_p2: {fileID: 0}
+  m_p3: {fileID: 1101976516}
+  m_p4: 0
+  m_p5: 0
+--- !u!114 &850321847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850321843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &850321848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850321843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &928402176
 GameObject:
   m_ObjectHideFlags: 0
@@ -2149,6 +2174,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 928402177}
+  - component: {fileID: 928402180}
+  - component: {fileID: 928402179}
   - component: {fileID: 928402178}
   m_Layer: 0
   m_Name: Point6
@@ -2180,51 +2207,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 928402176}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: af9cf1b1028744e17b0a7680850e0e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Point6
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point5
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point7
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point3
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+  m_p0: {fileID: 2140503903}
+  m_p1: {fileID: 1534748141}
+  m_p2: {fileID: 0}
+  m_p3: {fileID: 1924034690}
+  m_p4: 0
+  m_p5: 5
+--- !u!114 &928402179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 928402176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &928402180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 928402176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &938408482
 GameObject:
   m_ObjectHideFlags: 0
@@ -2234,6 +2250,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 938408483}
+  - component: {fileID: 938408487}
+  - component: {fileID: 938408486}
+  - component: {fileID: 938408485}
   - component: {fileID: 938408484}
   m_Layer: 0
   m_Name: Point19
@@ -2265,66 +2284,52 @@ MonoBehaviour:
   m_GameObject: {fileID: 938408482}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: 18145362355144ba1b76e2eb0ad83dee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Point19
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point14
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-    - m_TraitDefinition: {fileID: 11400000, guid: c8020f9c38860425b80c8b84a62f492e,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point14
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+--- !u!114 &938408485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938408482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af9cf1b1028744e17b0a7680850e0e02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_p0: {fileID: 0}
+  m_p1: {fileID: 0}
+  m_p2: {fileID: 0}
+  m_p3: {fileID: 401945782}
+  m_p4: 0
+  m_p5: 0
+--- !u!114 &938408486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938408482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &938408487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938408482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -2535,6 +2540,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1101976517}
+  - component: {fileID: 1101976521}
+  - component: {fileID: 1101976520}
+  - component: {fileID: 1101976519}
   - component: {fileID: 1101976518}
   m_Layer: 0
   m_Name: Point16-PinkSwitch
@@ -2566,96 +2574,53 @@ MonoBehaviour:
   m_GameObject: {fileID: 1101976516}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e3dcd37f6f124d628fd41f893648e3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Point16
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point14
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point17
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-    - m_TraitDefinition: {fileID: 11400000, guid: 3cb0b465f2b314d278ac7e7e7d2559c3,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point14
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point17
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Type
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 1
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+  m_p0: 1
+--- !u!114 &1101976519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101976516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af9cf1b1028744e17b0a7680850e0e02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_p0: {fileID: 401945782}
+  m_p1: {fileID: 0}
+  m_p2: {fileID: 850321843}
+  m_p3: {fileID: 0}
+  m_p4: 0
+  m_p5: 1
+--- !u!114 &1101976520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101976516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &1101976521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101976516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1234012568
 GameObject:
   m_ObjectHideFlags: 0
@@ -2947,69 +2912,61 @@ MonoBehaviour:
   m_GameObject: {fileID: 1431882851}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d94239eedf564e429c32b42784625e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: key
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2974ee5f13afc48199f17227b507cc85,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Type
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-    - m_TraitDefinition: {fileID: 11400000, guid: e9f2520952cec4b7d82b6575469aed4d,
-        type: 2}
-      m_FieldValues:
-      - m_Name: CarriedBy
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-    - m_TraitDefinition: {fileID: 11400000, guid: d9efbf4e9a1c6468b91a68edc69b16a9,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Waypoint
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point7
-        m_ObjectValue: {fileID: 0}
+  m_p0: 0
+--- !u!114 &1431882853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431882851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f148da0893c0a47e1984c2fb23ad79b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_p0: {fileID: 0}
+--- !u!114 &1431882854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431882851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0af77a57bd680436bb46de66bcf37c7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_p0: {fileID: 1534748141}
+--- !u!114 &1431882855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431882851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &1431882856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431882851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1470727275
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3021,6 +2978,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: eeb88af16ad92476d8458fc00ff30d23,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: eeb88af16ad92476d8458fc00ff30d23,
         type: 3}
@@ -3039,6 +3001,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: eeb88af16ad92476d8458fc00ff30d23,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: eeb88af16ad92476d8458fc00ff30d23,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -3051,16 +3018,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: eeb88af16ad92476d8458fc00ff30d23,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: eeb88af16ad92476d8458fc00ff30d23,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: eeb88af16ad92476d8458fc00ff30d23,
         type: 3}
@@ -3093,6 +3050,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1534748142}
+  - component: {fileID: 1534748145}
+  - component: {fileID: 1534748144}
   - component: {fileID: 1534748143}
   m_Layer: 0
   m_Name: Point7
@@ -3124,51 +3083,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 1534748141}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: af9cf1b1028744e17b0a7680850e0e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Point7
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point6
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+  m_p0: {fileID: 928402176}
+  m_p1: {fileID: 0}
+  m_p2: {fileID: 0}
+  m_p3: {fileID: 0}
+  m_p4: 0
+  m_p5: 6
+--- !u!114 &1534748144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1534748141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &1534748145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1534748141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1638208229
 GameObject:
   m_ObjectHideFlags: 0
@@ -3178,7 +3126,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1638208230}
+  - component: {fileID: 1638208234}
+  - component: {fileID: 1638208233}
   - component: {fileID: 1638208231}
+  - component: {fileID: 1638208232}
   m_Layer: 0
   m_Name: Point12-PinkSwitch
   m_TagString: Untagged
@@ -3209,96 +3160,53 @@ MonoBehaviour:
   m_GameObject: {fileID: 1638208229}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: af9cf1b1028744e17b0a7680850e0e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Point12
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point11
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-    - m_TraitDefinition: {fileID: 11400000, guid: 3cb0b465f2b314d278ac7e7e7d2559c3,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point11
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Type
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 1
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+  m_p0: {fileID: 0}
+  m_p1: {fileID: 770547777}
+  m_p2: {fileID: 0}
+  m_p3: {fileID: 0}
+  m_p4: 0
+  m_p5: 6
+--- !u!114 &1638208232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1638208229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e3dcd37f6f124d628fd41f893648e3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_p0: 1
+--- !u!114 &1638208233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1638208229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &1638208234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1638208229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1681663150
 GameObject:
   m_ObjectHideFlags: 0
@@ -3308,6 +3216,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1681663151}
+  - component: {fileID: 1681663154}
+  - component: {fileID: 1681663153}
   - component: {fileID: 1681663152}
   m_Layer: 0
   m_Name: Point4
@@ -3339,51 +3249,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 1681663150}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: af9cf1b1028744e17b0a7680850e0e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Point4
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point5
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point1
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point8
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+  m_p0: {fileID: 0}
+  m_p1: {fileID: 2140503903}
+  m_p2: {fileID: 244205181}
+  m_p3: {fileID: 1950432493}
+  m_p4: 0
+  m_p5: 5
+--- !u!114 &1681663153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1681663150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &1681663154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1681663150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1801448893
 GameObject:
   m_ObjectHideFlags: 0
@@ -3393,7 +3292,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1801448894}
+  - component: {fileID: 1801448898}
+  - component: {fileID: 1801448897}
   - component: {fileID: 1801448895}
+  - component: {fileID: 1801448896}
   m_Layer: 0
   m_Name: Point13-GateExit
   m_TagString: Untagged
@@ -3424,102 +3326,54 @@ MonoBehaviour:
   m_GameObject: {fileID: 1801448893}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: af9cf1b1028744e17b0a7680850e0e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Point13
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point9
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point14
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-    - m_TraitDefinition: {fileID: 11400000, guid: d5456278475a14ba497fda710c7b1497,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point9
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point14
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: ActivationB
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 1
-        m_StringValue: Point12
-        m_ObjectValue: {fileID: 0}
-      - m_Name: ActivationA
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point10
-        m_ObjectValue: {fileID: 0}
+  m_p0: {fileID: 0}
+  m_p1: {fileID: 0}
+  m_p2: {fileID: 401945782}
+  m_p3: {fileID: 644861466}
+  m_p4: 0
+  m_p5: 2
+--- !u!114 &1801448896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1801448893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eb592cf2da2a4328b337f527d4d8043, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_p0: 0
+  m_p1: 1
+--- !u!114 &1801448897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1801448893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &1801448898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1801448893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1924034690
 GameObject:
   m_ObjectHideFlags: 0
@@ -3529,6 +3383,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1924034691}
+  - component: {fileID: 1924034694}
+  - component: {fileID: 1924034693}
   - component: {fileID: 1924034692}
   m_Layer: 0
   m_Name: Point3
@@ -3560,51 +3416,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 1924034690}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: af9cf1b1028744e17b0a7680850e0e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Point3
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point6
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point2
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Occupied
-        m_BoolValue: 1
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 5
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+  m_p0: {fileID: 696609034}
+  m_p1: {fileID: 0}
+  m_p2: {fileID: 928402176}
+  m_p3: {fileID: 0}
+  m_p4: 1
+  m_p5: 6
+--- !u!114 &1924034693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1924034690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &1924034694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1924034690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1946293735
 GameObject:
   m_ObjectHideFlags: 0
@@ -3673,6 +3518,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1950432494}
+  - component: {fileID: 1950432497}
+  - component: {fileID: 1950432496}
   - component: {fileID: 1950432495}
   m_Layer: 0
   m_Name: Point1
@@ -3704,51 +3551,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 1950432493}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: af9cf1b1028744e17b0a7680850e0e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Point1
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Occupied
-        m_BoolValue: 1
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point4
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point2
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 5
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+  m_p0: {fileID: 0}
+  m_p1: {fileID: 696609034}
+  m_p2: {fileID: 1681663150}
+  m_p3: {fileID: 0}
+  m_p4: 1
+  m_p5: 6
+--- !u!114 &1950432496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1950432493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &1950432497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1950432493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1985422031
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3756,6 +3592,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4216859302048453862, guid: 25b204ec5109f49828f7b9a6cb28bca2,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 25b204ec5109f49828f7b9a6cb28bca2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3773,6 +3614,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 25b204ec5109f49828f7b9a6cb28bca2,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 25b204ec5109f49828f7b9a6cb28bca2,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -3785,16 +3631,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 25b204ec5109f49828f7b9a6cb28bca2,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 25b204ec5109f49828f7b9a6cb28bca2,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 25b204ec5109f49828f7b9a6cb28bca2,
         type: 3}
@@ -3863,6 +3699,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
         type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.011
       objectReference: {fileID: 0}
@@ -3878,6 +3719,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.2170342
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
@@ -3890,16 +3736,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.2170342
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 38b514e9acdfe4f98a2f8899aa840b02,
         type: 3}
@@ -3937,6 +3773,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2140503904}
+  - component: {fileID: 2140503907}
+  - component: {fileID: 2140503906}
   - component: {fileID: 2140503905}
   m_Layer: 0
   m_Name: Point5
@@ -3968,48 +3806,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 2140503903}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
+  m_Script: {fileID: 11500000, guid: af9cf1b1028744e17b0a7680850e0e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Point5
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Left
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point4
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Right
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point6
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Up
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point9
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Down
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: Point2
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Occupied
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Visited
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+  m_p0: {fileID: 1681663150}
+  m_p1: {fileID: 928402176}
+  m_p2: {fileID: 644861466}
+  m_p3: {fileID: 696609034}
+  m_p4: 0
+  m_p5: 4
+--- !u!114 &2140503906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140503903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &2140503907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140503903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

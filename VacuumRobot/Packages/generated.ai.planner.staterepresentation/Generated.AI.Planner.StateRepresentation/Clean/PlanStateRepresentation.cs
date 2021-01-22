@@ -1,12 +1,15 @@
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Unity.AI.Planner;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
+using Unity.AI.Planner.Traits;
 using Unity.AI.Planner.Jobs;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Jobs;
+using PlanningAgent = Unity.AI.Planner.Traits.PlanningAgent;
 
 namespace Generated.AI.Planner.StateRepresentation.Clean
 {
@@ -34,20 +37,23 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
         static TraitArrayIndex()
         {
             var typeIndex = TypeManager.GetTypeIndex<T>();
-            if (typeIndex == TypeManager.GetTypeIndex<Location>())
+            if (typeIndex == TypeManager.GetTypeIndex<Robot>())
                 Index = 0;
-            else if (typeIndex == TypeManager.GetTypeIndex<Robot>())
+            else if (typeIndex == TypeManager.GetTypeIndex<Location>())
                 Index = 1;
             else if (typeIndex == TypeManager.GetTypeIndex<Dirt>())
                 Index = 2;
             else if (typeIndex == TypeManager.GetTypeIndex<Moveable>())
                 Index = 3;
+            else if (typeIndex == TypeManager.GetTypeIndex<PlanningAgent>())
+                Index = 4;
         }
     }
 
-    public struct TraitBasedObject : ITraitBasedObject
+    [StructLayout(LayoutKind.Sequential, Size=8)]
+    public struct TraitBasedObject : ITraitBasedObject, IEquatable<TraitBasedObject>
     {
-        public int Length => 4;
+        public int Length => 5;
 
         public byte this[int i]
         {
@@ -56,13 +62,15 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
                 switch (i)
                 {
                     case 0:
-                        return LocationIndex;
-                    case 1:
                         return RobotIndex;
+                    case 1:
+                        return LocationIndex;
                     case 2:
                         return DirtIndex;
                     case 3:
                         return MoveableIndex;
+                    case 4:
+                        return PlanningAgentIndex;
                 }
 
                 return Unset;
@@ -72,16 +80,19 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
                 switch (i)
                 {
                     case 0:
-                        LocationIndex = value;
+                        RobotIndex = value;
                         break;
                     case 1:
-                        RobotIndex = value;
+                        LocationIndex = value;
                         break;
                     case 2:
                         DirtIndex = value;
                         break;
                     case 3:
                         MoveableIndex = value;
+                        break;
+                    case 4:
+                        PlanningAgentIndex = value;
                         break;
                 }
             }
@@ -91,23 +102,26 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
 
         public static TraitBasedObject Default => new TraitBasedObject
         {
-            LocationIndex = Unset,
             RobotIndex = Unset,
+            LocationIndex = Unset,
             DirtIndex = Unset,
             MoveableIndex = Unset,
+            PlanningAgentIndex = Unset,
         };
 
 
-        public byte LocationIndex;
         public byte RobotIndex;
+        public byte LocationIndex;
         public byte DirtIndex;
         public byte MoveableIndex;
+        public byte PlanningAgentIndex;
 
 
-        static readonly int s_LocationTypeIndex = TypeManager.GetTypeIndex<Location>();
         static readonly int s_RobotTypeIndex = TypeManager.GetTypeIndex<Robot>();
+        static readonly int s_LocationTypeIndex = TypeManager.GetTypeIndex<Location>();
         static readonly int s_DirtTypeIndex = TypeManager.GetTypeIndex<Dirt>();
         static readonly int s_MoveableTypeIndex = TypeManager.GetTypeIndex<Moveable>();
+        static readonly int s_PlanningAgentTypeIndex = TypeManager.GetTypeIndex<PlanningAgent>();
 
         public bool HasSameTraits(TraitBasedObject other)
         {
@@ -138,15 +152,18 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
             for (int i = 0; i < componentTypes.Length; i++)
             {
                 var t = componentTypes[i];
-
-                if (t.TypeIndex == s_LocationTypeIndex)
+                if (t == default || t.TypeIndex == 0)
                 {
-                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ LocationIndex == Unset)
-                        return false;
+                    // This seems to be necessary for Burst compilation; Doesn't happen with non-Burst compilation
                 }
                 else if (t.TypeIndex == s_RobotTypeIndex)
                 {
                     if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ RobotIndex == Unset)
+                        return false;
+                }
+                else if (t.TypeIndex == s_LocationTypeIndex)
+                {
+                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ LocationIndex == Unset)
                         return false;
                 }
                 else if (t.TypeIndex == s_DirtTypeIndex)
@@ -157,6 +174,11 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
                 else if (t.TypeIndex == s_MoveableTypeIndex)
                 {
                     if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ MoveableIndex == Unset)
+                        return false;
+                }
+                else if (t.TypeIndex == s_PlanningAgentTypeIndex)
+                {
+                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ PlanningAgentIndex == Unset)
                         return false;
                 }
                 else
@@ -171,15 +193,18 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
             for (int i = 0; i < componentTypes.Length; i++)
             {
                 var t = componentTypes[i];
-
-                if (t.TypeIndex == s_LocationTypeIndex)
+                if (t == default || t == null || t.TypeIndex == 0)
                 {
-                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ LocationIndex == Unset)
-                        return false;
+                    // This seems to be necessary for Burst compilation; Doesn't happen with non-Burst compilation
                 }
                 else if (t.TypeIndex == s_RobotTypeIndex)
                 {
                     if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ RobotIndex == Unset)
+                        return false;
+                }
+                else if (t.TypeIndex == s_LocationTypeIndex)
+                {
+                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ LocationIndex == Unset)
                         return false;
                 }
                 else if (t.TypeIndex == s_DirtTypeIndex)
@@ -192,11 +217,42 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
                     if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ MoveableIndex == Unset)
                         return false;
                 }
+                else if (t.TypeIndex == s_PlanningAgentTypeIndex)
+                {
+                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ PlanningAgentIndex == Unset)
+                        return false;
+                }
                 else
                     throw new ArgumentException($"Incorrect trait type used in object query: {t}");
             }
 
             return true;
+        }
+
+        public bool Equals(TraitBasedObject other)
+        {
+
+                return RobotIndex == other.RobotIndex && LocationIndex == other.LocationIndex && DirtIndex == other.DirtIndex && MoveableIndex == other.MoveableIndex && PlanningAgentIndex == other.PlanningAgentIndex;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is TraitBasedObject other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+
+                    var hashCode = RobotIndex.GetHashCode();
+                    
+                     hashCode = (hashCode * 397) ^ LocationIndex.GetHashCode();
+                     hashCode = (hashCode * 397) ^ DirtIndex.GetHashCode();
+                     hashCode = (hashCode * 397) ^ MoveableIndex.GetHashCode();
+                     hashCode = (hashCode * 397) ^ PlanningAgentIndex.GetHashCode();
+                return hashCode;
+            }
         }
     }
 
@@ -206,41 +262,45 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
         public DynamicBuffer<TraitBasedObject> TraitBasedObjects;
         public DynamicBuffer<TraitBasedObjectId> TraitBasedObjectIds;
 
-        public DynamicBuffer<Location> LocationBuffer;
         public DynamicBuffer<Robot> RobotBuffer;
+        public DynamicBuffer<Location> LocationBuffer;
         public DynamicBuffer<Dirt> DirtBuffer;
         public DynamicBuffer<Moveable> MoveableBuffer;
+        public DynamicBuffer<PlanningAgent> PlanningAgentBuffer;
 
-        static readonly int s_LocationTypeIndex = TypeManager.GetTypeIndex<Location>();
         static readonly int s_RobotTypeIndex = TypeManager.GetTypeIndex<Robot>();
+        static readonly int s_LocationTypeIndex = TypeManager.GetTypeIndex<Location>();
         static readonly int s_DirtTypeIndex = TypeManager.GetTypeIndex<Dirt>();
         static readonly int s_MoveableTypeIndex = TypeManager.GetTypeIndex<Moveable>();
+        static readonly int s_PlanningAgentTypeIndex = TypeManager.GetTypeIndex<PlanningAgent>();
 
-        public StateData(JobComponentSystem system, Entity stateEntity, bool readWrite = false)
+        public StateData(ExclusiveEntityTransaction transaction, Entity stateEntity)
         {
             StateEntity = stateEntity;
-            TraitBasedObjects = system.GetBufferFromEntity<TraitBasedObject>(!readWrite)[stateEntity];
-            TraitBasedObjectIds = system.GetBufferFromEntity<TraitBasedObjectId>(!readWrite)[stateEntity];
+            TraitBasedObjects = transaction.GetBuffer<TraitBasedObject>(stateEntity);
+            TraitBasedObjectIds = transaction.GetBuffer<TraitBasedObjectId>(stateEntity);
 
-            LocationBuffer = system.GetBufferFromEntity<Location>(!readWrite)[stateEntity];
-            RobotBuffer = system.GetBufferFromEntity<Robot>(!readWrite)[stateEntity];
-            DirtBuffer = system.GetBufferFromEntity<Dirt>(!readWrite)[stateEntity];
-            MoveableBuffer = system.GetBufferFromEntity<Moveable>(!readWrite)[stateEntity];
+            RobotBuffer = transaction.GetBuffer<Robot>(stateEntity);
+            LocationBuffer = transaction.GetBuffer<Location>(stateEntity);
+            DirtBuffer = transaction.GetBuffer<Dirt>(stateEntity);
+            MoveableBuffer = transaction.GetBuffer<Moveable>(stateEntity);
+            PlanningAgentBuffer = transaction.GetBuffer<PlanningAgent>(stateEntity);
         }
 
-        public StateData(int jobIndex, EntityCommandBuffer.Concurrent entityCommandBuffer, Entity stateEntity)
+        public StateData(int jobIndex, EntityCommandBuffer.ParallelWriter entityCommandBuffer, Entity stateEntity)
         {
             StateEntity = stateEntity;
             TraitBasedObjects = entityCommandBuffer.AddBuffer<TraitBasedObject>(jobIndex, stateEntity);
             TraitBasedObjectIds = entityCommandBuffer.AddBuffer<TraitBasedObjectId>(jobIndex, stateEntity);
 
-            LocationBuffer = entityCommandBuffer.AddBuffer<Location>(jobIndex, stateEntity);
             RobotBuffer = entityCommandBuffer.AddBuffer<Robot>(jobIndex, stateEntity);
+            LocationBuffer = entityCommandBuffer.AddBuffer<Location>(jobIndex, stateEntity);
             DirtBuffer = entityCommandBuffer.AddBuffer<Dirt>(jobIndex, stateEntity);
             MoveableBuffer = entityCommandBuffer.AddBuffer<Moveable>(jobIndex, stateEntity);
+            PlanningAgentBuffer = entityCommandBuffer.AddBuffer<PlanningAgent>(jobIndex, stateEntity);
         }
 
-        public StateData Copy(int jobIndex, EntityCommandBuffer.Concurrent entityCommandBuffer)
+        public StateData Copy(int jobIndex, EntityCommandBuffer.ParallelWriter entityCommandBuffer)
         {
             var stateEntity = entityCommandBuffer.Instantiate(jobIndex, StateEntity);
             var traitBasedObjects = entityCommandBuffer.SetBuffer<TraitBasedObject>(jobIndex, stateEntity);
@@ -248,14 +308,16 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
             var traitBasedObjectIds = entityCommandBuffer.SetBuffer<TraitBasedObjectId>(jobIndex, stateEntity);
             traitBasedObjectIds.CopyFrom(TraitBasedObjectIds.AsNativeArray());
 
-            var Locations = entityCommandBuffer.SetBuffer<Location>(jobIndex, stateEntity);
-            Locations.CopyFrom(LocationBuffer.AsNativeArray());
             var Robots = entityCommandBuffer.SetBuffer<Robot>(jobIndex, stateEntity);
             Robots.CopyFrom(RobotBuffer.AsNativeArray());
+            var Locations = entityCommandBuffer.SetBuffer<Location>(jobIndex, stateEntity);
+            Locations.CopyFrom(LocationBuffer.AsNativeArray());
             var Dirts = entityCommandBuffer.SetBuffer<Dirt>(jobIndex, stateEntity);
             Dirts.CopyFrom(DirtBuffer.AsNativeArray());
             var Moveables = entityCommandBuffer.SetBuffer<Moveable>(jobIndex, stateEntity);
             Moveables.CopyFrom(MoveableBuffer.AsNativeArray());
+            var PlanningAgents = entityCommandBuffer.SetBuffer<PlanningAgent>(jobIndex, stateEntity);
+            PlanningAgents.CopyFrom(PlanningAgentBuffer.AsNativeArray());
 
             return new StateData
             {
@@ -263,14 +325,15 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
                 TraitBasedObjects = traitBasedObjects,
                 TraitBasedObjectIds = traitBasedObjectIds,
 
-                LocationBuffer = Locations,
                 RobotBuffer = Robots,
+                LocationBuffer = Locations,
                 DirtBuffer = Dirts,
                 MoveableBuffer = Moveables,
+                PlanningAgentBuffer = PlanningAgents,
             };
         }
 
-        public void AddObject(NativeArray<ComponentType> types, out TraitBasedObject traitBasedObject, TraitBasedObjectId objectId, NativeString64 name = default)
+        public void AddObject(NativeArray<ComponentType> types, out TraitBasedObject traitBasedObject, TraitBasedObjectId objectId, FixedString64 name = default)
         {
             traitBasedObject = TraitBasedObject.Default;
 #if DEBUG
@@ -280,15 +343,15 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
             for (int i = 0; i < types.Length; i++)
             {
                 var t = types[i];
-                if (t.TypeIndex == s_LocationTypeIndex)
-                {
-                    LocationBuffer.Add(default);
-                    traitBasedObject.LocationIndex = (byte) (LocationBuffer.Length - 1);
-                }
-                else if (t.TypeIndex == s_RobotTypeIndex)
+                if (t.TypeIndex == s_RobotTypeIndex)
                 {
                     RobotBuffer.Add(default);
                     traitBasedObject.RobotIndex = (byte) (RobotBuffer.Length - 1);
+                }
+                else if (t.TypeIndex == s_LocationTypeIndex)
+                {
+                    LocationBuffer.Add(default);
+                    traitBasedObject.LocationIndex = (byte) (LocationBuffer.Length - 1);
                 }
                 else if (t.TypeIndex == s_DirtTypeIndex)
                 {
@@ -300,42 +363,70 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
                     MoveableBuffer.Add(default);
                     traitBasedObject.MoveableIndex = (byte) (MoveableBuffer.Length - 1);
                 }
+                else if (t.TypeIndex == s_PlanningAgentTypeIndex)
+                {
+                    PlanningAgentBuffer.Add(default);
+                    traitBasedObject.PlanningAgentIndex = (byte) (PlanningAgentBuffer.Length - 1);
+                }
             }
 
             TraitBasedObjectIds.Add(objectId);
             TraitBasedObjects.Add(traitBasedObject);
         }
 
-        public void AddObject(NativeArray<ComponentType> types, out TraitBasedObject traitBasedObject, out TraitBasedObjectId objectId, NativeString64 name = default)
+        public void AddObject(NativeArray<ComponentType> types, out TraitBasedObject traitBasedObject, out TraitBasedObjectId objectId, FixedString64 name = default)
         {
             objectId = new TraitBasedObjectId() { Id = ObjectId.GetNext() };
             AddObject(types, out traitBasedObject, objectId, name);
         }
 
+        public void ConvertAndSetPlannerTrait(Entity sourceEntity, EntityManager sourceEntityManager,
+            NativeArray<ComponentType> sourceTraitTypes, IDictionary<Entity, TraitBasedObjectId> entityToObjectId,
+            ref TraitBasedObject traitBasedObject)
+        {
+            unsafe
+            {
+                foreach (var type in sourceTraitTypes)
+                {
+                    if (type == typeof(Generated.Semantic.Traits.LocationData))
+                    {
+                        var traitData = sourceEntityManager.GetComponentData<Generated.Semantic.Traits.LocationData>(sourceEntity);
+                        var plannerTraitData = new Location();
+                        UnsafeUtility.CopyStructureToPtr(ref traitData, UnsafeUtility.AddressOf(ref plannerTraitData));
+                        SetTraitOnObject(plannerTraitData, ref traitBasedObject);
+                    }
+                }
+            }
+        }
+
         public void SetTraitOnObject(ITrait trait, ref TraitBasedObject traitBasedObject)
         {
-            if (trait is Location LocationTrait)
-                SetTraitOnObject(LocationTrait, ref traitBasedObject);
-            else if (trait is Robot RobotTrait)
+            if (trait is Robot RobotTrait)
                 SetTraitOnObject(RobotTrait, ref traitBasedObject);
+            else if (trait is Location LocationTrait)
+                SetTraitOnObject(LocationTrait, ref traitBasedObject);
             else if (trait is Dirt DirtTrait)
                 SetTraitOnObject(DirtTrait, ref traitBasedObject);
             else if (trait is Moveable MoveableTrait)
                 SetTraitOnObject(MoveableTrait, ref traitBasedObject);
+            else if (trait is PlanningAgent PlanningAgentTrait)
+                SetTraitOnObject(PlanningAgentTrait, ref traitBasedObject);
             else 
                 throw new ArgumentException($"Trait {trait} of type {trait.GetType()} is not supported in this state representation.");
         }
 
         public void SetTraitOnObjectAtIndex(ITrait trait, int traitBasedObjectIndex)
         {
-            if (trait is Location LocationTrait)
-                SetTraitOnObjectAtIndex(LocationTrait, traitBasedObjectIndex);
-            else if (trait is Robot RobotTrait)
+            if (trait is Robot RobotTrait)
                 SetTraitOnObjectAtIndex(RobotTrait, traitBasedObjectIndex);
+            else if (trait is Location LocationTrait)
+                SetTraitOnObjectAtIndex(LocationTrait, traitBasedObjectIndex);
             else if (trait is Dirt DirtTrait)
                 SetTraitOnObjectAtIndex(DirtTrait, traitBasedObjectIndex);
             else if (trait is Moveable MoveableTrait)
                 SetTraitOnObjectAtIndex(MoveableTrait, traitBasedObjectIndex);
+            else if (trait is PlanningAgent PlanningAgentTrait)
+                SetTraitOnObjectAtIndex(PlanningAgentTrait, traitBasedObjectIndex);
             else 
                 throw new ArgumentException($"Trait {trait} of type {trait.GetType()} is not supported in this state representation.");
         }
@@ -406,7 +497,8 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
             traitBuffer.RemoveAt(lastBufferIndex);
 
             // Update index for object with last trait in buffer
-            for (int i = 0; i < TraitBasedObjects.Length; i++)
+            var numObjects = TraitBasedObjects.Length;
+            for (int i = 0; i < numObjects; i++)
             {
                 var otherTraitBasedObject = TraitBasedObjects[i];
                 if (otherTraitBasedObject[objectTraitIndex] == lastBufferIndex)
@@ -418,7 +510,7 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
             }
 
             // Update traitBasedObject in buffer (ref is to a copy)
-            for (int i = 0; i < TraitBasedObjects.Length; i++)
+            for (int i = 0; i < numObjects; i++)
             {
                 if (traitBasedObject.Equals(TraitBasedObjects[i]))
                 {
@@ -438,10 +530,11 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
                 return false;
 
 
-            RemoveTraitOnObject<Location>(ref traitBasedObject);
             RemoveTraitOnObject<Robot>(ref traitBasedObject);
+            RemoveTraitOnObject<Location>(ref traitBasedObject);
             RemoveTraitOnObject<Dirt>(ref traitBasedObject);
             RemoveTraitOnObject<Moveable>(ref traitBasedObject);
+            RemoveTraitOnObject<PlanningAgent>(ref traitBasedObject);
 
             TraitBasedObjects.RemoveAt(objectIndex);
             TraitBasedObjectIds.RemoveAt(objectIndex);
@@ -506,7 +599,8 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
             traitBuffer.RemoveAt(lastBufferIndex);
 
             // Update index for object with last trait in buffer
-            for (int i = 0; i < TraitBasedObjects.Length; i++)
+            var numObjects = TraitBasedObjects.Length;
+            for (int i = 0; i < numObjects; i++)
             {
                 var otherTraitBasedObject = TraitBasedObjects[i];
                 if (otherTraitBasedObject[objectTraitIndex] == lastBufferIndex)
@@ -525,10 +619,11 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
 
         public bool RemoveTraitBasedObjectAtIndex(int traitBasedObjectIndex)
         {
-            RemoveTraitOnObjectAtIndex<Location>(traitBasedObjectIndex);
             RemoveTraitOnObjectAtIndex<Robot>(traitBasedObjectIndex);
+            RemoveTraitOnObjectAtIndex<Location>(traitBasedObjectIndex);
             RemoveTraitOnObjectAtIndex<Dirt>(traitBasedObjectIndex);
             RemoveTraitOnObjectAtIndex<Moveable>(traitBasedObjectIndex);
+            RemoveTraitOnObjectAtIndex<PlanningAgent>(traitBasedObjectIndex);
 
             TraitBasedObjects.RemoveAt(traitBasedObjectIndex);
             TraitBasedObjectIds.RemoveAt(traitBasedObjectIndex);
@@ -539,7 +634,8 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
 
         public NativeArray<int> GetTraitBasedObjectIndices(NativeList<int> traitBasedObjectIndices, NativeArray<ComponentType> traitFilter)
         {
-            for (var i = 0; i < TraitBasedObjects.Length; i++)
+            var numObjects = TraitBasedObjects.Length;
+            for (var i = 0; i < numObjects; i++)
             {
                 var traitBasedObject = TraitBasedObjects[i];
                 if (traitBasedObject.MatchesTraitFilter(traitFilter))
@@ -551,7 +647,8 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
 
         public NativeArray<int> GetTraitBasedObjectIndices(NativeList<int> traitBasedObjectIndices, params ComponentType[] traitFilter)
         {
-            for (var i = 0; i < TraitBasedObjects.Length; i++)
+            var numObjects = TraitBasedObjects.Length;
+            for (var i = 0; i < numObjects; i++)
             {
                 var traitBasedObject = TraitBasedObjects[i];
                 if (traitBasedObject.MatchesTraitFilter(traitFilter))
@@ -618,13 +715,15 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
             switch (index)
             {
                 case 0:
-                    return LocationBuffer.Reinterpret<T>();
-                case 1:
                     return RobotBuffer.Reinterpret<T>();
+                case 1:
+                    return LocationBuffer.Reinterpret<T>();
                 case 2:
                     return DirtBuffer.Reinterpret<T>();
                 case 3:
                     return MoveableBuffer.Reinterpret<T>();
+                case 4:
+                    return PlanningAgentBuffer.Reinterpret<T>();
             }
 
             return default;
@@ -639,10 +738,11 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
 
             // Easy check is to make sure each state has the same number of trait-based objects
             if (TraitBasedObjects.Length != rhsState.TraitBasedObjects.Length
-                || LocationBuffer.Length != rhsState.LocationBuffer.Length
                 || RobotBuffer.Length != rhsState.RobotBuffer.Length
+                || LocationBuffer.Length != rhsState.LocationBuffer.Length
                 || DirtBuffer.Length != rhsState.DirtBuffer.Length
-                || MoveableBuffer.Length != rhsState.MoveableBuffer.Length)
+                || MoveableBuffer.Length != rhsState.MoveableBuffer.Length
+                || PlanningAgentBuffer.Length != rhsState.PlanningAgentBuffer.Length)
                 return false;
 
             var objectMap = new ObjectCorrespondence(TraitBasedObjectIds.Length, Allocator.Temp);
@@ -656,21 +756,23 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
         {
             // Easy check is to make sure each state has the same number of domain objects
             if (TraitBasedObjects.Length != rhsState.TraitBasedObjects.Length
-                || LocationBuffer.Length != rhsState.LocationBuffer.Length
                 || RobotBuffer.Length != rhsState.RobotBuffer.Length
+                || LocationBuffer.Length != rhsState.LocationBuffer.Length
                 || DirtBuffer.Length != rhsState.DirtBuffer.Length
-                || MoveableBuffer.Length != rhsState.MoveableBuffer.Length)
+                || MoveableBuffer.Length != rhsState.MoveableBuffer.Length
+                || PlanningAgentBuffer.Length != rhsState.PlanningAgentBuffer.Length)
                 return false;
 
             return TryGetObjectMapping(rhsState, objectMap);
         }
 
-        bool TryGetObjectMapping(StateData rhsState, ObjectCorrespondence objectMap)
+        internal bool TryGetObjectMapping(StateData rhsState, ObjectCorrespondence objectMap)
         {
             objectMap.Initialize(TraitBasedObjectIds, rhsState.TraitBasedObjectIds);
 
             bool statesEqual = true;
-            for (int lhsIndex = 0; lhsIndex < TraitBasedObjects.Length; lhsIndex++)
+            var numObjects = TraitBasedObjects.Length;
+            for (int lhsIndex = 0; lhsIndex < numObjects; lhsIndex++)
             {
                 var lhsId = TraitBasedObjectIds[lhsIndex].Id;
                 if (objectMap.TryGetValue(lhsId, out _)) // already matched
@@ -678,7 +780,8 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
 
                 // todo lhsIndex to start? would require swapping rhs on assignments, though
                 bool matchFound = true;
-                for (var rhsIndex = 0; rhsIndex < rhsState.TraitBasedObjects.Length; rhsIndex++)
+
+                for (var rhsIndex = 0; rhsIndex < numObjects; rhsIndex++)
                 {
                     var rhsId = rhsState.TraitBasedObjectIds[rhsIndex].Id;
                     if (objectMap.ContainsRHS(rhsId)) // skip if already assigned todo optimize this
@@ -724,6 +827,7 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
             if (!traitBasedObjectLHS.HasSameTraits(traitBasedObjectRHS))
                 return false;
 
+
             if (traitBasedObjectLHS.LocationIndex != TraitBasedObject.Unset
                 && !LocationTraitAttributesEqual(LocationBuffer[traitBasedObjectLHS.LocationIndex], rhsState.LocationBuffer[traitBasedObjectRHS.LocationIndex]))
                 return false;
@@ -753,8 +857,16 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
             // h = 3860031 + (h+y)*2779 + (h*y*2)   // from How to Hash a Set by Richard O’Keefe
             var stateHashValue = 3860031 + (397 + TraitBasedObjectIds.Length) * 2779 + (397 * TraitBasedObjectIds.Length * 2);
 
+            int bufferLength;
 
-            for (int i = 0; i < LocationBuffer.Length; i++)
+            bufferLength = RobotBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
+            {
+                var value = 397;
+                stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
+            }
+            bufferLength = LocationBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
             {
                 var element = LocationBuffer[i];
                 var value = 397
@@ -762,17 +874,20 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
                     ^ element.Forward.GetHashCode();
                 stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
             }
-            for (int i = 0; i < RobotBuffer.Length; i++)
+            bufferLength = DirtBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
             {
                 var value = 397;
                 stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
             }
-            for (int i = 0; i < DirtBuffer.Length; i++)
+            bufferLength = MoveableBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
             {
                 var value = 397;
                 stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
             }
-            for (int i = 0; i < MoveableBuffer.Length; i++)
+            bufferLength = PlanningAgentBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
             {
                 var value = 397;
                 stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
@@ -787,7 +902,8 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
                 return string.Empty;
 
             var sb = new StringBuilder();
-            for (var traitBasedObjectIndex = 0; traitBasedObjectIndex < TraitBasedObjects.Length; traitBasedObjectIndex++)
+            var numObjects = TraitBasedObjects.Length;
+            for (var traitBasedObjectIndex = 0; traitBasedObjectIndex < numObjects; traitBasedObjectIndex++)
             {
                 var traitBasedObject = TraitBasedObjects[traitBasedObjectIndex];
                 sb.AppendLine(TraitBasedObjectIds[traitBasedObjectIndex].ToString());
@@ -796,11 +912,11 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
 
                 var traitIndex = traitBasedObject[i++];
                 if (traitIndex != TraitBasedObject.Unset)
-                    sb.AppendLine(LocationBuffer[traitIndex].ToString());
+                    sb.AppendLine(RobotBuffer[traitIndex].ToString());
 
                 traitIndex = traitBasedObject[i++];
                 if (traitIndex != TraitBasedObject.Unset)
-                    sb.AppendLine(RobotBuffer[traitIndex].ToString());
+                    sb.AppendLine(LocationBuffer[traitIndex].ToString());
 
                 traitIndex = traitBasedObject[i++];
                 if (traitIndex != TraitBasedObject.Unset)
@@ -809,6 +925,10 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
                 traitIndex = traitBasedObject[i++];
                 if (traitIndex != TraitBasedObject.Unset)
                     sb.AppendLine(MoveableBuffer[traitIndex].ToString());
+
+                traitIndex = traitBasedObject[i++];
+                if (traitIndex != TraitBasedObject.Unset)
+                    sb.AppendLine(PlanningAgentBuffer[traitIndex].ToString());
 
                 sb.AppendLine();
             }
@@ -819,17 +939,21 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
 
     public struct StateDataContext : ITraitBasedStateDataContext<TraitBasedObject, StateEntityKey, StateData>
     {
-        internal EntityCommandBuffer.Concurrent EntityCommandBuffer;
+        public bool IsCreated;
+        internal EntityCommandBuffer.ParallelWriter EntityCommandBuffer;
         internal EntityArchetype m_StateArchetype;
         internal int JobIndex;
 
-        [ReadOnly] public BufferFromEntity<TraitBasedObject> TraitBasedObjects;
-        [ReadOnly] public BufferFromEntity<TraitBasedObjectId> TraitBasedObjectIds;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<TraitBasedObject> TraitBasedObjects;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<TraitBasedObjectId> TraitBasedObjectIds;
 
-        [ReadOnly] public BufferFromEntity<Location> LocationData;
-        [ReadOnly] public BufferFromEntity<Robot> RobotData;
-        [ReadOnly] public BufferFromEntity<Dirt> DirtData;
-        [ReadOnly] public BufferFromEntity<Moveable> MoveableData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<Robot> RobotData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<Location> LocationData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<Dirt> DirtData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<Moveable> MoveableData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<PlanningAgent> PlanningAgentData;
+
+        [NativeDisableContainerSafetyRestriction,ReadOnly] ObjectCorrespondence m_ObjectCorrespondence;
 
         public StateDataContext(JobComponentSystem system, EntityArchetype stateArchetype)
         {
@@ -837,13 +961,16 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
             TraitBasedObjects = system.GetBufferFromEntity<TraitBasedObject>(true);
             TraitBasedObjectIds = system.GetBufferFromEntity<TraitBasedObjectId>(true);
 
-            LocationData = system.GetBufferFromEntity<Location>(true);
             RobotData = system.GetBufferFromEntity<Robot>(true);
+            LocationData = system.GetBufferFromEntity<Location>(true);
             DirtData = system.GetBufferFromEntity<Dirt>(true);
             MoveableData = system.GetBufferFromEntity<Moveable>(true);
+            PlanningAgentData = system.GetBufferFromEntity<PlanningAgent>(true);
 
             m_StateArchetype = stateArchetype;
             JobIndex = 0;
+            m_ObjectCorrespondence = default;
+            IsCreated = true;
         }
 
         public StateData GetStateData(StateEntityKey stateKey)
@@ -856,10 +983,11 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
                 TraitBasedObjects = TraitBasedObjects[stateEntity],
                 TraitBasedObjectIds = TraitBasedObjectIds[stateEntity],
 
-                LocationBuffer = LocationData[stateEntity],
                 RobotBuffer = RobotData[stateEntity],
+                LocationBuffer = LocationData[stateEntity],
                 DirtBuffer = DirtData[stateEntity],
                 MoveableBuffer = MoveableData[stateEntity],
+                PlanningAgentBuffer = PlanningAgentData[stateEntity],
             };
         }
 
@@ -885,7 +1013,13 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
 
         public bool Equals(StateData x, StateData y)
         {
-            return x.Equals(y);
+            if (x.TraitBasedObjectIds.Length != y.TraitBasedObjectIds.Length)
+                return false;
+
+            if (!m_ObjectCorrespondence.IsCreated)
+                m_ObjectCorrespondence = new ObjectCorrespondence(x.TraitBasedObjectIds.Length, Allocator.Temp);
+
+            return x.TryGetObjectMapping(y, m_ObjectCorrespondence);
         }
 
         public int GetHashCode(StateData obj)
@@ -897,22 +1031,58 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
     [DisableAutoCreation, AlwaysUpdateSystem]
     public class StateManager : JobComponentSystem, ITraitBasedStateManager<TraitBasedObject, StateEntityKey, StateData, StateDataContext>
     {
-        public ExclusiveEntityTransaction ExclusiveEntityTransaction;
+        public new EntityManager EntityManager
+        {
+            get
+            {
+                if (!m_EntityTransactionActive)
+                    BeginEntityExclusivity();
+
+                return ExclusiveEntityTransaction.EntityManager;
+            }
+        }
+
+        ExclusiveEntityTransaction m_ExclusiveEntityTransaction;
+        public ExclusiveEntityTransaction ExclusiveEntityTransaction
+        {
+            get
+            {
+                if (!m_EntityTransactionActive)
+                    BeginEntityExclusivity();
+
+                return m_ExclusiveEntityTransaction;
+            }
+        }
+
+        StateDataContext m_StateDataContext;
+        public StateDataContext StateDataContext
+        {
+            get
+            {
+                if (m_StateDataContext.IsCreated)
+                    return m_StateDataContext;
+
+                m_StateDataContext = new StateDataContext(this, m_StateArchetype);
+                return m_StateDataContext;
+            }
+        }
+
         public event Action Destroying;
 
         List<EntityCommandBuffer> m_EntityCommandBuffers;
         EntityArchetype m_StateArchetype;
+        bool m_EntityTransactionActive = false;
 
         protected override void OnCreate()
         {
-            m_StateArchetype = EntityManager.CreateArchetype(typeof(State), typeof(TraitBasedObject), typeof(TraitBasedObjectId), typeof(HashCode),
-                typeof(Location),
+            m_StateArchetype = base.EntityManager.CreateArchetype(typeof(State), typeof(TraitBasedObject), typeof(TraitBasedObjectId), typeof(HashCode),
                 typeof(Robot),
+                typeof(Location),
                 typeof(Dirt),
-                typeof(Moveable));
+                typeof(Moveable),
+                typeof(PlanningAgent));
 
             m_EntityCommandBuffers = new List<EntityCommandBuffer>();
-            BeginEntityExclusivity();
         }
 
         protected override void OnDestroy()
@@ -932,32 +1102,21 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
 
         public StateData CreateStateData()
         {
-            EndEntityExclusivity();
-            var stateEntity = EntityManager.CreateEntity(m_StateArchetype);
-            BeginEntityExclusivity();
-            return new StateData(this, stateEntity, true);
+            var stateEntity = ExclusiveEntityTransaction.CreateEntity(m_StateArchetype);
+            return new StateData(ExclusiveEntityTransaction, stateEntity);;
         }
 
         public StateData GetStateData(StateEntityKey stateKey, bool readWrite = false)
         {
-            return !Enabled || !EntityManager.Exists(stateKey.Entity) ?
-                default : new StateData(this, stateKey.Entity, readWrite);
+            return !Enabled || !ExclusiveEntityTransaction.Exists(stateKey.Entity) ?
+                default : new StateData(ExclusiveEntityTransaction, stateKey.Entity);
         }
 
         public void DestroyState(StateEntityKey stateKey)
         {
             var stateEntity = stateKey.Entity;
-            if (EntityManager != null && EntityManager.IsCreated && EntityManager.Exists(stateEntity))
-            {
-                EndEntityExclusivity();
-                EntityManager.DestroyEntity(stateEntity);
-                BeginEntityExclusivity();
-            }
-        }
-
-        public StateDataContext GetStateDataContext()
-        {
-            return new StateDataContext(this, m_StateArchetype);
+            if (ExclusiveEntityTransaction.Exists(stateEntity))
+                ExclusiveEntityTransaction.DestroyEntity(stateEntity);
         }
 
         public StateEntityKey GetStateDataKey(StateData stateData)
@@ -967,28 +1126,26 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
 
         public StateData CopyStateData(StateData stateData)
         {
-            EndEntityExclusivity();
-            var copyStateEntity = EntityManager.Instantiate(stateData.StateEntity);
-            BeginEntityExclusivity();
-            return new StateData(this, copyStateEntity, true);
+            var copyStateEntity = ExclusiveEntityTransaction.Instantiate(stateData.StateEntity);
+            return new StateData(ExclusiveEntityTransaction, copyStateEntity);
         }
 
         public StateEntityKey CopyState(StateEntityKey stateKey)
         {
-            EndEntityExclusivity();
-            var copyStateEntity = EntityManager.Instantiate(stateKey.Entity);
-            BeginEntityExclusivity();
-            var stateData = GetStateData(stateKey);
+            var copyStateEntity = ExclusiveEntityTransaction.Instantiate(stateKey.Entity);
+            var stateData = new StateData(ExclusiveEntityTransaction, copyStateEntity);
             return new StateEntityKey { Entity = copyStateEntity, HashCode = stateData.GetHashCode()};
         }
 
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
-            if (!EntityManager.ExclusiveEntityTransactionDependency.IsCompleted)
-                return inputDeps;
+            var jobDependencyHandle = ExclusiveEntityTransaction.EntityManager.ExclusiveEntityTransactionDependency;
+            if (jobDependencyHandle.IsCompleted)
+            {
+                jobDependencyHandle.Complete();
+                ClearECBs();
+            }
 
-            EntityManager.ExclusiveEntityTransactionDependency.Complete();
-            ClearECBs();
             return inputDeps;
         }
 
@@ -1013,12 +1170,16 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
 
         void BeginEntityExclusivity()
         {
-            ExclusiveEntityTransaction = EntityManager.BeginExclusiveEntityTransaction();
+            m_StateDataContext = new StateDataContext(this, m_StateArchetype);
+            m_ExclusiveEntityTransaction = base.EntityManager.BeginExclusiveEntityTransaction();
+            m_EntityTransactionActive = true;
         }
 
         void EndEntityExclusivity()
         {
-            EntityManager.EndExclusiveEntityTransaction();
+            base.EntityManager.EndExclusiveEntityTransaction();
+            m_EntityTransactionActive = false;
+            m_StateDataContext = default;
         }
     }
 
@@ -1029,12 +1190,9 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
 
         public JobHandle Schedule(JobHandle inputDeps)
         {
-            var entityManager = StateManager.EntityManager;
-            inputDeps = JobHandle.CombineDependencies(inputDeps, entityManager.ExclusiveEntityTransactionDependency);
-
-            var stateDataContext = StateManager.GetStateDataContext();
+            var stateDataContext = StateManager.StateDataContext;
             var ecb = StateManager.GetEntityCommandBuffer();
-            stateDataContext.EntityCommandBuffer = ecb.ToConcurrent();
+            stateDataContext.EntityCommandBuffer = ecb.AsParallelWriter();
             var destroyStatesJobHandle = new DestroyStatesJob<StateEntityKey, StateData, StateDataContext>()
             {
                 StateDataContext = stateDataContext,
@@ -1047,6 +1205,7 @@ namespace Generated.AI.Planner.StateRepresentation.Clean
                 EntityCommandBuffer = ecb
             }.Schedule(destroyStatesJobHandle);
 
+            var entityManager = StateManager.ExclusiveEntityTransaction.EntityManager;
             entityManager.ExclusiveEntityTransactionDependency = playbackECBJobHandle;
             return playbackECBJobHandle;
         }

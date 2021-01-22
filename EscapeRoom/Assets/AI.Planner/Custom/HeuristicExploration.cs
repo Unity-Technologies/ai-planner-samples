@@ -7,28 +7,29 @@ using UnityEngine;
 
 namespace AI.Planner.Custom.Escape
 {
-    public struct HeuristicExploration : ICustomHeuristic<StateData>
+    public struct HeuristicExploration : ICustomCumulativeRewardEstimator<StateData>
     {
         public BoundedValue Evaluate(StateData stateData)
         {
-            float estimatedValue = 0;
-            
-            var waypointIndices = new NativeList<int>(stateData.TraitBasedObjects.Length, Allocator.Temp);
-            
-            var waypointFilter = new NativeArray<ComponentType>(1, Allocator.Temp){ [0] = ComponentType.ReadWrite<Waypoint>()};
-            stateData.GetTraitBasedObjectIndices(waypointIndices, waypointFilter);
-            waypointFilter.Dispose();
-            
-            for (int i = 0; i < waypointIndices.Length; i++)
-            {
-                var waypoint = stateData.GetTraitOnObjectAtIndex<Waypoint>(waypointIndices[i]);
-                if (waypoint.Visited > 0)
-                    estimatedValue += Mathf.Max(0, 5 - waypoint.Visited) * 0.1f; // Increase curiosity by encouraging visiting less visited area first
-            }
-            
-            waypointIndices.Dispose();
+            float estimatedValue = 50f; // the reward for reaching the goal
 
-            return new BoundedValue(-100 - estimatedValue, estimatedValue, 100 + estimatedValue);
+            var characterIndices = new NativeList<int>(3, Allocator.Temp);
+
+            var characterFilter = new NativeArray<ComponentType>(1, Allocator.Temp){ [0] = ComponentType.ReadWrite<Character>()};
+            stateData.GetTraitBasedObjectIndices(characterIndices, characterFilter);
+            characterFilter.Dispose();
+
+            for (int i = 0; i < characterIndices.Length; i++)
+            {
+                var character = stateData.GetTraitOnObjectAtIndex<Character>(characterIndices[i]);
+                var waypoint = stateData.GetTraitOnObject<Waypoint>(stateData.GetTraitBasedObject(character.Waypoint));
+                estimatedValue += -0.1f * waypoint.StepsToEnd; // move cost for each step
+            }
+
+
+            characterIndices.Dispose();
+
+            return new BoundedValue(estimatedValue - 100, estimatedValue - 5, estimatedValue);
         }
     }
 }

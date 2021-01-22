@@ -3,10 +3,12 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.AI.Planner;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
+using Unity.AI.Planner.Traits;
 using Unity.Burst;
 using Generated.AI.Planner.StateRepresentation;
 using Generated.AI.Planner.StateRepresentation.Clean;
+using Unity.Collections.LowLevel.Unsafe;
+using Unity.Mathematics;
 
 namespace Generated.AI.Planner.Plans.Clean
 {
@@ -27,11 +29,39 @@ namespace Generated.AI.Planner.Plans.Clean
         [ReadOnly] NativeArray<StateEntityKey> m_StatesToExpand;
         StateDataContext m_StateDataContext;
 
+        // local allocations
+        [NativeDisableContainerSafetyRestriction] NativeArray<ComponentType> RobotFilter;
+        [NativeDisableContainerSafetyRestriction] NativeList<int> RobotObjectIndices;
+        [NativeDisableContainerSafetyRestriction] NativeArray<ComponentType> DirtFilter;
+        [NativeDisableContainerSafetyRestriction] NativeList<int> DirtObjectIndices;
+
+        [NativeDisableContainerSafetyRestriction] NativeList<ActionKey> ArgumentPermutations;
+        [NativeDisableContainerSafetyRestriction] NativeList<CollectFixupReference> TransitionInfo;
+
+        bool LocalContainersInitialized => ArgumentPermutations.IsCreated;
+
         internal Collect(Guid guid, NativeList<StateEntityKey> statesToExpand, StateDataContext stateDataContext)
         {
             ActionGuid = guid;
             m_StatesToExpand = statesToExpand.AsDeferredJobArray();
             m_StateDataContext = stateDataContext;
+            RobotFilter = default;
+            RobotObjectIndices = default;
+            DirtFilter = default;
+            DirtObjectIndices = default;
+            ArgumentPermutations = default;
+            TransitionInfo = default;
+        }
+
+        void InitializeLocalContainers()
+        {
+            RobotFilter = new NativeArray<ComponentType>(2, Allocator.Temp){[0] = ComponentType.ReadWrite<Robot>(),[1] = ComponentType.ReadWrite<Location>(),  };
+            RobotObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            DirtFilter = new NativeArray<ComponentType>(2, Allocator.Temp){[0] = ComponentType.ReadWrite<Dirt>(),[1] = ComponentType.ReadWrite<Location>(),  };
+            DirtObjectIndices = new NativeList<int>(2, Allocator.Temp);
+
+            ArgumentPermutations = new NativeList<ActionKey>(4, Allocator.Temp);
+            TransitionInfo = new NativeList<CollectFixupReference>(ArgumentPermutations.Length, Allocator.Temp);
         }
 
         public static int GetIndexForParameterName(string parameterName)
@@ -47,12 +77,10 @@ namespace Generated.AI.Planner.Plans.Clean
 
         void GenerateArgumentPermutations(StateData stateData, NativeList<ActionKey> argumentPermutations)
         {
-            var RobotFilter = new NativeArray<ComponentType>(2, Allocator.Temp){[0] = ComponentType.ReadWrite<Unity.AI.Planner.DomainLanguage.TraitBased.Location>(),[1] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.Robot>(),  };
-            var DirtFilter = new NativeArray<ComponentType>(2, Allocator.Temp){[0] = ComponentType.ReadWrite<Unity.AI.Planner.DomainLanguage.TraitBased.Location>(),[1] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.Dirt>(),  };
-            var RobotObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            RobotObjectIndices.Clear();
             stateData.GetTraitBasedObjectIndices(RobotObjectIndices, RobotFilter);
             
-            var DirtObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            DirtObjectIndices.Clear();
             stateData.GetTraitBasedObjectIndices(DirtObjectIndices, DirtFilter);
             
             var LocationBuffer = stateData.LocationBuffer;
@@ -89,10 +117,6 @@ namespace Generated.AI.Planner.Plans.Clean
             }
             
             }
-            RobotObjectIndices.Dispose();
-            DirtObjectIndices.Dispose();
-            RobotFilter.Dispose();
-            DirtFilter.Dispose();
         }
 
         StateTransitionInfoPair<StateEntityKey, ActionKey, StateTransitionInfo> ApplyEffects(ActionKey action, StateEntityKey originalStateEntityKey)
@@ -121,27 +145,28 @@ namespace Generated.AI.Planner.Plans.Clean
 
         public void Execute(int jobIndex)
         {
+            if (!LocalContainersInitialized)
+                InitializeLocalContainers();
+
             m_StateDataContext.JobIndex = jobIndex;
 
             var stateEntityKey = m_StatesToExpand[jobIndex];
             var stateData = m_StateDataContext.GetStateData(stateEntityKey);
 
-            var argumentPermutations = new NativeList<ActionKey>(4, Allocator.Temp);
-            GenerateArgumentPermutations(stateData, argumentPermutations);
+            ArgumentPermutations.Clear();
+            GenerateArgumentPermutations(stateData, ArgumentPermutations);
 
-            var transitionInfo = new NativeArray<CollectFixupReference>(argumentPermutations.Length, Allocator.Temp);
-            for (var i = 0; i < argumentPermutations.Length; i++)
+            TransitionInfo.Clear();
+            TransitionInfo.Capacity = math.max(TransitionInfo.Capacity, ArgumentPermutations.Length);
+            for (var i = 0; i < ArgumentPermutations.Length; i++)
             {
-                transitionInfo[i] = new CollectFixupReference { TransitionInfo = ApplyEffects(argumentPermutations[i], stateEntityKey) };
+                TransitionInfo.Add(new CollectFixupReference { TransitionInfo = ApplyEffects(ArgumentPermutations[i], stateEntityKey) });
             }
 
             // fixups
             var stateEntity = stateEntityKey.Entity;
             var fixupBuffer = m_StateDataContext.EntityCommandBuffer.AddBuffer<CollectFixupReference>(jobIndex, stateEntity);
-            fixupBuffer.CopyFrom(transitionInfo);
-
-            transitionInfo.Dispose();
-            argumentPermutations.Dispose();
+            fixupBuffer.CopyFrom(TransitionInfo);
         }
 
         

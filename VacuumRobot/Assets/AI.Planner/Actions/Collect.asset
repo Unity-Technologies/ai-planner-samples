@@ -9,32 +9,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00e16f0575d73480ebe7b76bb4ae3939, type: 3}
+  m_Script: {fileID: 11500000, guid: ab48ef9de5712c440bd0e1f505d00e04, type: 3}
   m_Name: Collect
   m_EditorClassIdentifier: 
   m_Parameters:
   - m_Name: Robot
     m_RequiredTraits:
-    - {fileID: 11400000, guid: 9d24b90158d644873a4d488182380074, type: 2}
-    - {fileID: 11400000, guid: 2dd19cdd888894e8baa06bcdc23dd5dd, type: 2}
+    - {fileID: 11400000, guid: acdcec5a57d5a4b4cb8c4d3883581964, type: 2}
+    - {fileID: 11400000, guid: 6b7c2cd8001b84552891cf17ebf8b587, type: 2}
     m_ProhibitedTraits: []
+    m_LimitCount: 0
+    m_LimitComparerType: 
+    m_LimitComparerReference: 
   - m_Name: Dirt
     m_RequiredTraits:
-    - {fileID: 11400000, guid: 9d24b90158d644873a4d488182380074, type: 2}
-    - {fileID: 11400000, guid: 150fe5d00d17742daa2077b3b77d64b1, type: 2}
+    - {fileID: 11400000, guid: 11e92cabadf1b8748910960dc9633039, type: 2}
+    - {fileID: 11400000, guid: 6b7c2cd8001b84552891cf17ebf8b587, type: 2}
     m_ProhibitedTraits: []
+    m_LimitCount: 0
+    m_LimitComparerType: 
+    m_LimitComparerReference: 
   m_Preconditions:
   - m_Operator: ==
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: Robot
-      m_Trait: {fileID: 11400000, guid: 9d24b90158d644873a4d488182380074, type: 2}
-      m_TraitFieldId: 101
+      m_Trait: {fileID: 11400000, guid: 6b7c2cd8001b84552891cf17ebf8b587, type: 2}
+      m_TraitPropertyId: 0
       m_Enum: {fileID: 0}
       m_Value: 
     m_OperandB:
       m_Parameter: Dirt
-      m_Trait: {fileID: 11400000, guid: 9d24b90158d644873a4d488182380074, type: 2}
-      m_TraitFieldId: 101
+      m_Trait: {fileID: 11400000, guid: 6b7c2cd8001b84552891cf17ebf8b587, type: 2}
+      m_TraitPropertyId: 0
       m_Enum: {fileID: 0}
       m_Value: 
   m_CreatedObjects: []

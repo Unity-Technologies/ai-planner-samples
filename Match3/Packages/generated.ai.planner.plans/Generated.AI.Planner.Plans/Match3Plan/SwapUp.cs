@@ -3,11 +3,13 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.AI.Planner;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
+using Unity.AI.Planner.Traits;
 using Unity.Burst;
 using Generated.AI.Planner.StateRepresentation;
 using Generated.AI.Planner.StateRepresentation.Match3Plan;
-using Generated.AI.Planner.StateRepresentation.Enums;
+using Generated.Semantic.Traits.Enums;
+using Unity.Collections.LowLevel.Unsafe;
+using Unity.Mathematics;
 
 namespace Generated.AI.Planner.Plans.Match3Plan
 {
@@ -30,11 +32,45 @@ namespace Generated.AI.Planner.Plans.Match3Plan
         [ReadOnly] NativeArray<StateEntityKey> m_StatesToExpand;
         StateDataContext m_StateDataContext;
 
+        // local allocations
+        [NativeDisableContainerSafetyRestriction] NativeArray<ComponentType> GameFilter;
+        [NativeDisableContainerSafetyRestriction] NativeList<int> GameObjectIndices;
+        [NativeDisableContainerSafetyRestriction] NativeArray<ComponentType> SourceFilter;
+        [NativeDisableContainerSafetyRestriction] NativeList<int> SourceObjectIndices;
+        [NativeDisableContainerSafetyRestriction] NativeArray<ComponentType> TargetFilter;
+        [NativeDisableContainerSafetyRestriction] NativeList<int> TargetObjectIndices;
+
+        [NativeDisableContainerSafetyRestriction] NativeList<ActionKey> ArgumentPermutations;
+        [NativeDisableContainerSafetyRestriction] NativeList<SwapUpFixupReference> TransitionInfo;
+
+        bool LocalContainersInitialized => ArgumentPermutations.IsCreated;
+
         internal SwapUp(Guid guid, NativeList<StateEntityKey> statesToExpand, StateDataContext stateDataContext)
         {
             ActionGuid = guid;
             m_StatesToExpand = statesToExpand.AsDeferredJobArray();
             m_StateDataContext = stateDataContext;
+            GameFilter = default;
+            GameObjectIndices = default;
+            SourceFilter = default;
+            SourceObjectIndices = default;
+            TargetFilter = default;
+            TargetObjectIndices = default;
+            ArgumentPermutations = default;
+            TransitionInfo = default;
+        }
+
+        void InitializeLocalContainers()
+        {
+            GameFilter = new NativeArray<ComponentType>(1, Allocator.Temp){[0] = ComponentType.ReadWrite<Game>(),  };
+            GameObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            SourceFilter = new NativeArray<ComponentType>(3, Allocator.Temp){[0] = ComponentType.ReadWrite<Cell>(),[1] = ComponentType.ReadWrite<Coordinate>(), [2] = ComponentType.Exclude<Blocker>(),  };
+            SourceObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            TargetFilter = new NativeArray<ComponentType>(3, Allocator.Temp){[0] = ComponentType.ReadWrite<Cell>(),[1] = ComponentType.ReadWrite<Coordinate>(), [2] = ComponentType.Exclude<Blocker>(),  };
+            TargetObjectIndices = new NativeList<int>(2, Allocator.Temp);
+
+            ArgumentPermutations = new NativeList<ActionKey>(4, Allocator.Temp);
+            TransitionInfo = new NativeList<SwapUpFixupReference>(ArgumentPermutations.Length, Allocator.Temp);
         }
 
         public static int GetIndexForParameterName(string parameterName)
@@ -52,16 +88,13 @@ namespace Generated.AI.Planner.Plans.Match3Plan
 
         void GenerateArgumentPermutations(StateData stateData, NativeList<ActionKey> argumentPermutations)
         {
-            var GameFilter = new NativeArray<ComponentType>(1, Allocator.Temp){[0] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.Game>(),  };
-            var SourceFilter = new NativeArray<ComponentType>(3, Allocator.Temp){[0] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.Coordinate>(),[1] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.Cell>(), [2] = ComponentType.Exclude<Generated.AI.Planner.StateRepresentation.Blocker>(),  };
-            var TargetFilter = new NativeArray<ComponentType>(3, Allocator.Temp){[0] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.Coordinate>(),[1] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.Cell>(), [2] = ComponentType.Exclude<Generated.AI.Planner.StateRepresentation.Blocker>(),  };
-            var GameObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            GameObjectIndices.Clear();
             stateData.GetTraitBasedObjectIndices(GameObjectIndices, GameFilter);
             
-            var SourceObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            SourceObjectIndices.Clear();
             stateData.GetTraitBasedObjectIndices(SourceObjectIndices, SourceFilter);
             
-            var TargetObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            TargetObjectIndices.Clear();
             stateData.GetTraitBasedObjectIndices(TargetObjectIndices, TargetFilter);
             
             var CellBuffer = stateData.CellBuffer;
@@ -124,12 +157,6 @@ namespace Generated.AI.Planner.Plans.Match3Plan
             }
             
             }
-            GameObjectIndices.Dispose();
-            SourceObjectIndices.Dispose();
-            TargetObjectIndices.Dispose();
-            GameFilter.Dispose();
-            SourceFilter.Dispose();
-            TargetFilter.Dispose();
         }
 
         StateTransitionInfoPair<StateEntityKey, ActionKey, StateTransitionInfo> ApplyEffects(ActionKey action, StateEntityKey originalStateEntityKey)
@@ -170,27 +197,28 @@ namespace Generated.AI.Planner.Plans.Match3Plan
 
         public void Execute(int jobIndex)
         {
+            if (!LocalContainersInitialized)
+                InitializeLocalContainers();
+
             m_StateDataContext.JobIndex = jobIndex;
 
             var stateEntityKey = m_StatesToExpand[jobIndex];
             var stateData = m_StateDataContext.GetStateData(stateEntityKey);
 
-            var argumentPermutations = new NativeList<ActionKey>(4, Allocator.Temp);
-            GenerateArgumentPermutations(stateData, argumentPermutations);
+            ArgumentPermutations.Clear();
+            GenerateArgumentPermutations(stateData, ArgumentPermutations);
 
-            var transitionInfo = new NativeArray<SwapUpFixupReference>(argumentPermutations.Length, Allocator.Temp);
-            for (var i = 0; i < argumentPermutations.Length; i++)
+            TransitionInfo.Clear();
+            TransitionInfo.Capacity = math.max(TransitionInfo.Capacity, ArgumentPermutations.Length);
+            for (var i = 0; i < ArgumentPermutations.Length; i++)
             {
-                transitionInfo[i] = new SwapUpFixupReference { TransitionInfo = ApplyEffects(argumentPermutations[i], stateEntityKey) };
+                TransitionInfo.Add(new SwapUpFixupReference { TransitionInfo = ApplyEffects(ArgumentPermutations[i], stateEntityKey) });
             }
 
             // fixups
             var stateEntity = stateEntityKey.Entity;
             var fixupBuffer = m_StateDataContext.EntityCommandBuffer.AddBuffer<SwapUpFixupReference>(jobIndex, stateEntity);
-            fixupBuffer.CopyFrom(transitionInfo);
-
-            transitionInfo.Dispose();
-            argumentPermutations.Dispose();
+            fixupBuffer.CopyFrom(TransitionInfo);
         }
 
         

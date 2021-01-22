@@ -9,27 +9,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 701c5d8bd1c704db8b5f6d23b982b4f4, type: 3}
+  m_Script: {fileID: 11500000, guid: a27cd9824d2898648bbe2fd90bc62daf, type: 3}
   m_Name: SearchPruned
   m_EditorClassIdentifier: 
-  m_Namespace: 
   m_Parameters:
   - m_Name: Game
     m_RequiredTraits:
-    - {fileID: 11400000, guid: f0443c10ffc6c43d58c33424c809f475, type: 2}
+    - {fileID: 11400000, guid: 34d75f53f6f2f49e8b3ff71f1c751d5a, type: 2}
     m_ProhibitedTraits: []
+    m_LimitCount: 0
+    m_LimitComparerType: 
+    m_LimitComparerReference: 
   m_Criteria:
   - m_Operator: <
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: Game
-      m_Trait: {fileID: 11400000, guid: f0443c10ffc6c43d58c33424c809f475, type: 2}
-      m_TraitFieldId: 101
+      m_Trait: {fileID: 11400000, guid: 34d75f53f6f2f49e8b3ff71f1c751d5a, type: 2}
+      m_TraitPropertyId: 1
       m_Enum: {fileID: 0}
       m_Value: 
     m_OperandB:
       m_Parameter: 
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 0
   m_TerminalReward: 0

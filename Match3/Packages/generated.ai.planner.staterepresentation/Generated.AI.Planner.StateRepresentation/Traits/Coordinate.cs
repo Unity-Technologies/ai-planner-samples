@@ -1,27 +1,29 @@
 using System;
+using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
-using Generated.AI.Planner.StateRepresentation.Enums;
+using Unity.AI.Planner.Traits;
+using Generated.Semantic.Traits.Enums;
 
 namespace Generated.AI.Planner.StateRepresentation
 {
     [Serializable]
-    public struct Coordinate : ITrait, IEquatable<Coordinate>
+    public struct Coordinate : ITrait, IBufferElementData, IEquatable<Coordinate>
     {
         public const string FieldX = "X";
         public const string FieldY = "Y";
-        public System.Int64 X;
-        public System.Int64 Y;
+        public System.Int32 X;
+        public System.Int32 Y;
 
         public void SetField(string fieldName, object value)
         {
             switch (fieldName)
             {
                 case nameof(X):
-                    X = (System.Int64)value;
+                    X = (System.Int32)value;
                     break;
                 case nameof(Y):
-                    Y = (System.Int64)value;
+                    Y = (System.Int32)value;
                     break;
                 default:
                     throw new ArgumentException($"Field \"{fieldName}\" does not exist on trait Coordinate.");

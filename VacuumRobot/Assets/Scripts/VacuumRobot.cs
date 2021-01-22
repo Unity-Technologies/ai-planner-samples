@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using Unity.AI.Planner;
 using UnityEngine;
-using UnityEngine.AI.Planner.Controller;
-using UnityEngine.AI.Planner.DomainLanguage.TraitBased;
+using Generated.Semantic.Traits;
+using Unity.AI.Planner.Controller;
 #if PLANNER_STATEREPRESENTATION_GENERATED
 using Generated.AI.Planner.StateRepresentation;
 #endif
@@ -22,12 +22,15 @@ namespace VacuumGame
         ControllerType m_ControlledBy;
 
         DecisionController m_Controller;
+
+        [SerializeField]
+        float m_SensorDelay = 1;
 #pragma warning restore 0649
 
         GameObject m_Target;
-
         Coroutine m_NavigateTo;
-        bool m_UpdateStateWithWorldQuery;
+
+        float m_TimeOfLastWorldQuery;
 
         public IEnumerator NavigateTo(GameObject target)
         {
@@ -90,21 +93,12 @@ namespace VacuumGame
             else
             {
                 m_Controller.AutoUpdate = true;
-                if (m_UpdateStateWithWorldQuery && m_Controller.PlanExecutionStatus != PlanExecutionStatus.ExecutingAction)
+                if (m_Controller.IsIdle && Time.realtimeSinceStartup > m_TimeOfLastWorldQuery + m_SensorDelay)
                 {
                     m_Controller.UpdateStateWithWorldQuery();
-                    m_UpdateStateWithWorldQuery = false;
+                    m_TimeOfLastWorldQuery = Time.realtimeSinceStartup;
                 }
             }
-        }
-
-        void OnTriggerEnter(Collider other)
-        {
-#if PLANNER_STATEREPRESENTATION_GENERATED
-            var traitComponent = other.gameObject.GetComponent<TraitComponent>();
-            if (traitComponent && traitComponent.HasTraitData<Dirt>())
-                m_UpdateStateWithWorldQuery = true;
-#endif
         }
     }
 }

@@ -1,0 +1,24 @@
+{
+    "name": "EscapeRoom",
+    "references": [
+        "GUID:5d7abd49047cd6749bac9593cc354ad1",
+        "GUID:60870cbb771f86242bc12088f98e8d91"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "SEMANTIC_TRAITS_GENERATED"
+    ],
+    "versionDefines": [
+        {
+            "name": "generated.semantic.traits",
+            "expression": "0.0",
+            "define": "SEMANTIC_TRAITS_GENERATED"
+        }
+    ],
+    "noEngineReferences": false
+}

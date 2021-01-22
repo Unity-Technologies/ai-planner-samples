@@ -1,6 +1,6 @@
 using System;
 using Unity.AI.Planner;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
+using Unity.AI.Planner.Traits;
 using Unity.AI.Planner.Jobs;
 using Unity.Collections;
 using Unity.Entities;
@@ -67,13 +67,13 @@ namespace Generated.AI.Planner.Plans.Match3Plan
 
         public JobHandle Schedule(JobHandle inputDeps)
         {
-            var entityManager = StateManager.EntityManager;
-            var SwapRightDataContext = StateManager.GetStateDataContext();
+            var entityManager = StateManager.ExclusiveEntityTransaction.EntityManager;
+            var SwapRightDataContext = StateManager.StateDataContext;
             var SwapRightECB = StateManager.GetEntityCommandBuffer();
-            SwapRightDataContext.EntityCommandBuffer = SwapRightECB.ToConcurrent();
-            var SwapUpDataContext = StateManager.GetStateDataContext();
+            SwapRightDataContext.EntityCommandBuffer = SwapRightECB.AsParallelWriter();
+            var SwapUpDataContext = StateManager.StateDataContext;
             var SwapUpECB = StateManager.GetEntityCommandBuffer();
-            SwapUpDataContext.EntityCommandBuffer = SwapUpECB.ToConcurrent();
+            SwapUpDataContext.EntityCommandBuffer = SwapUpECB.AsParallelWriter();
 
             var allActionJobs = new NativeArray<JobHandle>(3, Allocator.TempJob)
             {

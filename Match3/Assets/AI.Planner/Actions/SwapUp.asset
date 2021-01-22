@@ -9,32 +9,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00e16f0575d73480ebe7b76bb4ae3939, type: 3}
+  m_Script: {fileID: 11500000, guid: ab48ef9de5712c440bd0e1f505d00e04, type: 3}
   m_Name: SwapUp
   m_EditorClassIdentifier: 
   m_Parameters:
   - m_Name: Game
     m_RequiredTraits:
-    - {fileID: 11400000, guid: f0443c10ffc6c43d58c33424c809f475, type: 2}
+    - {fileID: 11400000, guid: 34d75f53f6f2f49e8b3ff71f1c751d5a, type: 2}
     m_ProhibitedTraits: []
     m_LimitCount: 0
     m_LimitComparerType: 
     m_LimitComparerReference: 
   - m_Name: Source
     m_RequiredTraits:
-    - {fileID: 11400000, guid: adfe9bd08fc85481299fc94e70faed69, type: 2}
-    - {fileID: 11400000, guid: 19c88bf78931d4c20986199ecf2b9a27, type: 2}
+    - {fileID: 11400000, guid: 42508e4b3ca8d4060864a077fddbba52, type: 2}
+    - {fileID: 11400000, guid: 21f59350b9f4a46fbacbafad031289d9, type: 2}
     m_ProhibitedTraits:
-    - {fileID: 11400000, guid: 21258737886f6450b9d0ff16f92e308b, type: 2}
+    - {fileID: 11400000, guid: 23396ac8e5ecb42bca441a979a434c05, type: 2}
     m_LimitCount: 0
     m_LimitComparerType: 
     m_LimitComparerReference: 
   - m_Name: Target
     m_RequiredTraits:
-    - {fileID: 11400000, guid: adfe9bd08fc85481299fc94e70faed69, type: 2}
-    - {fileID: 11400000, guid: 19c88bf78931d4c20986199ecf2b9a27, type: 2}
+    - {fileID: 11400000, guid: 42508e4b3ca8d4060864a077fddbba52, type: 2}
+    - {fileID: 11400000, guid: 21f59350b9f4a46fbacbafad031289d9, type: 2}
     m_ProhibitedTraits:
-    - {fileID: 11400000, guid: 21258737886f6450b9d0ff16f92e308b, type: 2}
+    - {fileID: 11400000, guid: 23396ac8e5ecb42bca441a979a434c05, type: 2}
     m_LimitCount: 0
     m_LimitComparerType: 
     m_LimitComparerReference: 
@@ -43,43 +43,43 @@ MonoBehaviour:
     m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: Source
-      m_Trait: {fileID: 11400000, guid: 19c88bf78931d4c20986199ecf2b9a27, type: 2}
-      m_TraitFieldId: 103
+      m_Trait: {fileID: 11400000, guid: 42508e4b3ca8d4060864a077fddbba52, type: 2}
+      m_TraitPropertyId: 3
       m_Enum: {fileID: 0}
       m_Value: 
     m_OperandB:
       m_Parameter: Target
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
   - m_Operator: '!='
     m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: Source
-      m_Trait: {fileID: 11400000, guid: 19c88bf78931d4c20986199ecf2b9a27, type: 2}
-      m_TraitFieldId: 100
+      m_Trait: {fileID: 11400000, guid: 42508e4b3ca8d4060864a077fddbba52, type: 2}
+      m_TraitPropertyId: 0
       m_Enum: {fileID: 0}
       m_Value: 
     m_OperandB:
       m_Parameter: 
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
-      m_Enum: {fileID: 11400000, guid: fc0b23ee093e5455caa36dac73e98e8c, type: 2}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 11400000, guid: 5c94d6dd0542b46e9bacb1966704d210, type: 2}
       m_Value: None
   - m_Operator: '!='
     m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: Target
-      m_Trait: {fileID: 11400000, guid: 19c88bf78931d4c20986199ecf2b9a27, type: 2}
-      m_TraitFieldId: 100
+      m_Trait: {fileID: 11400000, guid: 42508e4b3ca8d4060864a077fddbba52, type: 2}
+      m_TraitPropertyId: 0
       m_Enum: {fileID: 0}
       m_Value: 
     m_OperandB:
       m_Parameter: 
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
-      m_Enum: {fileID: 11400000, guid: fc0b23ee093e5455caa36dac73e98e8c, type: 2}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 11400000, guid: 5c94d6dd0542b46e9bacb1966704d210, type: 2}
       m_Value: None
   m_CreatedObjects: []
   m_RemovedObjects: []
@@ -88,14 +88,14 @@ MonoBehaviour:
     m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: Game
-      m_Trait: {fileID: 11400000, guid: f0443c10ffc6c43d58c33424c809f475, type: 2}
-      m_TraitFieldId: 100
+      m_Trait: {fileID: 11400000, guid: 34d75f53f6f2f49e8b3ff71f1c751d5a, type: 2}
+      m_TraitPropertyId: 0
       m_Enum: {fileID: 0}
       m_Value: 
     m_OperandB:
       m_Parameter: 
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 1
   - m_Operator: Custom
@@ -103,13 +103,13 @@ MonoBehaviour:
     m_OperandA:
       m_Parameter: 
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
     m_OperandB:
       m_Parameter: 
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
   m_Reward: 0

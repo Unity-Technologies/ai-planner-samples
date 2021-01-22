@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
+using Generated.Semantic.Traits;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -17,7 +17,9 @@ public class GameController : MonoBehaviour
 
     public void PickItem(GameObject character, GameObject item)
     {
-	    item.SetActive(false);
-	    character.transform.Find("Key").gameObject.SetActive(true);
+        item.SetActive(false);
+        character.transform.Find("Key").gameObject.SetActive(true);
+        character.GetComponent<Carrier>().Carried = item;
+        item.GetComponent<Carriable>().CarriedBy = character;
     }
 }

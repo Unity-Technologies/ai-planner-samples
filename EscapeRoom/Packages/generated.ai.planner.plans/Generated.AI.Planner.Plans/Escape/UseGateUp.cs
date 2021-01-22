@@ -3,11 +3,13 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.AI.Planner;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
+using Unity.AI.Planner.Traits;
 using Unity.Burst;
 using Generated.AI.Planner.StateRepresentation;
 using Generated.AI.Planner.StateRepresentation.Escape;
-using Generated.AI.Planner.StateRepresentation.Enums;
+using Generated.Semantic.Traits.Enums;
+using Unity.Collections.LowLevel.Unsafe;
+using Unity.Mathematics;
 
 namespace Generated.AI.Planner.Plans.Escape
 {
@@ -34,11 +36,57 @@ namespace Generated.AI.Planner.Plans.Escape
         [ReadOnly] NativeArray<StateEntityKey> m_StatesToExpand;
         StateDataContext m_StateDataContext;
 
+        // local allocations
+        [NativeDisableContainerSafetyRestriction] NativeArray<ComponentType> CharacterFilter;
+        [NativeDisableContainerSafetyRestriction] NativeList<int> CharacterObjectIndices;
+        [NativeDisableContainerSafetyRestriction] NativeArray<ComponentType> ToFilter;
+        [NativeDisableContainerSafetyRestriction] NativeList<int> ToObjectIndices;
+        [NativeDisableContainerSafetyRestriction] NativeArray<ComponentType> FromFilter;
+        [NativeDisableContainerSafetyRestriction] NativeList<int> FromObjectIndices;
+        [NativeDisableContainerSafetyRestriction] NativeArray<ComponentType> ActivationBlueFilter;
+        [NativeDisableContainerSafetyRestriction] NativeList<int> ActivationBlueObjectIndices;
+        [NativeDisableContainerSafetyRestriction] NativeArray<ComponentType> ActivationPinkFilter;
+        [NativeDisableContainerSafetyRestriction] NativeList<int> ActivationPinkObjectIndices;
+
+        [NativeDisableContainerSafetyRestriction] NativeList<ActionKey> ArgumentPermutations;
+        [NativeDisableContainerSafetyRestriction] NativeList<UseGateUpFixupReference> TransitionInfo;
+
+        bool LocalContainersInitialized => ArgumentPermutations.IsCreated;
+
         internal UseGateUp(Guid guid, NativeList<StateEntityKey> statesToExpand, StateDataContext stateDataContext)
         {
             ActionGuid = guid;
             m_StatesToExpand = statesToExpand.AsDeferredJobArray();
             m_StateDataContext = stateDataContext;
+            CharacterFilter = default;
+            CharacterObjectIndices = default;
+            ToFilter = default;
+            ToObjectIndices = default;
+            FromFilter = default;
+            FromObjectIndices = default;
+            ActivationBlueFilter = default;
+            ActivationBlueObjectIndices = default;
+            ActivationPinkFilter = default;
+            ActivationPinkObjectIndices = default;
+            ArgumentPermutations = default;
+            TransitionInfo = default;
+        }
+
+        void InitializeLocalContainers()
+        {
+            CharacterFilter = new NativeArray<ComponentType>(1, Allocator.Temp){[0] = ComponentType.ReadWrite<Character>(),  };
+            CharacterObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            ToFilter = new NativeArray<ComponentType>(2, Allocator.Temp){[0] = ComponentType.ReadWrite<Waypoint>(),[1] = ComponentType.ReadWrite<ActivationLock>(),  };
+            ToObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            FromFilter = new NativeArray<ComponentType>(1, Allocator.Temp){[0] = ComponentType.ReadWrite<Waypoint>(),  };
+            FromObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            ActivationBlueFilter = new NativeArray<ComponentType>(2, Allocator.Temp){[0] = ComponentType.ReadWrite<ActivationSwitch>(),[1] = ComponentType.ReadWrite<Waypoint>(),  };
+            ActivationBlueObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            ActivationPinkFilter = new NativeArray<ComponentType>(2, Allocator.Temp){[0] = ComponentType.ReadWrite<ActivationSwitch>(),[1] = ComponentType.ReadWrite<Waypoint>(),  };
+            ActivationPinkObjectIndices = new NativeList<int>(2, Allocator.Temp);
+
+            ArgumentPermutations = new NativeList<ActionKey>(4, Allocator.Temp);
+            TransitionInfo = new NativeList<UseGateUpFixupReference>(ArgumentPermutations.Length, Allocator.Temp);
         }
 
         public static int GetIndexForParameterName(string parameterName)
@@ -60,24 +108,19 @@ namespace Generated.AI.Planner.Plans.Escape
 
         void GenerateArgumentPermutations(StateData stateData, NativeList<ActionKey> argumentPermutations)
         {
-            var CharacterFilter = new NativeArray<ComponentType>(1, Allocator.Temp){[0] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.Character>(),  };
-            var ToFilter = new NativeArray<ComponentType>(2, Allocator.Temp){[0] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.ActivationLock>(),[1] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.Waypoint>(),  };
-            var FromFilter = new NativeArray<ComponentType>(1, Allocator.Temp){[0] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.Waypoint>(),  };
-            var ActivationBlueFilter = new NativeArray<ComponentType>(2, Allocator.Temp){[0] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.ActivationSwitch>(),[1] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.Waypoint>(),  };
-            var ActivationPinkFilter = new NativeArray<ComponentType>(2, Allocator.Temp){[0] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.ActivationSwitch>(),[1] = ComponentType.ReadWrite<Generated.AI.Planner.StateRepresentation.Waypoint>(),  };
-            var CharacterObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            CharacterObjectIndices.Clear();
             stateData.GetTraitBasedObjectIndices(CharacterObjectIndices, CharacterFilter);
             
-            var ToObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            ToObjectIndices.Clear();
             stateData.GetTraitBasedObjectIndices(ToObjectIndices, ToFilter);
             
-            var FromObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            FromObjectIndices.Clear();
             stateData.GetTraitBasedObjectIndices(FromObjectIndices, FromFilter);
             
-            var ActivationBlueObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            ActivationBlueObjectIndices.Clear();
             stateData.GetTraitBasedObjectIndices(ActivationBlueObjectIndices, ActivationBlueFilter);
             
-            var ActivationPinkObjectIndices = new NativeList<int>(2, Allocator.Temp);
+            ActivationPinkObjectIndices.Clear();
             stateData.GetTraitBasedObjectIndices(ActivationPinkObjectIndices, ActivationPinkFilter);
             
             var WaypointBuffer = stateData.WaypointBuffer;
@@ -212,16 +255,6 @@ namespace Generated.AI.Planner.Plans.Escape
             }
             
             }
-            CharacterObjectIndices.Dispose();
-            ToObjectIndices.Dispose();
-            FromObjectIndices.Dispose();
-            ActivationBlueObjectIndices.Dispose();
-            ActivationPinkObjectIndices.Dispose();
-            CharacterFilter.Dispose();
-            ToFilter.Dispose();
-            FromFilter.Dispose();
-            ActivationBlueFilter.Dispose();
-            ActivationPinkFilter.Dispose();
         }
 
         StateTransitionInfoPair<StateEntityKey, ActionKey, StateTransitionInfo> ApplyEffects(ActionKey action, StateEntityKey originalStateEntityKey)
@@ -250,11 +283,6 @@ namespace Generated.AI.Planner.Plans.Escape
                     @Waypoint.@Occupied = false;
                     newWaypointBuffer[originalFromObject.WaypointIndex] = @Waypoint;
             }
-            {
-                    var @Waypoint = newWaypointBuffer[originalToObject.WaypointIndex];
-                    @Waypoint.@Visited += 1;
-                    newWaypointBuffer[originalToObject.WaypointIndex] = @Waypoint;
-            }
 
             
 
@@ -267,34 +295,35 @@ namespace Generated.AI.Planner.Plans.Escape
 
         float Reward(StateData originalState, ActionKey action, StateData newState)
         {
-            var reward = 1f;
+            var reward = -0.1f;
 
             return reward;
         }
 
         public void Execute(int jobIndex)
         {
+            if (!LocalContainersInitialized)
+                InitializeLocalContainers();
+
             m_StateDataContext.JobIndex = jobIndex;
 
             var stateEntityKey = m_StatesToExpand[jobIndex];
             var stateData = m_StateDataContext.GetStateData(stateEntityKey);
 
-            var argumentPermutations = new NativeList<ActionKey>(4, Allocator.Temp);
-            GenerateArgumentPermutations(stateData, argumentPermutations);
+            ArgumentPermutations.Clear();
+            GenerateArgumentPermutations(stateData, ArgumentPermutations);
 
-            var transitionInfo = new NativeArray<UseGateUpFixupReference>(argumentPermutations.Length, Allocator.Temp);
-            for (var i = 0; i < argumentPermutations.Length; i++)
+            TransitionInfo.Clear();
+            TransitionInfo.Capacity = math.max(TransitionInfo.Capacity, ArgumentPermutations.Length);
+            for (var i = 0; i < ArgumentPermutations.Length; i++)
             {
-                transitionInfo[i] = new UseGateUpFixupReference { TransitionInfo = ApplyEffects(argumentPermutations[i], stateEntityKey) };
+                TransitionInfo.Add(new UseGateUpFixupReference { TransitionInfo = ApplyEffects(ArgumentPermutations[i], stateEntityKey) });
             }
 
             // fixups
             var stateEntity = stateEntityKey.Entity;
             var fixupBuffer = m_StateDataContext.EntityCommandBuffer.AddBuffer<UseGateUpFixupReference>(jobIndex, stateEntity);
-            fixupBuffer.CopyFrom(transitionInfo);
-
-            transitionInfo.Dispose();
-            argumentPermutations.Dispose();
+            fixupBuffer.CopyFrom(TransitionInfo);
         }
 
         

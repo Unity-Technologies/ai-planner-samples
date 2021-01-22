@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7112968021839922267}
   - component: {fileID: 4186567151366303934}
   - component: {fileID: 1335517788}
+  - component: {fileID: -6736097559394466608}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -44,7 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89ce6649a5a6e40bc8f637d19c243df2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_controller: 1
 --- !u!114 &1335517788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57,17 +57,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd8ac131c09d04008af565adfda708ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlanDefinition: {fileID: 11400000, guid: b64da0180756b46eb8961d391e2b5d2e, type: 2}
+  m_ProblemDefinition: {fileID: 11400000, guid: cbceb3a6fdda94342b1b9acd1bd26351,
+    type: 2}
   m_InitializeOnStart: 1
-  m_SearchSettings:
-    SearchIterationsPerUpdate: 1
+  m_PlannerSettings:
+    PlanningIterationsPerUpdate: 1
     StateExpansionBudgetPerIteration: 1
-    UseCustomSearchFrequency: 1
-    MinFramesPerSearchUpdate: 0
+    UseCustomPlanningFrequency: 0
+    MinFramesPerPlanningUpdate: 0
     CapPlanSize: 0
     MaxStatesInPlan: 0
     StopPlanningWhenToleranceAchieved: 0
-    RootPolicyValueTolerance: 0
+    RootEstimatedRewardTolerance: 0
     CapPlanUpdates: 0
     MaxUpdates: 2147483647
     GraphSelectionJobMode: 0
@@ -76,9 +77,8 @@ MonoBehaviour:
     ExecutionMode: 5
     MaximumDecisionTolerance: 0
     MinimumPlanSize: 0
-    MinimumSearchTime: 1
-  m_WorldObjectQuery:
-    m_Filters: []
+    MinimumPlanningTime: 1
+  m_WorldObjectQuery: {fileID: -6736097559394466608}
   m_ActionExecuteInfos:
   - m_ActionName: SwapRight
     m_PlanExecutorStateUpdateMode: 1
@@ -87,13 +87,13 @@ MonoBehaviour:
     m_Source: {fileID: 4186567151366303934}
     m_Arguments:
     - m_Parameter: Source
-      m_Trait: {fileID: 11400000, guid: adfe9bd08fc85481299fc94e70faed69, type: 2}
-      m_TraitFieldId: 0
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
     - m_Parameter: Target
-      m_Trait: {fileID: 11400000, guid: adfe9bd08fc85481299fc94e70faed69, type: 2}
-      m_TraitFieldId: 0
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
   - m_ActionName: SwapUp
@@ -103,13 +103,72 @@ MonoBehaviour:
     m_Source: {fileID: 4186567151366303934}
     m_Arguments:
     - m_Parameter: Source
-      m_Trait: {fileID: 11400000, guid: adfe9bd08fc85481299fc94e70faed69, type: 2}
-      m_TraitFieldId: 0
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
     - m_Parameter: Target
-      m_Trait: {fileID: 11400000, guid: adfe9bd08fc85481299fc94e70faed69, type: 2}
-      m_TraitFieldId: 0
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+  - m_ActionName: SwapRight
+    m_PlanExecutorStateUpdateMode: 0
+    m_Method: SwapCells
+    m_SourceGameObject: {fileID: 3114786095242188510}
+    m_Source: {fileID: 4186567151366303934}
+    m_Arguments:
+    - m_Parameter: Source
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+    - m_Parameter: Target
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+  - m_ActionName: SwapUp
+    m_PlanExecutorStateUpdateMode: 0
+    m_Method: SwapCells
+    m_SourceGameObject: {fileID: 3114786095242188510}
+    m_Source: {fileID: 4186567151366303934}
+    m_Arguments:
+    - m_Parameter: Source
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+    - m_Parameter: Target
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
   m_AutoUpdate: 1
+--- !u!114 &-6736097559394466608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3114786095242188510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f222baf27330f49959caf266f2f6b851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Query:
+    m_QueryGroups:
+    - m_Filters: []
+      m_Quantifier: 0
+      m_QuantifierLimit: 0
+      m_QuantifierScorer:
+        id: 0
+      m_RequiredTraits:
+        m_Traits: []
+      m_ProhibitedTraits:
+        m_Traits: []
+  references:
+    version: 1
+    00000000:
+      type: {class: , ns: , asm: }

@@ -9,17 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4733c0880a5a0ce4f94cc97cb9b0049b, type: 3}
+  m_Script: {fileID: 11500000, guid: 83c2836cfe3b2446da67909e4bcf860a, type: 3}
   m_Name: Blocker
   m_EditorClassIdentifier: 
-  m_Fields:
-  - m_Name: Life
-    m_Type: System.Int64
-    m_DefaultValue:
-      m_Name: 
-      m_BoolValue: 0
-      m_FloatValue: 0
-      m_IntValue: 2
-      m_StringValue: 
-      m_ObjectValue: {fileID: 0}
-    m_restriction: 0
+  m_Color: {r: 0.28, g: 1, b: 1, a: 1}
+  m_Properties:
+  - id: 0
+  m_NextElementId: 1
+  references:
+    version: 1
+    00000000:
+      type: {class: IntProperty, ns: Unity.Semantic.Traits, asm: Unity.Semantic.Traits}
+      data:
+        m_Name: Life
+        m_Id: 0
+        m_Value: 2

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
+using Generated.Semantic.Traits;
 using UnityEngine;
-#if PLANNER_STATEREPRESENTATION_GENERATED
-using Generated.AI.Planner.StateRepresentation;
-#endif
 
 namespace Match3
 {
@@ -11,18 +9,19 @@ namespace Match3
     public class Player : MonoBehaviour
     {
         public Match3Grid Grid { get; set; }
-  
-#if PLANNER_STATEREPRESENTATION_GENERATED
+
         // Used implicitly via Decision Controller
-        public IEnumerator SwapCells(Coordinate cell1, Coordinate cell2)
+        public IEnumerator SwapCells(GameObject cell1, GameObject cell2)
         {
-            Grid.SwapGems((int)cell1.X, (int)cell1.Y, (int)cell2.X, (int)cell2.Y);
+            var coords1 = cell1.GetComponent<Coordinate>();
+            var coords2 = cell2.GetComponent<Coordinate>();
+
+            Grid.SwapGems((int)coords1.X, (int)coords1.Y, (int)coords2.X, (int)coords2.Y);
 
             while (!Grid.ReadyToPlay())
             {
                 yield return null;
             }
         }
-#endif
     }
 }

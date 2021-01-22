@@ -1,12 +1,15 @@
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Unity.AI.Planner;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
+using Unity.AI.Planner.Traits;
 using Unity.AI.Planner.Jobs;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Jobs;
+using PlanningAgent = Unity.AI.Planner.Traits.PlanningAgent;
 
 namespace Generated.AI.Planner.StateRepresentation.Match3Plan
 {
@@ -36,18 +39,21 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
             var typeIndex = TypeManager.GetTypeIndex<T>();
             if (typeIndex == TypeManager.GetTypeIndex<Game>())
                 Index = 0;
-            else if (typeIndex == TypeManager.GetTypeIndex<Coordinate>())
-                Index = 1;
             else if (typeIndex == TypeManager.GetTypeIndex<Cell>())
+                Index = 1;
+            else if (typeIndex == TypeManager.GetTypeIndex<Coordinate>())
                 Index = 2;
             else if (typeIndex == TypeManager.GetTypeIndex<Blocker>())
                 Index = 3;
+            else if (typeIndex == TypeManager.GetTypeIndex<PlanningAgent>())
+                Index = 4;
         }
     }
 
-    public struct TraitBasedObject : ITraitBasedObject
+    [StructLayout(LayoutKind.Sequential, Size=8)]
+    public struct TraitBasedObject : ITraitBasedObject, IEquatable<TraitBasedObject>
     {
-        public int Length => 4;
+        public int Length => 5;
 
         public byte this[int i]
         {
@@ -58,11 +64,13 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
                     case 0:
                         return GameIndex;
                     case 1:
-                        return CoordinateIndex;
-                    case 2:
                         return CellIndex;
+                    case 2:
+                        return CoordinateIndex;
                     case 3:
                         return BlockerIndex;
+                    case 4:
+                        return PlanningAgentIndex;
                 }
 
                 return Unset;
@@ -75,13 +83,16 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
                         GameIndex = value;
                         break;
                     case 1:
-                        CoordinateIndex = value;
+                        CellIndex = value;
                         break;
                     case 2:
-                        CellIndex = value;
+                        CoordinateIndex = value;
                         break;
                     case 3:
                         BlockerIndex = value;
+                        break;
+                    case 4:
+                        PlanningAgentIndex = value;
                         break;
                 }
             }
@@ -92,22 +103,25 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
         public static TraitBasedObject Default => new TraitBasedObject
         {
             GameIndex = Unset,
-            CoordinateIndex = Unset,
             CellIndex = Unset,
+            CoordinateIndex = Unset,
             BlockerIndex = Unset,
+            PlanningAgentIndex = Unset,
         };
 
 
         public byte GameIndex;
-        public byte CoordinateIndex;
         public byte CellIndex;
+        public byte CoordinateIndex;
         public byte BlockerIndex;
+        public byte PlanningAgentIndex;
 
 
         static readonly int s_GameTypeIndex = TypeManager.GetTypeIndex<Game>();
-        static readonly int s_CoordinateTypeIndex = TypeManager.GetTypeIndex<Coordinate>();
         static readonly int s_CellTypeIndex = TypeManager.GetTypeIndex<Cell>();
+        static readonly int s_CoordinateTypeIndex = TypeManager.GetTypeIndex<Coordinate>();
         static readonly int s_BlockerTypeIndex = TypeManager.GetTypeIndex<Blocker>();
+        static readonly int s_PlanningAgentTypeIndex = TypeManager.GetTypeIndex<PlanningAgent>();
 
         public bool HasSameTraits(TraitBasedObject other)
         {
@@ -138,15 +152,13 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
             for (int i = 0; i < componentTypes.Length; i++)
             {
                 var t = componentTypes[i];
-
-                if (t.TypeIndex == s_GameTypeIndex)
+                if (t == default || t.TypeIndex == 0)
+                {
+                    // This seems to be necessary for Burst compilation; Doesn't happen with non-Burst compilation
+                }
+                else if (t.TypeIndex == s_GameTypeIndex)
                 {
                     if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ GameIndex == Unset)
-                        return false;
-                }
-                else if (t.TypeIndex == s_CoordinateTypeIndex)
-                {
-                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ CoordinateIndex == Unset)
                         return false;
                 }
                 else if (t.TypeIndex == s_CellTypeIndex)
@@ -154,9 +166,19 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
                     if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ CellIndex == Unset)
                         return false;
                 }
+                else if (t.TypeIndex == s_CoordinateTypeIndex)
+                {
+                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ CoordinateIndex == Unset)
+                        return false;
+                }
                 else if (t.TypeIndex == s_BlockerTypeIndex)
                 {
                     if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ BlockerIndex == Unset)
+                        return false;
+                }
+                else if (t.TypeIndex == s_PlanningAgentTypeIndex)
+                {
+                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ PlanningAgentIndex == Unset)
                         return false;
                 }
                 else
@@ -171,15 +193,13 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
             for (int i = 0; i < componentTypes.Length; i++)
             {
                 var t = componentTypes[i];
-
-                if (t.TypeIndex == s_GameTypeIndex)
+                if (t == default || t == null || t.TypeIndex == 0)
+                {
+                    // This seems to be necessary for Burst compilation; Doesn't happen with non-Burst compilation
+                }
+                else if (t.TypeIndex == s_GameTypeIndex)
                 {
                     if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ GameIndex == Unset)
-                        return false;
-                }
-                else if (t.TypeIndex == s_CoordinateTypeIndex)
-                {
-                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ CoordinateIndex == Unset)
                         return false;
                 }
                 else if (t.TypeIndex == s_CellTypeIndex)
@@ -187,9 +207,19 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
                     if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ CellIndex == Unset)
                         return false;
                 }
+                else if (t.TypeIndex == s_CoordinateTypeIndex)
+                {
+                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ CoordinateIndex == Unset)
+                        return false;
+                }
                 else if (t.TypeIndex == s_BlockerTypeIndex)
                 {
                     if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ BlockerIndex == Unset)
+                        return false;
+                }
+                else if (t.TypeIndex == s_PlanningAgentTypeIndex)
+                {
+                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ PlanningAgentIndex == Unset)
                         return false;
                 }
                 else
@@ -197,6 +227,32 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
             }
 
             return true;
+        }
+
+        public bool Equals(TraitBasedObject other)
+        {
+
+                return GameIndex == other.GameIndex && CellIndex == other.CellIndex && CoordinateIndex == other.CoordinateIndex && BlockerIndex == other.BlockerIndex && PlanningAgentIndex == other.PlanningAgentIndex;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is TraitBasedObject other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+
+                    var hashCode = GameIndex.GetHashCode();
+                    
+                     hashCode = (hashCode * 397) ^ CellIndex.GetHashCode();
+                     hashCode = (hashCode * 397) ^ CoordinateIndex.GetHashCode();
+                     hashCode = (hashCode * 397) ^ BlockerIndex.GetHashCode();
+                     hashCode = (hashCode * 397) ^ PlanningAgentIndex.GetHashCode();
+                return hashCode;
+            }
         }
     }
 
@@ -207,40 +263,44 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
         public DynamicBuffer<TraitBasedObjectId> TraitBasedObjectIds;
 
         public DynamicBuffer<Game> GameBuffer;
-        public DynamicBuffer<Coordinate> CoordinateBuffer;
         public DynamicBuffer<Cell> CellBuffer;
+        public DynamicBuffer<Coordinate> CoordinateBuffer;
         public DynamicBuffer<Blocker> BlockerBuffer;
+        public DynamicBuffer<PlanningAgent> PlanningAgentBuffer;
 
         static readonly int s_GameTypeIndex = TypeManager.GetTypeIndex<Game>();
-        static readonly int s_CoordinateTypeIndex = TypeManager.GetTypeIndex<Coordinate>();
         static readonly int s_CellTypeIndex = TypeManager.GetTypeIndex<Cell>();
+        static readonly int s_CoordinateTypeIndex = TypeManager.GetTypeIndex<Coordinate>();
         static readonly int s_BlockerTypeIndex = TypeManager.GetTypeIndex<Blocker>();
+        static readonly int s_PlanningAgentTypeIndex = TypeManager.GetTypeIndex<PlanningAgent>();
 
-        public StateData(JobComponentSystem system, Entity stateEntity, bool readWrite = false)
+        public StateData(ExclusiveEntityTransaction transaction, Entity stateEntity)
         {
             StateEntity = stateEntity;
-            TraitBasedObjects = system.GetBufferFromEntity<TraitBasedObject>(!readWrite)[stateEntity];
-            TraitBasedObjectIds = system.GetBufferFromEntity<TraitBasedObjectId>(!readWrite)[stateEntity];
+            TraitBasedObjects = transaction.GetBuffer<TraitBasedObject>(stateEntity);
+            TraitBasedObjectIds = transaction.GetBuffer<TraitBasedObjectId>(stateEntity);
 
-            GameBuffer = system.GetBufferFromEntity<Game>(!readWrite)[stateEntity];
-            CoordinateBuffer = system.GetBufferFromEntity<Coordinate>(!readWrite)[stateEntity];
-            CellBuffer = system.GetBufferFromEntity<Cell>(!readWrite)[stateEntity];
-            BlockerBuffer = system.GetBufferFromEntity<Blocker>(!readWrite)[stateEntity];
+            GameBuffer = transaction.GetBuffer<Game>(stateEntity);
+            CellBuffer = transaction.GetBuffer<Cell>(stateEntity);
+            CoordinateBuffer = transaction.GetBuffer<Coordinate>(stateEntity);
+            BlockerBuffer = transaction.GetBuffer<Blocker>(stateEntity);
+            PlanningAgentBuffer = transaction.GetBuffer<PlanningAgent>(stateEntity);
         }
 
-        public StateData(int jobIndex, EntityCommandBuffer.Concurrent entityCommandBuffer, Entity stateEntity)
+        public StateData(int jobIndex, EntityCommandBuffer.ParallelWriter entityCommandBuffer, Entity stateEntity)
         {
             StateEntity = stateEntity;
             TraitBasedObjects = entityCommandBuffer.AddBuffer<TraitBasedObject>(jobIndex, stateEntity);
             TraitBasedObjectIds = entityCommandBuffer.AddBuffer<TraitBasedObjectId>(jobIndex, stateEntity);
 
             GameBuffer = entityCommandBuffer.AddBuffer<Game>(jobIndex, stateEntity);
-            CoordinateBuffer = entityCommandBuffer.AddBuffer<Coordinate>(jobIndex, stateEntity);
             CellBuffer = entityCommandBuffer.AddBuffer<Cell>(jobIndex, stateEntity);
+            CoordinateBuffer = entityCommandBuffer.AddBuffer<Coordinate>(jobIndex, stateEntity);
             BlockerBuffer = entityCommandBuffer.AddBuffer<Blocker>(jobIndex, stateEntity);
+            PlanningAgentBuffer = entityCommandBuffer.AddBuffer<PlanningAgent>(jobIndex, stateEntity);
         }
 
-        public StateData Copy(int jobIndex, EntityCommandBuffer.Concurrent entityCommandBuffer)
+        public StateData Copy(int jobIndex, EntityCommandBuffer.ParallelWriter entityCommandBuffer)
         {
             var stateEntity = entityCommandBuffer.Instantiate(jobIndex, StateEntity);
             var traitBasedObjects = entityCommandBuffer.SetBuffer<TraitBasedObject>(jobIndex, stateEntity);
@@ -250,12 +310,14 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
 
             var Games = entityCommandBuffer.SetBuffer<Game>(jobIndex, stateEntity);
             Games.CopyFrom(GameBuffer.AsNativeArray());
-            var Coordinates = entityCommandBuffer.SetBuffer<Coordinate>(jobIndex, stateEntity);
-            Coordinates.CopyFrom(CoordinateBuffer.AsNativeArray());
             var Cells = entityCommandBuffer.SetBuffer<Cell>(jobIndex, stateEntity);
             Cells.CopyFrom(CellBuffer.AsNativeArray());
+            var Coordinates = entityCommandBuffer.SetBuffer<Coordinate>(jobIndex, stateEntity);
+            Coordinates.CopyFrom(CoordinateBuffer.AsNativeArray());
             var Blockers = entityCommandBuffer.SetBuffer<Blocker>(jobIndex, stateEntity);
             Blockers.CopyFrom(BlockerBuffer.AsNativeArray());
+            var PlanningAgents = entityCommandBuffer.SetBuffer<PlanningAgent>(jobIndex, stateEntity);
+            PlanningAgents.CopyFrom(PlanningAgentBuffer.AsNativeArray());
 
             return new StateData
             {
@@ -264,13 +326,14 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
                 TraitBasedObjectIds = traitBasedObjectIds,
 
                 GameBuffer = Games,
-                CoordinateBuffer = Coordinates,
                 CellBuffer = Cells,
+                CoordinateBuffer = Coordinates,
                 BlockerBuffer = Blockers,
+                PlanningAgentBuffer = PlanningAgents,
             };
         }
 
-        public void AddObject(NativeArray<ComponentType> types, out TraitBasedObject traitBasedObject, TraitBasedObjectId objectId, NativeString64 name = default)
+        public void AddObject(NativeArray<ComponentType> types, out TraitBasedObject traitBasedObject, TraitBasedObjectId objectId, FixedString64 name = default)
         {
             traitBasedObject = TraitBasedObject.Default;
 #if DEBUG
@@ -285,20 +348,25 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
                     GameBuffer.Add(default);
                     traitBasedObject.GameIndex = (byte) (GameBuffer.Length - 1);
                 }
-                else if (t.TypeIndex == s_CoordinateTypeIndex)
-                {
-                    CoordinateBuffer.Add(default);
-                    traitBasedObject.CoordinateIndex = (byte) (CoordinateBuffer.Length - 1);
-                }
                 else if (t.TypeIndex == s_CellTypeIndex)
                 {
                     CellBuffer.Add(default);
                     traitBasedObject.CellIndex = (byte) (CellBuffer.Length - 1);
                 }
+                else if (t.TypeIndex == s_CoordinateTypeIndex)
+                {
+                    CoordinateBuffer.Add(default);
+                    traitBasedObject.CoordinateIndex = (byte) (CoordinateBuffer.Length - 1);
+                }
                 else if (t.TypeIndex == s_BlockerTypeIndex)
                 {
                     BlockerBuffer.Add(default);
                     traitBasedObject.BlockerIndex = (byte) (BlockerBuffer.Length - 1);
+                }
+                else if (t.TypeIndex == s_PlanningAgentTypeIndex)
+                {
+                    PlanningAgentBuffer.Add(default);
+                    traitBasedObject.PlanningAgentIndex = (byte) (PlanningAgentBuffer.Length - 1);
                 }
             }
 
@@ -306,22 +374,72 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
             TraitBasedObjects.Add(traitBasedObject);
         }
 
-        public void AddObject(NativeArray<ComponentType> types, out TraitBasedObject traitBasedObject, out TraitBasedObjectId objectId, NativeString64 name = default)
+        public void AddObject(NativeArray<ComponentType> types, out TraitBasedObject traitBasedObject, out TraitBasedObjectId objectId, FixedString64 name = default)
         {
             objectId = new TraitBasedObjectId() { Id = ObjectId.GetNext() };
             AddObject(types, out traitBasedObject, objectId, name);
+        }
+
+        public void ConvertAndSetPlannerTrait(Entity sourceEntity, EntityManager sourceEntityManager,
+            NativeArray<ComponentType> sourceTraitTypes, IDictionary<Entity, TraitBasedObjectId> entityToObjectId,
+            ref TraitBasedObject traitBasedObject)
+        {
+            unsafe
+            {
+                foreach (var type in sourceTraitTypes)
+                {
+                    if (type == typeof(Generated.Semantic.Traits.GameData))
+                    {
+                        var traitData = sourceEntityManager.GetComponentData<Generated.Semantic.Traits.GameData>(sourceEntity);
+                        var plannerTraitData = new Game();
+                        UnsafeUtility.CopyStructureToPtr(ref traitData, UnsafeUtility.AddressOf(ref plannerTraitData));
+                        SetTraitOnObject(plannerTraitData, ref traitBasedObject);
+                    }
+                    if (type == typeof(Generated.Semantic.Traits.CellData))
+                    {
+                        var traitData = sourceEntityManager.GetComponentData<Generated.Semantic.Traits.CellData>(sourceEntity);
+                        var plannerTraitData = new Cell();
+                        plannerTraitData.Type = traitData.Type;
+                        if (entityToObjectId.TryGetValue(traitData.Left, out var Left))
+                            plannerTraitData.Left = Left;
+                        if (entityToObjectId.TryGetValue(traitData.Right, out var Right))
+                            plannerTraitData.Right = Right;
+                        if (entityToObjectId.TryGetValue(traitData.Top, out var Top))
+                            plannerTraitData.Top = Top;
+                        if (entityToObjectId.TryGetValue(traitData.Bottom, out var Bottom))
+                            plannerTraitData.Bottom = Bottom;
+                        SetTraitOnObject(plannerTraitData, ref traitBasedObject);
+                    }
+                    if (type == typeof(Generated.Semantic.Traits.CoordinateData))
+                    {
+                        var traitData = sourceEntityManager.GetComponentData<Generated.Semantic.Traits.CoordinateData>(sourceEntity);
+                        var plannerTraitData = new Coordinate();
+                        UnsafeUtility.CopyStructureToPtr(ref traitData, UnsafeUtility.AddressOf(ref plannerTraitData));
+                        SetTraitOnObject(plannerTraitData, ref traitBasedObject);
+                    }
+                    if (type == typeof(Generated.Semantic.Traits.BlockerData))
+                    {
+                        var traitData = sourceEntityManager.GetComponentData<Generated.Semantic.Traits.BlockerData>(sourceEntity);
+                        var plannerTraitData = new Blocker();
+                        UnsafeUtility.CopyStructureToPtr(ref traitData, UnsafeUtility.AddressOf(ref plannerTraitData));
+                        SetTraitOnObject(plannerTraitData, ref traitBasedObject);
+                    }
+                }
+            }
         }
 
         public void SetTraitOnObject(ITrait trait, ref TraitBasedObject traitBasedObject)
         {
             if (trait is Game GameTrait)
                 SetTraitOnObject(GameTrait, ref traitBasedObject);
-            else if (trait is Coordinate CoordinateTrait)
-                SetTraitOnObject(CoordinateTrait, ref traitBasedObject);
             else if (trait is Cell CellTrait)
                 SetTraitOnObject(CellTrait, ref traitBasedObject);
+            else if (trait is Coordinate CoordinateTrait)
+                SetTraitOnObject(CoordinateTrait, ref traitBasedObject);
             else if (trait is Blocker BlockerTrait)
                 SetTraitOnObject(BlockerTrait, ref traitBasedObject);
+            else if (trait is PlanningAgent PlanningAgentTrait)
+                SetTraitOnObject(PlanningAgentTrait, ref traitBasedObject);
             else 
                 throw new ArgumentException($"Trait {trait} of type {trait.GetType()} is not supported in this state representation.");
         }
@@ -330,12 +448,14 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
         {
             if (trait is Game GameTrait)
                 SetTraitOnObjectAtIndex(GameTrait, traitBasedObjectIndex);
-            else if (trait is Coordinate CoordinateTrait)
-                SetTraitOnObjectAtIndex(CoordinateTrait, traitBasedObjectIndex);
             else if (trait is Cell CellTrait)
                 SetTraitOnObjectAtIndex(CellTrait, traitBasedObjectIndex);
+            else if (trait is Coordinate CoordinateTrait)
+                SetTraitOnObjectAtIndex(CoordinateTrait, traitBasedObjectIndex);
             else if (trait is Blocker BlockerTrait)
                 SetTraitOnObjectAtIndex(BlockerTrait, traitBasedObjectIndex);
+            else if (trait is PlanningAgent PlanningAgentTrait)
+                SetTraitOnObjectAtIndex(PlanningAgentTrait, traitBasedObjectIndex);
             else 
                 throw new ArgumentException($"Trait {trait} of type {trait.GetType()} is not supported in this state representation.");
         }
@@ -406,7 +526,8 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
             traitBuffer.RemoveAt(lastBufferIndex);
 
             // Update index for object with last trait in buffer
-            for (int i = 0; i < TraitBasedObjects.Length; i++)
+            var numObjects = TraitBasedObjects.Length;
+            for (int i = 0; i < numObjects; i++)
             {
                 var otherTraitBasedObject = TraitBasedObjects[i];
                 if (otherTraitBasedObject[objectTraitIndex] == lastBufferIndex)
@@ -418,7 +539,7 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
             }
 
             // Update traitBasedObject in buffer (ref is to a copy)
-            for (int i = 0; i < TraitBasedObjects.Length; i++)
+            for (int i = 0; i < numObjects; i++)
             {
                 if (traitBasedObject.Equals(TraitBasedObjects[i]))
                 {
@@ -439,9 +560,10 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
 
 
             RemoveTraitOnObject<Game>(ref traitBasedObject);
-            RemoveTraitOnObject<Coordinate>(ref traitBasedObject);
             RemoveTraitOnObject<Cell>(ref traitBasedObject);
+            RemoveTraitOnObject<Coordinate>(ref traitBasedObject);
             RemoveTraitOnObject<Blocker>(ref traitBasedObject);
+            RemoveTraitOnObject<PlanningAgent>(ref traitBasedObject);
 
             TraitBasedObjects.RemoveAt(objectIndex);
             TraitBasedObjectIds.RemoveAt(objectIndex);
@@ -506,7 +628,8 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
             traitBuffer.RemoveAt(lastBufferIndex);
 
             // Update index for object with last trait in buffer
-            for (int i = 0; i < TraitBasedObjects.Length; i++)
+            var numObjects = TraitBasedObjects.Length;
+            for (int i = 0; i < numObjects; i++)
             {
                 var otherTraitBasedObject = TraitBasedObjects[i];
                 if (otherTraitBasedObject[objectTraitIndex] == lastBufferIndex)
@@ -526,9 +649,10 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
         public bool RemoveTraitBasedObjectAtIndex(int traitBasedObjectIndex)
         {
             RemoveTraitOnObjectAtIndex<Game>(traitBasedObjectIndex);
-            RemoveTraitOnObjectAtIndex<Coordinate>(traitBasedObjectIndex);
             RemoveTraitOnObjectAtIndex<Cell>(traitBasedObjectIndex);
+            RemoveTraitOnObjectAtIndex<Coordinate>(traitBasedObjectIndex);
             RemoveTraitOnObjectAtIndex<Blocker>(traitBasedObjectIndex);
+            RemoveTraitOnObjectAtIndex<PlanningAgent>(traitBasedObjectIndex);
 
             TraitBasedObjects.RemoveAt(traitBasedObjectIndex);
             TraitBasedObjectIds.RemoveAt(traitBasedObjectIndex);
@@ -539,7 +663,8 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
 
         public NativeArray<int> GetTraitBasedObjectIndices(NativeList<int> traitBasedObjectIndices, NativeArray<ComponentType> traitFilter)
         {
-            for (var i = 0; i < TraitBasedObjects.Length; i++)
+            var numObjects = TraitBasedObjects.Length;
+            for (var i = 0; i < numObjects; i++)
             {
                 var traitBasedObject = TraitBasedObjects[i];
                 if (traitBasedObject.MatchesTraitFilter(traitFilter))
@@ -551,7 +676,8 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
 
         public NativeArray<int> GetTraitBasedObjectIndices(NativeList<int> traitBasedObjectIndices, params ComponentType[] traitFilter)
         {
-            for (var i = 0; i < TraitBasedObjects.Length; i++)
+            var numObjects = TraitBasedObjects.Length;
+            for (var i = 0; i < numObjects; i++)
             {
                 var traitBasedObject = TraitBasedObjects[i];
                 if (traitBasedObject.MatchesTraitFilter(traitFilter))
@@ -620,11 +746,13 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
                 case 0:
                     return GameBuffer.Reinterpret<T>();
                 case 1:
-                    return CoordinateBuffer.Reinterpret<T>();
-                case 2:
                     return CellBuffer.Reinterpret<T>();
+                case 2:
+                    return CoordinateBuffer.Reinterpret<T>();
                 case 3:
                     return BlockerBuffer.Reinterpret<T>();
+                case 4:
+                    return PlanningAgentBuffer.Reinterpret<T>();
             }
 
             return default;
@@ -640,9 +768,10 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
             // Easy check is to make sure each state has the same number of trait-based objects
             if (TraitBasedObjects.Length != rhsState.TraitBasedObjects.Length
                 || GameBuffer.Length != rhsState.GameBuffer.Length
-                || CoordinateBuffer.Length != rhsState.CoordinateBuffer.Length
                 || CellBuffer.Length != rhsState.CellBuffer.Length
-                || BlockerBuffer.Length != rhsState.BlockerBuffer.Length)
+                || CoordinateBuffer.Length != rhsState.CoordinateBuffer.Length
+                || BlockerBuffer.Length != rhsState.BlockerBuffer.Length
+                || PlanningAgentBuffer.Length != rhsState.PlanningAgentBuffer.Length)
                 return false;
 
             var objectMap = new ObjectCorrespondence(TraitBasedObjectIds.Length, Allocator.Temp);
@@ -657,20 +786,22 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
             // Easy check is to make sure each state has the same number of domain objects
             if (TraitBasedObjects.Length != rhsState.TraitBasedObjects.Length
                 || GameBuffer.Length != rhsState.GameBuffer.Length
-                || CoordinateBuffer.Length != rhsState.CoordinateBuffer.Length
                 || CellBuffer.Length != rhsState.CellBuffer.Length
-                || BlockerBuffer.Length != rhsState.BlockerBuffer.Length)
+                || CoordinateBuffer.Length != rhsState.CoordinateBuffer.Length
+                || BlockerBuffer.Length != rhsState.BlockerBuffer.Length
+                || PlanningAgentBuffer.Length != rhsState.PlanningAgentBuffer.Length)
                 return false;
 
             return TryGetObjectMapping(rhsState, objectMap);
         }
 
-        bool TryGetObjectMapping(StateData rhsState, ObjectCorrespondence objectMap)
+        internal bool TryGetObjectMapping(StateData rhsState, ObjectCorrespondence objectMap)
         {
             objectMap.Initialize(TraitBasedObjectIds, rhsState.TraitBasedObjectIds);
 
             bool statesEqual = true;
-            for (int lhsIndex = 0; lhsIndex < TraitBasedObjects.Length; lhsIndex++)
+            var numObjects = TraitBasedObjects.Length;
+            for (int lhsIndex = 0; lhsIndex < numObjects; lhsIndex++)
             {
                 var lhsId = TraitBasedObjectIds[lhsIndex].Id;
                 if (objectMap.TryGetValue(lhsId, out _)) // already matched
@@ -678,7 +809,8 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
 
                 // todo lhsIndex to start? would require swapping rhs on assignments, though
                 bool matchFound = true;
-                for (var rhsIndex = 0; rhsIndex < rhsState.TraitBasedObjects.Length; rhsIndex++)
+
+                for (var rhsIndex = 0; rhsIndex < numObjects; rhsIndex++)
                 {
                     var rhsId = rhsState.TraitBasedObjectIds[rhsIndex].Id;
                     if (objectMap.ContainsRHS(rhsId)) // skip if already assigned todo optimize this
@@ -729,19 +861,20 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
                 return false;
 
 
-            if (traitBasedObjectLHS.CoordinateIndex != TraitBasedObject.Unset
-                && !CoordinateTraitAttributesEqual(CoordinateBuffer[traitBasedObjectLHS.CoordinateIndex], rhsState.CoordinateBuffer[traitBasedObjectRHS.CoordinateIndex]))
+            if (traitBasedObjectLHS.CellIndex != TraitBasedObject.Unset
+                && !CellTraitAttributesEqual(CellBuffer[traitBasedObjectLHS.CellIndex], rhsState.CellBuffer[traitBasedObjectRHS.CellIndex]))
                 return false;
 
 
-            if (traitBasedObjectLHS.CellIndex != TraitBasedObject.Unset
-                && !CellTraitAttributesEqual(CellBuffer[traitBasedObjectLHS.CellIndex], rhsState.CellBuffer[traitBasedObjectRHS.CellIndex]))
+            if (traitBasedObjectLHS.CoordinateIndex != TraitBasedObject.Unset
+                && !CoordinateTraitAttributesEqual(CoordinateBuffer[traitBasedObjectLHS.CoordinateIndex], rhsState.CoordinateBuffer[traitBasedObjectRHS.CoordinateIndex]))
                 return false;
 
 
             if (traitBasedObjectLHS.BlockerIndex != TraitBasedObject.Unset
                 && !BlockerTraitAttributesEqual(BlockerBuffer[traitBasedObjectLHS.BlockerIndex], rhsState.BlockerBuffer[traitBasedObjectRHS.BlockerIndex]))
                 return false;
+
 
 
             return true;
@@ -756,17 +889,17 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
                     one.GoalCount == two.GoalCount;
         }
         
+        bool CellTraitAttributesEqual(Cell one, Cell two)
+        {
+            return
+                    one.Type == two.Type;
+        }
+        
         bool CoordinateTraitAttributesEqual(Coordinate one, Coordinate two)
         {
             return
                     one.X == two.X && 
                     one.Y == two.Y;
-        }
-        
-        bool CellTraitAttributesEqual(Cell one, Cell two)
-        {
-            return
-                    one.Type == two.Type;
         }
         
         bool BlockerTraitAttributesEqual(Blocker one, Blocker two)
@@ -861,8 +994,10 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
             // h = 3860031 + (h+y)*2779 + (h*y*2)   // from How to Hash a Set by Richard O’Keefe
             var stateHashValue = 3860031 + (397 + TraitBasedObjectIds.Length) * 2779 + (397 * TraitBasedObjectIds.Length * 2);
 
+            int bufferLength;
 
-            for (int i = 0; i < GameBuffer.Length; i++)
+            bufferLength = GameBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
             {
                 var element = GameBuffer[i];
                 var value = 397
@@ -872,7 +1007,16 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
                     ^ element.GoalCount.GetHashCode();
                 stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
             }
-            for (int i = 0; i < CoordinateBuffer.Length; i++)
+            bufferLength = CellBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
+            {
+                var element = CellBuffer[i];
+                var value = 397
+                    ^ (int) element.Type;
+                stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
+            }
+            bufferLength = CoordinateBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
             {
                 var element = CoordinateBuffer[i];
                 var value = 397
@@ -880,18 +1024,18 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
                     ^ element.Y.GetHashCode();
                 stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
             }
-            for (int i = 0; i < CellBuffer.Length; i++)
-            {
-                var element = CellBuffer[i];
-                var value = 397
-                    ^ (int) element.Type;
-                stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
-            }
-            for (int i = 0; i < BlockerBuffer.Length; i++)
+            bufferLength = BlockerBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
             {
                 var element = BlockerBuffer[i];
                 var value = 397
                     ^ element.Life.GetHashCode();
+                stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
+            }
+            bufferLength = PlanningAgentBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
+            {
+                var value = 397;
                 stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
             }
 
@@ -904,7 +1048,8 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
                 return string.Empty;
 
             var sb = new StringBuilder();
-            for (var traitBasedObjectIndex = 0; traitBasedObjectIndex < TraitBasedObjects.Length; traitBasedObjectIndex++)
+            var numObjects = TraitBasedObjects.Length;
+            for (var traitBasedObjectIndex = 0; traitBasedObjectIndex < numObjects; traitBasedObjectIndex++)
             {
                 var traitBasedObject = TraitBasedObjects[traitBasedObjectIndex];
                 sb.AppendLine(TraitBasedObjectIds[traitBasedObjectIndex].ToString());
@@ -917,15 +1062,19 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
 
                 traitIndex = traitBasedObject[i++];
                 if (traitIndex != TraitBasedObject.Unset)
-                    sb.AppendLine(CoordinateBuffer[traitIndex].ToString());
-
-                traitIndex = traitBasedObject[i++];
-                if (traitIndex != TraitBasedObject.Unset)
                     sb.AppendLine(CellBuffer[traitIndex].ToString());
 
                 traitIndex = traitBasedObject[i++];
                 if (traitIndex != TraitBasedObject.Unset)
+                    sb.AppendLine(CoordinateBuffer[traitIndex].ToString());
+
+                traitIndex = traitBasedObject[i++];
+                if (traitIndex != TraitBasedObject.Unset)
                     sb.AppendLine(BlockerBuffer[traitIndex].ToString());
+
+                traitIndex = traitBasedObject[i++];
+                if (traitIndex != TraitBasedObject.Unset)
+                    sb.AppendLine(PlanningAgentBuffer[traitIndex].ToString());
 
                 sb.AppendLine();
             }
@@ -936,17 +1085,21 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
 
     public struct StateDataContext : ITraitBasedStateDataContext<TraitBasedObject, StateEntityKey, StateData>
     {
-        internal EntityCommandBuffer.Concurrent EntityCommandBuffer;
+        public bool IsCreated;
+        internal EntityCommandBuffer.ParallelWriter EntityCommandBuffer;
         internal EntityArchetype m_StateArchetype;
         internal int JobIndex;
 
-        [ReadOnly] public BufferFromEntity<TraitBasedObject> TraitBasedObjects;
-        [ReadOnly] public BufferFromEntity<TraitBasedObjectId> TraitBasedObjectIds;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<TraitBasedObject> TraitBasedObjects;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<TraitBasedObjectId> TraitBasedObjectIds;
 
-        [ReadOnly] public BufferFromEntity<Game> GameData;
-        [ReadOnly] public BufferFromEntity<Coordinate> CoordinateData;
-        [ReadOnly] public BufferFromEntity<Cell> CellData;
-        [ReadOnly] public BufferFromEntity<Blocker> BlockerData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<Game> GameData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<Cell> CellData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<Coordinate> CoordinateData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<Blocker> BlockerData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<PlanningAgent> PlanningAgentData;
+
+        [NativeDisableContainerSafetyRestriction,ReadOnly] ObjectCorrespondence m_ObjectCorrespondence;
 
         public StateDataContext(JobComponentSystem system, EntityArchetype stateArchetype)
         {
@@ -955,12 +1108,15 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
             TraitBasedObjectIds = system.GetBufferFromEntity<TraitBasedObjectId>(true);
 
             GameData = system.GetBufferFromEntity<Game>(true);
-            CoordinateData = system.GetBufferFromEntity<Coordinate>(true);
             CellData = system.GetBufferFromEntity<Cell>(true);
+            CoordinateData = system.GetBufferFromEntity<Coordinate>(true);
             BlockerData = system.GetBufferFromEntity<Blocker>(true);
+            PlanningAgentData = system.GetBufferFromEntity<PlanningAgent>(true);
 
             m_StateArchetype = stateArchetype;
             JobIndex = 0;
+            m_ObjectCorrespondence = default;
+            IsCreated = true;
         }
 
         public StateData GetStateData(StateEntityKey stateKey)
@@ -974,9 +1130,10 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
                 TraitBasedObjectIds = TraitBasedObjectIds[stateEntity],
 
                 GameBuffer = GameData[stateEntity],
-                CoordinateBuffer = CoordinateData[stateEntity],
                 CellBuffer = CellData[stateEntity],
+                CoordinateBuffer = CoordinateData[stateEntity],
                 BlockerBuffer = BlockerData[stateEntity],
+                PlanningAgentBuffer = PlanningAgentData[stateEntity],
             };
         }
 
@@ -1002,7 +1159,13 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
 
         public bool Equals(StateData x, StateData y)
         {
-            return x.Equals(y);
+            if (x.TraitBasedObjectIds.Length != y.TraitBasedObjectIds.Length)
+                return false;
+
+            if (!m_ObjectCorrespondence.IsCreated)
+                m_ObjectCorrespondence = new ObjectCorrespondence(x.TraitBasedObjectIds.Length, Allocator.Temp);
+
+            return x.TryGetObjectMapping(y, m_ObjectCorrespondence);
         }
 
         public int GetHashCode(StateData obj)
@@ -1014,22 +1177,58 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
     [DisableAutoCreation, AlwaysUpdateSystem]
     public class StateManager : JobComponentSystem, ITraitBasedStateManager<TraitBasedObject, StateEntityKey, StateData, StateDataContext>
     {
-        public ExclusiveEntityTransaction ExclusiveEntityTransaction;
+        public new EntityManager EntityManager
+        {
+            get
+            {
+                if (!m_EntityTransactionActive)
+                    BeginEntityExclusivity();
+
+                return ExclusiveEntityTransaction.EntityManager;
+            }
+        }
+
+        ExclusiveEntityTransaction m_ExclusiveEntityTransaction;
+        public ExclusiveEntityTransaction ExclusiveEntityTransaction
+        {
+            get
+            {
+                if (!m_EntityTransactionActive)
+                    BeginEntityExclusivity();
+
+                return m_ExclusiveEntityTransaction;
+            }
+        }
+
+        StateDataContext m_StateDataContext;
+        public StateDataContext StateDataContext
+        {
+            get
+            {
+                if (m_StateDataContext.IsCreated)
+                    return m_StateDataContext;
+
+                m_StateDataContext = new StateDataContext(this, m_StateArchetype);
+                return m_StateDataContext;
+            }
+        }
+
         public event Action Destroying;
 
         List<EntityCommandBuffer> m_EntityCommandBuffers;
         EntityArchetype m_StateArchetype;
+        bool m_EntityTransactionActive = false;
 
         protected override void OnCreate()
         {
-            m_StateArchetype = EntityManager.CreateArchetype(typeof(State), typeof(TraitBasedObject), typeof(TraitBasedObjectId), typeof(HashCode),
+            m_StateArchetype = base.EntityManager.CreateArchetype(typeof(State), typeof(TraitBasedObject), typeof(TraitBasedObjectId), typeof(HashCode),
                 typeof(Game),
-                typeof(Coordinate),
                 typeof(Cell),
-                typeof(Blocker));
+                typeof(Coordinate),
+                typeof(Blocker),
+                typeof(PlanningAgent));
 
             m_EntityCommandBuffers = new List<EntityCommandBuffer>();
-            BeginEntityExclusivity();
         }
 
         protected override void OnDestroy()
@@ -1049,32 +1248,21 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
 
         public StateData CreateStateData()
         {
-            EndEntityExclusivity();
-            var stateEntity = EntityManager.CreateEntity(m_StateArchetype);
-            BeginEntityExclusivity();
-            return new StateData(this, stateEntity, true);
+            var stateEntity = ExclusiveEntityTransaction.CreateEntity(m_StateArchetype);
+            return new StateData(ExclusiveEntityTransaction, stateEntity);;
         }
 
         public StateData GetStateData(StateEntityKey stateKey, bool readWrite = false)
         {
-            return !Enabled || !EntityManager.Exists(stateKey.Entity) ?
-                default : new StateData(this, stateKey.Entity, readWrite);
+            return !Enabled || !ExclusiveEntityTransaction.Exists(stateKey.Entity) ?
+                default : new StateData(ExclusiveEntityTransaction, stateKey.Entity);
         }
 
         public void DestroyState(StateEntityKey stateKey)
         {
             var stateEntity = stateKey.Entity;
-            if (EntityManager != null && EntityManager.IsCreated && EntityManager.Exists(stateEntity))
-            {
-                EndEntityExclusivity();
-                EntityManager.DestroyEntity(stateEntity);
-                BeginEntityExclusivity();
-            }
-        }
-
-        public StateDataContext GetStateDataContext()
-        {
-            return new StateDataContext(this, m_StateArchetype);
+            if (ExclusiveEntityTransaction.Exists(stateEntity))
+                ExclusiveEntityTransaction.DestroyEntity(stateEntity);
         }
 
         public StateEntityKey GetStateDataKey(StateData stateData)
@@ -1084,28 +1272,26 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
 
         public StateData CopyStateData(StateData stateData)
         {
-            EndEntityExclusivity();
-            var copyStateEntity = EntityManager.Instantiate(stateData.StateEntity);
-            BeginEntityExclusivity();
-            return new StateData(this, copyStateEntity, true);
+            var copyStateEntity = ExclusiveEntityTransaction.Instantiate(stateData.StateEntity);
+            return new StateData(ExclusiveEntityTransaction, copyStateEntity);
         }
 
         public StateEntityKey CopyState(StateEntityKey stateKey)
         {
-            EndEntityExclusivity();
-            var copyStateEntity = EntityManager.Instantiate(stateKey.Entity);
-            BeginEntityExclusivity();
-            var stateData = GetStateData(stateKey);
+            var copyStateEntity = ExclusiveEntityTransaction.Instantiate(stateKey.Entity);
+            var stateData = new StateData(ExclusiveEntityTransaction, copyStateEntity);
             return new StateEntityKey { Entity = copyStateEntity, HashCode = stateData.GetHashCode()};
         }
 
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
-            if (!EntityManager.ExclusiveEntityTransactionDependency.IsCompleted)
-                return inputDeps;
+            var jobDependencyHandle = ExclusiveEntityTransaction.EntityManager.ExclusiveEntityTransactionDependency;
+            if (jobDependencyHandle.IsCompleted)
+            {
+                jobDependencyHandle.Complete();
+                ClearECBs();
+            }
 
-            EntityManager.ExclusiveEntityTransactionDependency.Complete();
-            ClearECBs();
             return inputDeps;
         }
 
@@ -1130,12 +1316,16 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
 
         void BeginEntityExclusivity()
         {
-            ExclusiveEntityTransaction = EntityManager.BeginExclusiveEntityTransaction();
+            m_StateDataContext = new StateDataContext(this, m_StateArchetype);
+            m_ExclusiveEntityTransaction = base.EntityManager.BeginExclusiveEntityTransaction();
+            m_EntityTransactionActive = true;
         }
 
         void EndEntityExclusivity()
         {
-            EntityManager.EndExclusiveEntityTransaction();
+            base.EntityManager.EndExclusiveEntityTransaction();
+            m_EntityTransactionActive = false;
+            m_StateDataContext = default;
         }
     }
 
@@ -1146,12 +1336,9 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
 
         public JobHandle Schedule(JobHandle inputDeps)
         {
-            var entityManager = StateManager.EntityManager;
-            inputDeps = JobHandle.CombineDependencies(inputDeps, entityManager.ExclusiveEntityTransactionDependency);
-
-            var stateDataContext = StateManager.GetStateDataContext();
+            var stateDataContext = StateManager.StateDataContext;
             var ecb = StateManager.GetEntityCommandBuffer();
-            stateDataContext.EntityCommandBuffer = ecb.ToConcurrent();
+            stateDataContext.EntityCommandBuffer = ecb.AsParallelWriter();
             var destroyStatesJobHandle = new DestroyStatesJob<StateEntityKey, StateData, StateDataContext>()
             {
                 StateDataContext = stateDataContext,
@@ -1164,6 +1351,7 @@ namespace Generated.AI.Planner.StateRepresentation.Match3Plan
                 EntityCommandBuffer = ecb
             }.Schedule(destroyStatesJobHandle);
 
+            var entityManager = StateManager.ExclusiveEntityTransaction.EntityManager;
             entityManager.ExclusiveEntityTransactionDependency = playbackECBJobHandle;
             return playbackECBJobHandle;
         }

@@ -9,179 +9,191 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00e16f0575d73480ebe7b76bb4ae3939, type: 3}
+  m_Script: {fileID: 11500000, guid: ab48ef9de5712c440bd0e1f505d00e04, type: 3}
   m_Name: UseGateUp
   m_EditorClassIdentifier: 
   m_Parameters:
   - m_Name: Character
     m_RequiredTraits:
-    - {fileID: 11400000, guid: 2acde6b1fa18c41e88367e3c31ce67b8, type: 2}
+    - {fileID: 11400000, guid: d0dff4b94af164a43a5291159c39053b, type: 2}
     m_ProhibitedTraits: []
+    m_LimitCount: 0
+    m_LimitComparerType: 
+    m_LimitComparerReference: 
   - m_Name: To
     m_RequiredTraits:
-    - {fileID: 11400000, guid: d5456278475a14ba497fda710c7b1497, type: 2}
-    - {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
+    - {fileID: 11400000, guid: a7128a14fc65540d5b5ca83be1f9a478, type: 2}
+    - {fileID: 11400000, guid: 73d7979b283af43cdb165f69e2273970, type: 2}
     m_ProhibitedTraits: []
+    m_LimitCount: 0
+    m_LimitComparerType: 
+    m_LimitComparerReference: 
   - m_Name: From
     m_RequiredTraits:
-    - {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
+    - {fileID: 11400000, guid: a7128a14fc65540d5b5ca83be1f9a478, type: 2}
     m_ProhibitedTraits: []
+    m_LimitCount: 0
+    m_LimitComparerType: 
+    m_LimitComparerReference: 
   - m_Name: ActivationBlue
     m_RequiredTraits:
-    - {fileID: 11400000, guid: 3cb0b465f2b314d278ac7e7e7d2559c3, type: 2}
-    - {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
+    - {fileID: 11400000, guid: 7e9df32a185624fc3b26fb9cfe98cc83, type: 2}
+    - {fileID: 11400000, guid: a7128a14fc65540d5b5ca83be1f9a478, type: 2}
     m_ProhibitedTraits: []
+    m_LimitCount: 0
+    m_LimitComparerType: 
+    m_LimitComparerReference: 
   - m_Name: ActivationPink
     m_RequiredTraits:
-    - {fileID: 11400000, guid: 3cb0b465f2b314d278ac7e7e7d2559c3, type: 2}
-    - {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
+    - {fileID: 11400000, guid: 7e9df32a185624fc3b26fb9cfe98cc83, type: 2}
+    - {fileID: 11400000, guid: a7128a14fc65540d5b5ca83be1f9a478, type: 2}
     m_ProhibitedTraits: []
+    m_LimitCount: 0
+    m_LimitComparerType: 
+    m_LimitComparerReference: 
   m_Preconditions:
   - m_Operator: ==
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: To
-      m_Trait: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
-      m_TraitFieldId: 104
+      m_Trait: {fileID: 11400000, guid: a7128a14fc65540d5b5ca83be1f9a478, type: 2}
+      m_TraitPropertyId: 4
       m_Enum: {fileID: 0}
       m_Value: 
     m_OperandB:
       m_Parameter: 
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: false
   - m_Operator: ==
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: To
-      m_Trait: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
-      m_TraitFieldId: 103
+      m_Trait: {fileID: 11400000, guid: a7128a14fc65540d5b5ca83be1f9a478, type: 2}
+      m_TraitPropertyId: 3
       m_Enum: {fileID: 0}
       m_Value: 
     m_OperandB:
       m_Parameter: Character
-      m_Trait: {fileID: 11400000, guid: 2acde6b1fa18c41e88367e3c31ce67b8, type: 2}
-      m_TraitFieldId: 100
+      m_Trait: {fileID: 11400000, guid: d0dff4b94af164a43a5291159c39053b, type: 2}
+      m_TraitPropertyId: 0
       m_Enum: {fileID: 0}
       m_Value: 
   - m_Operator: ==
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: Character
-      m_Trait: {fileID: 11400000, guid: 2acde6b1fa18c41e88367e3c31ce67b8, type: 2}
-      m_TraitFieldId: 100
+      m_Trait: {fileID: 11400000, guid: d0dff4b94af164a43a5291159c39053b, type: 2}
+      m_TraitPropertyId: 0
       m_Enum: {fileID: 0}
       m_Value: 
     m_OperandB:
       m_Parameter: From
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
   - m_Operator: ==
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: ActivationBlue
-      m_Trait: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
-      m_TraitFieldId: 104
+      m_Trait: {fileID: 11400000, guid: a7128a14fc65540d5b5ca83be1f9a478, type: 2}
+      m_TraitPropertyId: 4
       m_Enum: {fileID: 0}
       m_Value: 
     m_OperandB:
       m_Parameter: 
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: true
   - m_Operator: ==
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: ActivationPink
-      m_Trait: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
-      m_TraitFieldId: 104
+      m_Trait: {fileID: 11400000, guid: a7128a14fc65540d5b5ca83be1f9a478, type: 2}
+      m_TraitPropertyId: 4
       m_Enum: {fileID: 0}
       m_Value: 
     m_OperandB:
       m_Parameter: 
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: true
   - m_Operator: ==
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: ActivationBlue
-      m_Trait: {fileID: 11400000, guid: 3cb0b465f2b314d278ac7e7e7d2559c3, type: 2}
-      m_TraitFieldId: 100
+      m_Trait: {fileID: 11400000, guid: 7e9df32a185624fc3b26fb9cfe98cc83, type: 2}
+      m_TraitPropertyId: 0
       m_Enum: {fileID: 0}
       m_Value: 
     m_OperandB:
       m_Parameter: 
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
-      m_Enum: {fileID: 11400000, guid: 784b0e30237c3409b98b2f56c92ba07c, type: 2}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 11400000, guid: 75c034ce9412d4213acaf2d055cf7243, type: 2}
       m_Value: Blue
   - m_Operator: ==
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: ActivationPink
-      m_Trait: {fileID: 11400000, guid: 3cb0b465f2b314d278ac7e7e7d2559c3, type: 2}
-      m_TraitFieldId: 100
+      m_Trait: {fileID: 11400000, guid: 7e9df32a185624fc3b26fb9cfe98cc83, type: 2}
+      m_TraitPropertyId: 0
       m_Enum: {fileID: 0}
       m_Value: 
     m_OperandB:
       m_Parameter: 
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
-      m_Enum: {fileID: 11400000, guid: 784b0e30237c3409b98b2f56c92ba07c, type: 2}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 11400000, guid: 75c034ce9412d4213acaf2d055cf7243, type: 2}
       m_Value: Pink
   m_CreatedObjects: []
   m_RemovedObjects: []
   m_ObjectModifiers:
   - m_Operator: =
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: Character
-      m_Trait: {fileID: 11400000, guid: 2acde6b1fa18c41e88367e3c31ce67b8, type: 2}
-      m_TraitFieldId: 100
+      m_Trait: {fileID: 11400000, guid: d0dff4b94af164a43a5291159c39053b, type: 2}
+      m_TraitPropertyId: 0
       m_Enum: {fileID: 0}
       m_Value: 
     m_OperandB:
       m_Parameter: To
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: 
   - m_Operator: =
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: To
-      m_Trait: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
-      m_TraitFieldId: 104
+      m_Trait: {fileID: 11400000, guid: a7128a14fc65540d5b5ca83be1f9a478, type: 2}
+      m_TraitPropertyId: 4
       m_Enum: {fileID: 0}
       m_Value: 
     m_OperandB:
       m_Parameter: 
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: true
   - m_Operator: =
+    m_CustomOperatorType: 
     m_OperandA:
       m_Parameter: From
-      m_Trait: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
-      m_TraitFieldId: 104
+      m_Trait: {fileID: 11400000, guid: a7128a14fc65540d5b5ca83be1f9a478, type: 2}
+      m_TraitPropertyId: 4
       m_Enum: {fileID: 0}
       m_Value: 
     m_OperandB:
       m_Parameter: 
       m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
+      m_TraitPropertyId: -1
       m_Enum: {fileID: 0}
       m_Value: false
-  - m_Operator: +=
-    m_OperandA:
-      m_Parameter: To
-      m_Trait: {fileID: 11400000, guid: 2374f0741531340d0b7f9dc854f436df, type: 2}
-      m_TraitFieldId: 105
-      m_Enum: {fileID: 0}
-      m_Value: 
-    m_OperandB:
-      m_Parameter: 
-      m_Trait: {fileID: 0}
-      m_TraitFieldId: 0
-      m_Enum: {fileID: 0}
-      m_Value: 1
-  m_Reward: 1
+  m_Reward: -0.1
   m_CustomRewards: []

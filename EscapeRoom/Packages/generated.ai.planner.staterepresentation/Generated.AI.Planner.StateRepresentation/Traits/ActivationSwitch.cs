@@ -1,22 +1,24 @@
 using System;
+using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
-using Generated.AI.Planner.StateRepresentation.Enums;
+using Unity.AI.Planner.Traits;
+using Generated.Semantic.Traits.Enums;
 
 namespace Generated.AI.Planner.StateRepresentation
 {
     [Serializable]
-    public struct ActivationSwitch : ITrait, IEquatable<ActivationSwitch>
+    public struct ActivationSwitch : ITrait, IBufferElementData, IEquatable<ActivationSwitch>
     {
         public const string FieldType = "Type";
-        public Generated.AI.Planner.StateRepresentation.Enums.ActivationType Type;
+        public Generated.Semantic.Traits.Enums.ActivationType Type;
 
         public void SetField(string fieldName, object value)
         {
             switch (fieldName)
             {
                 case nameof(Type):
-                    Type = (Generated.AI.Planner.StateRepresentation.Enums.ActivationType)Enum.ToObject(typeof(Generated.AI.Planner.StateRepresentation.Enums.ActivationType), value);
+                    Type = (Generated.Semantic.Traits.Enums.ActivationType)Enum.ToObject(typeof(Generated.Semantic.Traits.Enums.ActivationType), value);
                     break;
                 default:
                     throw new ArgumentException($"Field \"{fieldName}\" does not exist on trait ActivationSwitch.");

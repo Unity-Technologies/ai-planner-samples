@@ -2,16 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.AI.Planner;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
-using Unity.AI.Planner.Controller;
+using Unity.AI.Planner.Traits;
 using UnityEngine;
-using UnityEngine.AI.Planner.DomainLanguage.TraitBased;
 using Generated.AI.Planner.StateRepresentation;
 using Generated.AI.Planner.StateRepresentation.Clean;
 
 namespace Generated.AI.Planner.Plans.Clean
 {
-    public struct DefaultHeuristic : IHeuristic<StateData>
+    public struct DefaultCumulativeRewardEstimator : ICumulativeRewardEstimator<StateData>
     {
         public BoundedValue Evaluate(StateData state)
         {
@@ -28,7 +26,7 @@ namespace Generated.AI.Planner.Plans.Clean
         }
     }
 
-    class CleanExecutor : BaseTraitBasedPlanExecutor<TraitBasedObject, StateEntityKey, StateData, StateDataContext, ActionScheduler, global::AI.Planner.Actions.Clean.CustomVacuumRobotHeuristic, TerminationEvaluator, StateManager, ActionKey, DestroyStatesJobScheduler>
+    class CleanExecutor : BaseTraitBasedPlanExecutor<TraitBasedObject, StateEntityKey, StateData, StateDataContext, StateManager, ActionKey>
     {
         static Dictionary<Guid, string> s_ActionGuidToNameLookup = new Dictionary<Guid,string>()
         {
@@ -36,16 +34,18 @@ namespace Generated.AI.Planner.Plans.Clean
             { ActionScheduler.NavigateGuid, nameof(Navigate) },
         };
 
+        PlannerStateConverter<TraitBasedObject, StateEntityKey, StateData, StateDataContext, StateManager> m_StateConverter;
+
+        public  CleanExecutor(StateManager stateManager, PlannerStateConverter<TraitBasedObject, StateEntityKey, StateData, StateDataContext, StateManager> stateConverter)
+        {
+            m_StateManager = stateManager;
+            m_StateConverter = stateConverter;
+        }
+
         public override string GetActionName(IActionKey actionKey)
         {
             s_ActionGuidToNameLookup.TryGetValue(((IActionKeyWithGuid)actionKey).ActionGuid, out var name);
             return name;
-        }
-
-        public override void Initialize(MonoBehaviour actor, PlanDefinition planDefinition, IActionExecutionInfo[] actionExecutionInfos)
-        {
-            base.Initialize(actor, planDefinition, actionExecutionInfos);
-            m_StateManager.Destroying += () => PlannerScheduler.CurrentJobHandle.Complete();
         }
 
         protected override void Act(ActionKey actionKey)
@@ -98,13 +98,13 @@ namespace Generated.AI.Planner.Plans.Clean
                 {
                     switch (split[1])
                     {
-                        case nameof(Location):
-                            var traitLocation = stateData.GetTraitOnObjectAtIndex<Location>(traitBasedObjectIndex);
-                            arguments[i] = split.Length == 3 ? traitLocation.GetField(split[2]) : traitLocation;
-                            break;
                         case nameof(Robot):
                             var traitRobot = stateData.GetTraitOnObjectAtIndex<Robot>(traitBasedObjectIndex);
                             arguments[i] = split.Length == 3 ? traitRobot.GetField(split[2]) : traitRobot;
+                            break;
+                        case nameof(Location):
+                            var traitLocation = stateData.GetTraitOnObjectAtIndex<Location>(traitBasedObjectIndex);
+                            arguments[i] = split.Length == 3 ? traitLocation.GetField(split[2]) : traitLocation;
                             break;
                         case nameof(Dirt):
                             var traitDirt = stateData.GetTraitOnObjectAtIndex<Dirt>(traitBasedObjectIndex);
@@ -119,21 +119,22 @@ namespace Generated.AI.Planner.Plans.Clean
                 else // argument is an object
                 {
                     var planStateId = stateData.GetTraitBasedObjectId(traitBasedObjectIndex);
-                    ITraitBasedObjectData dataSource;
+                    GameObject dataSource;
                     if (m_PlanStateToGameStateIdLookup.TryGetValue(planStateId.Id, out var gameStateId))
                         dataSource = m_StateConverter.GetDataSource(new TraitBasedObjectId { Id = gameStateId });
                     else
                         dataSource = m_StateConverter.GetDataSource(planStateId);
 
                     Type expectedType = executeInfos.GetParameterType(i);
-                    if (typeof(ITraitBasedObjectData).IsAssignableFrom(expectedType))
-                    {
-                        arguments[i] = dataSource;
-                    }
-                    else
+                    // FIXME - if this is still needed
+                    // if (typeof(ITraitBasedObjectData).IsAssignableFrom(expectedType))
+                    // {
+                    //     arguments[i] = dataSource;
+                    // }
+                    // else
                     {
                         arguments[i] = null;
-                        var obj = dataSource.ParentObject;
+                        var obj = dataSource;
                         if (obj != null && obj is GameObject gameObject)
                         {
                             if (expectedType == typeof(GameObject))
@@ -152,7 +153,7 @@ namespace Generated.AI.Planner.Plans.Clean
             StartAction(executeInfos, arguments);
         }
 
-        public override IActionParameterInfo[] GetActionParametersInfo(IStateKey stateKey, IActionKey actionKey)
+        public override ActionParameterInfo[] GetActionParametersInfo(IStateKey stateKey, IActionKey actionKey)
         {
             string[] parameterNames = {};
             var stateData = m_StateManager.GetStateData((StateEntityKey)stateKey, false);
@@ -167,7 +168,7 @@ namespace Generated.AI.Planner.Plans.Clean
                         break;
             }
 
-            var parameterInfo = new IActionParameterInfo[parameterNames.Length];
+            var parameterInfo = new ActionParameterInfo[parameterNames.Length];
             for (var i = 0; i < parameterNames.Length; i++)
             {
                 var traitBasedObjectId = stateData.GetTraitBasedObjectId(((ActionKey)actionKey)[i]);

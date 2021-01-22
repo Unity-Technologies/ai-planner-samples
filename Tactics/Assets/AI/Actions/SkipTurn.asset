@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab48ef9de5712c440bd0e1f505d00e04, type: 3}
+  m_Name: SkipTurn
+  m_EditorClassIdentifier: 
+  m_Parameters:
+  - m_Name: Agent
+    m_RequiredTraits:
+    - {fileID: 11400000, guid: e2d28bc9e00f04ad1bb249375e78a910, type: 2}
+    m_ProhibitedTraits: []
+    m_LimitCount: 1
+    m_LimitComparerType: AI.Tactics.PlayOrderComparer
+    m_LimitComparerReference: 
+  m_Preconditions:
+  - m_Operator: ==
+    m_CustomOperatorType: 
+    m_OperandA:
+      m_Parameter: Agent
+      m_Trait: {fileID: 11400000, guid: e2d28bc9e00f04ad1bb249375e78a910, type: 2}
+      m_TraitPropertyId: 1
+      m_Enum: {fileID: 0}
+      m_Value: 
+    m_OperandB:
+      m_Parameter: 
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: false
+  - m_Operator: <
+    m_CustomOperatorType: 
+    m_OperandA:
+      m_Parameter: Agent
+      m_Trait: {fileID: 11400000, guid: e2d28bc9e00f04ad1bb249375e78a910, type: 2}
+      m_TraitPropertyId: 0
+      m_Enum: {fileID: 0}
+      m_Value: 
+    m_OperandB:
+      m_Parameter: 
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 1
+  m_CreatedObjects: []
+  m_RemovedObjects: []
+  m_ObjectModifiers:
+  - m_Operator: +=
+    m_CustomOperatorType: 
+    m_OperandA:
+      m_Parameter: Agent
+      m_Trait: {fileID: 11400000, guid: e2d28bc9e00f04ad1bb249375e78a910, type: 2}
+      m_TraitPropertyId: 0
+      m_Enum: {fileID: 0}
+      m_Value: 
+    m_OperandB:
+      m_Parameter: 
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 1
+  m_Reward: -1
+  m_CustomRewards: []

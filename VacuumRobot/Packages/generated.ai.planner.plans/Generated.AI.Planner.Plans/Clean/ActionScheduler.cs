@@ -1,6 +1,6 @@
 using System;
 using Unity.AI.Planner;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
+using Unity.AI.Planner.Traits;
 using Unity.AI.Planner.Jobs;
 using Unity.Collections;
 using Unity.Entities;
@@ -67,13 +67,13 @@ namespace Generated.AI.Planner.Plans.Clean
 
         public JobHandle Schedule(JobHandle inputDeps)
         {
-            var entityManager = StateManager.EntityManager;
-            var CollectDataContext = StateManager.GetStateDataContext();
+            var entityManager = StateManager.ExclusiveEntityTransaction.EntityManager;
+            var CollectDataContext = StateManager.StateDataContext;
             var CollectECB = StateManager.GetEntityCommandBuffer();
-            CollectDataContext.EntityCommandBuffer = CollectECB.ToConcurrent();
-            var NavigateDataContext = StateManager.GetStateDataContext();
+            CollectDataContext.EntityCommandBuffer = CollectECB.AsParallelWriter();
+            var NavigateDataContext = StateManager.StateDataContext;
             var NavigateECB = StateManager.GetEntityCommandBuffer();
-            NavigateDataContext.EntityCommandBuffer = NavigateECB.ToConcurrent();
+            NavigateDataContext.EntityCommandBuffer = NavigateECB.AsParallelWriter();
 
             var allActionJobs = new NativeArray<JobHandle>(3, Allocator.TempJob)
             {

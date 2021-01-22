@@ -1,0 +1,169 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4414816196402786303
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4414816196402786301}
+  - component: {fileID: 4414816196402786300}
+  - component: {fileID: 4414816196402786290}
+  - component: {fileID: 6868385445447319663}
+  m_Layer: 0
+  m_Name: PlannerTakeCoverNorth
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4414816196402786301
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4414816196402786303}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4414816196402786300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4414816196402786303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd8ac131c09d04008af565adfda708ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ProblemDefinition: {fileID: 11400000, guid: 42d7f644793904904a452148c4f3aefa,
+    type: 2}
+  m_InitializeOnStart: 0
+  m_PlannerSettings:
+    PlanningIterationsPerUpdate: 1
+    StateExpansionBudgetPerIteration: 1
+    UseCustomPlanningFrequency: 1
+    MinFramesPerPlanningUpdate: 0
+    CapPlanSize: 0
+    MaxStatesInPlan: 0
+    StopPlanningWhenToleranceAchieved: 0
+    RootEstimatedRewardTolerance: 0
+    CapPlanUpdates: 0
+    MaxUpdates: 2147483647
+    GraphSelectionJobMode: 0
+    GraphBackpropagationJobMode: 0
+  m_ExecutionSettings:
+    ExecutionMode: 2
+    MaximumDecisionTolerance: 0
+    MinimumPlanSize: 100
+    MinimumPlanningTime: 0
+  m_WorldObjectQuery: {fileID: 6868385445447319663}
+  m_ActionExecuteInfos:
+  - m_ActionName: TakeCover
+    m_PlanExecutorStateUpdateMode: 0
+    m_Method: TakeCover
+    m_SourceGameObject: {fileID: 4414816196402786303}
+    m_Source: {fileID: 4414816196402786290}
+    m_Arguments:
+    - m_Parameter: Agent
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+    - m_Parameter: Cover
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+  - m_ActionName: PickupWeapon
+    m_PlanExecutorStateUpdateMode: 0
+    m_Method: PickupItem
+    m_SourceGameObject: {fileID: 4414816196402786303}
+    m_Source: {fileID: 4414816196402786290}
+    m_Arguments:
+    - m_Parameter: Agent
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+    - m_Parameter: Item
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+  - m_ActionName: SkipTurn
+    m_PlanExecutorStateUpdateMode: 0
+    m_Method: SkipTurn
+    m_SourceGameObject: {fileID: 4414816196402786303}
+    m_Source: {fileID: 4414816196402786290}
+    m_Arguments:
+    - m_Parameter: Agent
+      m_Trait: {fileID: 0}
+      m_TraitPropertyId: -1
+      m_Enum: {fileID: 0}
+      m_Value: 
+  m_AutoUpdate: 0
+--- !u!114 &4414816196402786290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4414816196402786303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 898df80d3daa9435091928705dd65831, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6868385445447319663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4414816196402786303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f222baf27330f49959caf266f2f6b851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Query:
+    m_QueryGroups:
+    - m_Filters:
+      - id: 0
+      m_Quantifier: 0
+      m_QuantifierLimit: 0
+      m_QuantifierScorer:
+        id: 1
+      m_RequiredTraits:
+        m_Traits:
+        - {fileID: 11400000, guid: 1a25dc97339bf4af282979eb3c5a94a5, type: 2}
+      m_ProhibitedTraits:
+        m_Traits: []
+    - m_Filters: []
+      m_Quantifier: 0
+      m_QuantifierLimit: 0
+      m_QuantifierScorer:
+        id: 1
+      m_RequiredTraits:
+        m_Traits: []
+      m_ProhibitedTraits:
+        m_Traits:
+        - {fileID: 11400000, guid: 1a25dc97339bf4af282979eb3c5a94a5, type: 2}
+  references:
+    version: 1
+    00000000:
+      type: {class: CoverDirectionFilter, ns: CustomQuery, asm: Tactics}
+      data:
+        m_Facing: 0
+    00000001:
+      type: {class: , ns: , asm: }

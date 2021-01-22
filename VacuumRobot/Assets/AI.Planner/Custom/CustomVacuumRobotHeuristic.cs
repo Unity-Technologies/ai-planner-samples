@@ -1,14 +1,15 @@
+using Generated.AI.Planner.StateRepresentation.Clean;
+using Generated.Semantic.Traits;
 using Unity.AI.Planner;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
-using Generated.AI.Planner.StateRepresentation;
-using Generated.AI.Planner.StateRepresentation.Clean;
+using Dirt = Generated.AI.Planner.StateRepresentation.Dirt;
+using Location = Unity.AI.Planner.Traits.Location;
 
 namespace AI.Planner.Actions.Clean
 {
-    public struct CustomVacuumRobotHeuristic : ICustomHeuristic<StateData>
+    public struct CustomVacuumRobotHeuristic : ICustomCumulativeRewardEstimator<StateData>
     {
         public BoundedValue Evaluate(StateData stateData)
         {

@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using Generated.AI.Planner.StateRepresentation.Match3Plan;
+using Generated.Semantic.Traits;
+using Generated.Semantic.Traits.Enums;
 using Match3;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
+using Unity.AI.Planner.Controller;
 using Unity.Collections;
 using UnityEngine;
-using UnityEngine.AI.Planner.Controller;
-using UnityEngine.AI.Planner.DomainLanguage.TraitBased;
-#if PLANNER_STATEREPRESENTATION_GENERATED
-using Generated.AI.Planner.StateRepresentation;
-using Generated.AI.Planner.StateRepresentation.Enums;
-using Generated.AI.Planner.StateRepresentation.Match3Plan;
-#endif
+using Random = UnityEngine.Random;
 
 public class Match3Grid : MonoBehaviour
 {
@@ -37,7 +33,7 @@ public class Match3Grid : MonoBehaviour
     public Action<int> GoalCountChanged;
 
     GemObject[,] m_GemObjects;
-    ITraitData[,] m_CellsData;
+    Cell[,] m_CellsData;
 
     float m_NextBoardUpdate;
     List<(int, int)> m_CellToCheckNextUpdate = new List<(int, int)>();
@@ -45,8 +41,8 @@ public class Match3Grid : MonoBehaviour
     DecisionController m_DecisionController;
 
     public GameObject CellPrefab => m_CellPrefab;
-    
-    ITraitData m_GameTraitData;
+
+    Game m_GameTraitData;
     int TotalMoveCount { get; set; }
 
     protected void Start()
@@ -59,11 +55,9 @@ public class Match3Grid : MonoBehaviour
         var player = Instantiate(m_PlayerPrefab);
         player.Grid = this;
         m_DecisionController = player.GetComponent<DecisionController>();
-        
-#if PLANNER_STATEREPRESENTATION_GENERATED
-        m_GameTraitData = GetComponent<TraitComponent>().GetTraitData<Game>();
-        GoalCountChanged?.Invoke((int)m_GameTraitData.GetValue(Game.FieldGoalCount));
-#endif
+
+        m_GameTraitData = GetComponent<Game>();
+        GoalCountChanged?.Invoke((int)m_GameTraitData.GoalCount);
     }
 
     public bool ReadyToPlay()
@@ -73,36 +67,29 @@ public class Match3Grid : MonoBehaviour
 
     void InitializeWorldState()
     {
-#if PLANNER_STATEREPRESENTATION_GENERATED
-        m_CellsData = new ITraitData[m_GridSize, m_GridSize];
+        m_CellsData = new Cell[m_GridSize, m_GridSize];
         for (int x = 0; x < m_GridSize; x++)
         {
             for (int y = 0; y < m_GridSize; y++)
             {
-                var traitHolder = transform.Find(x + "_" + y).GetComponent<ITraitBasedObjectData>();
-                m_CellsData[x, y] = traitHolder.TraitData.FirstOrDefault(t => t.TraitDefinitionName == nameof(Cell));
+                m_CellsData[x, y] = transform.Find(x + "_" + y).GetComponent<Cell>();
             }
         }
-#endif
     }
 
     void InitializeVisualGems()
     {
-#if PLANNER_STATEREPRESENTATION_GENERATED
-
         m_GemObjects = new GemObject[m_GridSize, m_GridSize];
         for (int x = 0; x < m_GridSize; x++)
         {
             for (int y = 0; y < m_GridSize; y++)
             {
-                var gemType = m_GemTypes[(long)m_CellsData[x, y].GetValue(Cell.FieldType)];
-
+                var gemType = m_GemTypes[(long)m_CellsData[x, y].Type];
                 var gem = Instantiate(gemType, new Vector3(x, 0, y), Quaternion.identity, transform);
                 gem.Initialize(x, y);
                 m_GemObjects[x, y] = gem;
             }
         }
-#endif
     }
 
     public void TryToSwapSelectedCell(GemObject gem, Vector3 targetPos)
@@ -163,10 +150,8 @@ public class Match3Grid : MonoBehaviour
         m_GemObjects[gem1.X, gem1.Y] = gem1;
         m_GemObjects[gem2.X, gem2.Y] = gem2;
 
-#if PLANNER_STATEREPRESENTATION_GENERATED
-        m_CellsData[gem1.X, gem1.Y].SetValue(Cell.FieldType, gem1.Type);
-        m_CellsData[gem2.X, gem2.Y].SetValue(Cell.FieldType, gem2.Type);
-#endif
+        m_CellsData[gem1.X, gem1.Y].Type = gem1.Type;
+        m_CellsData[gem2.X, gem2.Y].Type = gem2.Type;
 
         m_CellToCheckNextUpdate.Add((gem1.X, gem1.Y));
         m_CellToCheckNextUpdate.Add((gem2.X, gem2.Y));
@@ -174,7 +159,6 @@ public class Match3Grid : MonoBehaviour
         m_NextBoardUpdate = Time.realtimeSinceStartup + k_DelayCellsToCheck;
     }
 
-#if PLANNER_STATEREPRESENTATION_GENERATED
     protected void Update()
     {
         if (Time.realtimeSinceStartup > m_NextBoardUpdate)
@@ -214,7 +198,7 @@ public class Match3Grid : MonoBehaviour
                 else if (firstEmptyY >= 0)
                 {
                     m_GemObjects[x, firstEmptyY] = gem;
-                    m_CellsData[x, firstEmptyY].SetValue(Cell.FieldType, gem.Type);
+                    m_CellsData[x, firstEmptyY].Type = gem.Type;
 
                     m_GemObjects[x, y] = null;
 
@@ -234,8 +218,8 @@ public class Match3Grid : MonoBehaviour
             {
                 if (m_GemObjects[x, y] == null)
                 {
-                    var gemTypeIndex = UnityEngine.Random.Range(1, m_GemTypes.Length);
-                    m_CellsData[x, y].SetValue(Cell.FieldType, (CellType)gemTypeIndex);
+                    var gemTypeIndex = Random.Range(1, m_GemTypes.Length);
+                    m_CellsData[x, y].Type = (CellType)gemTypeIndex;
 
                     var gemType = m_GemTypes[gemTypeIndex];
                     var gem = Instantiate(gemType, new Vector3(x, 0, y + 10), Quaternion.identity, transform);
@@ -286,13 +270,13 @@ public class Match3Grid : MonoBehaviour
 
     void DestroyGem(GemObject gemObject)
     {
-        var goalType = (CellType)(long)m_GameTraitData.GetValue(Game.FieldGoalType);
+        var goalType = m_GameTraitData.GoalType;
         if (goalType == gemObject.Type)
         {
-            int currentGoal = (int)m_GameTraitData.GetValue(Game.FieldGoalCount);
+            int currentGoal = (int)m_GameTraitData.GoalCount;
             currentGoal = Math.Max(0, currentGoal - 1);
-            
-            m_GameTraitData.SetValue(Game.FieldGoalCount, currentGoal);
+
+            m_GameTraitData.GoalCount = currentGoal;
             GoalCountChanged?.Invoke(currentGoal);
 
             if (currentGoal == 0)
@@ -326,15 +310,16 @@ public class Match3Grid : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        if (m_DecisionController == null || m_DecisionController.CurrentStateData == default)
+        if (!m_DecisionController || !m_DecisionController.Initialized || m_DecisionController.CurrentStateData == null)
             return;
 
         var stateData = (StateData)m_DecisionController.CurrentStateData;
-        
+
         var cellObjects = new NativeList<int>(64, Allocator.Temp);
-        foreach (var traitBasedObjectIndex in stateData.GetTraitBasedObjectIndices(cellObjects, typeof(Cell)))
+        var cellIndices = stateData.GetTraitBasedObjectIndices(cellObjects, typeof(Generated.AI.Planner.StateRepresentation.Cell));
+        foreach (var traitBasedObjectIndex in cellIndices)
         {
-            var cell = stateData.GetTraitOnObjectAtIndex<Cell>(traitBasedObjectIndex);
+            var cell = stateData.GetTraitOnObjectAtIndex<Generated.AI.Planner.StateRepresentation.Cell>(traitBasedObjectIndex);
 
             switch (cell.Type)
             {
@@ -358,11 +343,10 @@ public class Match3Grid : MonoBehaviour
                     break;
             }
 
-            var coordinate = stateData.GetTraitOnObjectAtIndex<Coordinate>(traitBasedObjectIndex);
+            var coordinate = stateData.GetTraitOnObjectAtIndex<Generated.AI.Planner.StateRepresentation.Coordinate>(traitBasedObjectIndex);
             Gizmos.DrawCube(new Vector3(coordinate.X, 0, coordinate.Y), Vector3.one * 0.2f);
         }
 
         cellObjects.Dispose();
     }
-#endif
 }

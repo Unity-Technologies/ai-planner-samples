@@ -1,27 +1,29 @@
 using System;
+using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
-using Generated.AI.Planner.StateRepresentation.Enums;
+using Unity.AI.Planner.Traits;
+using Generated.Semantic.Traits.Enums;
 
 namespace Generated.AI.Planner.StateRepresentation
 {
     [Serializable]
-    public struct ActivationLock : ITrait, IEquatable<ActivationLock>
+    public struct ActivationLock : ITrait, IBufferElementData, IEquatable<ActivationLock>
     {
         public const string FieldActivationA = "ActivationA";
         public const string FieldActivationB = "ActivationB";
-        public Generated.AI.Planner.StateRepresentation.Enums.ActivationType ActivationA;
-        public Generated.AI.Planner.StateRepresentation.Enums.ActivationType ActivationB;
+        public Generated.Semantic.Traits.Enums.ActivationType ActivationA;
+        public Generated.Semantic.Traits.Enums.ActivationType ActivationB;
 
         public void SetField(string fieldName, object value)
         {
             switch (fieldName)
             {
                 case nameof(ActivationA):
-                    ActivationA = (Generated.AI.Planner.StateRepresentation.Enums.ActivationType)Enum.ToObject(typeof(Generated.AI.Planner.StateRepresentation.Enums.ActivationType), value);
+                    ActivationA = (Generated.Semantic.Traits.Enums.ActivationType)Enum.ToObject(typeof(Generated.Semantic.Traits.Enums.ActivationType), value);
                     break;
                 case nameof(ActivationB):
-                    ActivationB = (Generated.AI.Planner.StateRepresentation.Enums.ActivationType)Enum.ToObject(typeof(Generated.AI.Planner.StateRepresentation.Enums.ActivationType), value);
+                    ActivationB = (Generated.Semantic.Traits.Enums.ActivationType)Enum.ToObject(typeof(Generated.Semantic.Traits.Enums.ActivationType), value);
                     break;
                 default:
                     throw new ArgumentException($"Field \"{fieldName}\" does not exist on trait ActivationLock.");

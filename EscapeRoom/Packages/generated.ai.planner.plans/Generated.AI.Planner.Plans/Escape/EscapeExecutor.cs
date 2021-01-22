@@ -2,16 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.AI.Planner;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
-using Unity.AI.Planner.Controller;
+using Unity.AI.Planner.Traits;
 using UnityEngine;
-using UnityEngine.AI.Planner.DomainLanguage.TraitBased;
 using Generated.AI.Planner.StateRepresentation;
 using Generated.AI.Planner.StateRepresentation.Escape;
 
 namespace Generated.AI.Planner.Plans.Escape
 {
-    public struct DefaultHeuristic : IHeuristic<StateData>
+    public struct DefaultCumulativeRewardEstimator : ICumulativeRewardEstimator<StateData>
     {
         public BoundedValue Evaluate(StateData state)
         {
@@ -36,7 +34,7 @@ namespace Generated.AI.Planner.Plans.Escape
         }
     }
 
-    class EscapeExecutor : BaseTraitBasedPlanExecutor<TraitBasedObject, StateEntityKey, StateData, StateDataContext, ActionScheduler, global::AI.Planner.Custom.Escape.HeuristicExploration, TerminationEvaluator, StateManager, ActionKey, DestroyStatesJobScheduler>
+    class EscapeExecutor : BaseTraitBasedPlanExecutor<TraitBasedObject, StateEntityKey, StateData, StateDataContext, StateManager, ActionKey>
     {
         static Dictionary<Guid, string> s_ActionGuidToNameLookup = new Dictionary<Guid,string>()
         {
@@ -50,16 +48,18 @@ namespace Generated.AI.Planner.Plans.Escape
             { ActionScheduler.UseGateUpGuid, nameof(UseGateUp) },
         };
 
+        PlannerStateConverter<TraitBasedObject, StateEntityKey, StateData, StateDataContext, StateManager> m_StateConverter;
+
+        public  EscapeExecutor(StateManager stateManager, PlannerStateConverter<TraitBasedObject, StateEntityKey, StateData, StateDataContext, StateManager> stateConverter)
+        {
+            m_StateManager = stateManager;
+            m_StateConverter = stateConverter;
+        }
+
         public override string GetActionName(IActionKey actionKey)
         {
             s_ActionGuidToNameLookup.TryGetValue(((IActionKeyWithGuid)actionKey).ActionGuid, out var name);
             return name;
-        }
-
-        public override void Initialize(MonoBehaviour actor, PlanDefinition planDefinition, IActionExecutionInfo[] actionExecutionInfos)
-        {
-            base.Initialize(actor, planDefinition, actionExecutionInfos);
-            m_StateManager.Destroying += () => PlannerScheduler.CurrentJobHandle.Complete();
         }
 
         protected override void Act(ActionKey actionKey)
@@ -168,17 +168,17 @@ namespace Generated.AI.Planner.Plans.Escape
                             var traitCarrier = stateData.GetTraitOnObjectAtIndex<Carrier>(traitBasedObjectIndex);
                             arguments[i] = split.Length == 3 ? traitCarrier.GetField(split[2]) : traitCarrier;
                             break;
-                        case nameof(Carriable):
-                            var traitCarriable = stateData.GetTraitOnObjectAtIndex<Carriable>(traitBasedObjectIndex);
-                            arguments[i] = split.Length == 3 ? traitCarriable.GetField(split[2]) : traitCarriable;
+                        case nameof(Item):
+                            var traitItem = stateData.GetTraitOnObjectAtIndex<Item>(traitBasedObjectIndex);
+                            arguments[i] = split.Length == 3 ? traitItem.GetField(split[2]) : traitItem;
                             break;
                         case nameof(Position):
                             var traitPosition = stateData.GetTraitOnObjectAtIndex<Position>(traitBasedObjectIndex);
                             arguments[i] = split.Length == 3 ? traitPosition.GetField(split[2]) : traitPosition;
                             break;
-                        case nameof(Item):
-                            var traitItem = stateData.GetTraitOnObjectAtIndex<Item>(traitBasedObjectIndex);
-                            arguments[i] = split.Length == 3 ? traitItem.GetField(split[2]) : traitItem;
+                        case nameof(Carriable):
+                            var traitCarriable = stateData.GetTraitOnObjectAtIndex<Carriable>(traitBasedObjectIndex);
+                            arguments[i] = split.Length == 3 ? traitCarriable.GetField(split[2]) : traitCarriable;
                             break;
                         case nameof(ActivationSwitch):
                             var traitActivationSwitch = stateData.GetTraitOnObjectAtIndex<ActivationSwitch>(traitBasedObjectIndex);
@@ -193,21 +193,22 @@ namespace Generated.AI.Planner.Plans.Escape
                 else // argument is an object
                 {
                     var planStateId = stateData.GetTraitBasedObjectId(traitBasedObjectIndex);
-                    ITraitBasedObjectData dataSource;
+                    GameObject dataSource;
                     if (m_PlanStateToGameStateIdLookup.TryGetValue(planStateId.Id, out var gameStateId))
                         dataSource = m_StateConverter.GetDataSource(new TraitBasedObjectId { Id = gameStateId });
                     else
                         dataSource = m_StateConverter.GetDataSource(planStateId);
 
                     Type expectedType = executeInfos.GetParameterType(i);
-                    if (typeof(ITraitBasedObjectData).IsAssignableFrom(expectedType))
-                    {
-                        arguments[i] = dataSource;
-                    }
-                    else
+                    // FIXME - if this is still needed
+                    // if (typeof(ITraitBasedObjectData).IsAssignableFrom(expectedType))
+                    // {
+                    //     arguments[i] = dataSource;
+                    // }
+                    // else
                     {
                         arguments[i] = null;
-                        var obj = dataSource.ParentObject;
+                        var obj = dataSource;
                         if (obj != null && obj is GameObject gameObject)
                         {
                             if (expectedType == typeof(GameObject))
@@ -226,7 +227,7 @@ namespace Generated.AI.Planner.Plans.Escape
             StartAction(executeInfos, arguments);
         }
 
-        public override IActionParameterInfo[] GetActionParametersInfo(IStateKey stateKey, IActionKey actionKey)
+        public override ActionParameterInfo[] GetActionParametersInfo(IStateKey stateKey, IActionKey actionKey)
         {
             string[] parameterNames = {};
             var stateData = m_StateManager.GetStateData((StateEntityKey)stateKey, false);
@@ -259,7 +260,7 @@ namespace Generated.AI.Planner.Plans.Escape
                         break;
             }
 
-            var parameterInfo = new IActionParameterInfo[parameterNames.Length];
+            var parameterInfo = new ActionParameterInfo[parameterNames.Length];
             for (var i = 0; i < parameterNames.Length; i++)
             {
                 var traitBasedObjectId = stateData.GetTraitBasedObjectId(((ActionKey)actionKey)[i]);

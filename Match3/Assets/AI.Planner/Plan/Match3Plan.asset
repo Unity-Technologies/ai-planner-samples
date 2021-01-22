@@ -9,16 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba34515fc82b64f37966f612cca1f4c9, type: 3}
+  m_Script: {fileID: 11500000, guid: a93ef591de1cd6a42b724b9314379ad4, type: 3}
   m_Name: Match3Plan
   m_EditorClassIdentifier: 
   m_ActionDefinitions:
-  - {fileID: 11400000, guid: 0f60889f268144391835c34de8bc41de, type: 2}
-  - {fileID: 11400000, guid: ba19277f832d544a7ba606fc34c84ffc, type: 2}
+  - {fileID: 11400000, guid: 92d0c638871f30145bb74a265114ac50, type: 2}
+  - {fileID: 11400000, guid: b760c76d9a5e0054390f465aac7f1980, type: 2}
   m_StateTerminationDefinitions:
-  - {fileID: 11400000, guid: cc46ab33a753c4bf7a7e0942bccfa648, type: 2}
-  - {fileID: 11400000, guid: 69eef3493d9784697939906d4e2ec648, type: 2}
-  m_CustomHeuristic: 
-  m_DefaultHeuristicLower: -5
-  m_DefaultHeuristicAverage: 0
-  m_DefaultHeuristicUpper: 5
+  - {fileID: 11400000, guid: aca298e008dca3a46968dfcdba19af05, type: 2}
+  - {fileID: 11400000, guid: 052a1f58bd057b8449422955456705b1, type: 2}
+  m_CustomCumulativeRewardEstimator: 
+  m_DefaultEstimateLower: -5
+  m_DefaultEstimateAverage: 0
+  m_DefaultEstimateUpper: 5
+  DiscountFactor: 1

@@ -11,8 +11,11 @@ GameObject:
   - component: {fileID: 3426967422392644556}
   - component: {fileID: 5968410840846797306}
   - component: {fileID: 137508647479047427}
-  - component: {fileID: 5011672913350159088}
   - component: {fileID: 8291834554554198683}
+  - component: {fileID: 2276721872915632621}
+  - component: {fileID: 7214563515875500212}
+  - component: {fileID: 6271242159284904134}
+  - component: {fileID: 1918004381961216724}
   m_Layer: 0
   m_Name: Dirt
   m_TagString: Untagged
@@ -57,6 +60,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -81,45 +85,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &5011672913350159088
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1861202080293339615}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4163c4525e1464b2d87e13978b85c02d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ObjectData:
-    m_Name: Dirt
-    m_TraitData:
-    - m_TraitDefinition: {fileID: 11400000, guid: 150fe5d00d17742daa2077b3b77d64b1,
-        type: 2}
-      m_FieldValues: []
-    - m_TraitDefinition: {fileID: 11400000, guid: 9d24b90158d644873a4d488182380074,
-        type: 2}
-      m_FieldValues:
-      - m_Name: Transform
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 3426967422392644556}
-      - m_Name: Position
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
-      - m_Name: Forward
-        m_BoolValue: 0
-        m_FloatValue: 0
-        m_IntValue: 0
-        m_StringValue: 
-        m_ObjectValue: {fileID: 0}
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!135 &8291834554554198683
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -133,3 +99,52 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 2.6245155
   m_Center: {x: -0.33246735, y: 0.63125616, z: 0.61361647}
+--- !u!114 &2276721872915632621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1861202080293339615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca305a07e837a645a0fc69a59f3ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EnableTraitInspectors: 1
+--- !u!114 &7214563515875500212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1861202080293339615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52a27e7e82aaf840bc19d82abd63620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6271242159284904134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1861202080293339615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfa808edabf7749f6adde2a21df51fa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1918004381961216724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1861202080293339615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fffd197a23152f48958a84d47c07f5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

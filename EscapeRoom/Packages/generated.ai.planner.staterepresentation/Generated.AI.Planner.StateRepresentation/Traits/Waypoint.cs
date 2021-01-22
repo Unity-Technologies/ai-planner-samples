@@ -1,47 +1,49 @@
 using System;
+using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
-using Generated.AI.Planner.StateRepresentation.Enums;
+using Unity.AI.Planner.Traits;
+using Generated.Semantic.Traits.Enums;
 
 namespace Generated.AI.Planner.StateRepresentation
 {
     [Serializable]
-    public struct Waypoint : ITrait, IEquatable<Waypoint>
+    public struct Waypoint : ITrait, IBufferElementData, IEquatable<Waypoint>
     {
         public const string FieldLeft = "Left";
         public const string FieldRight = "Right";
         public const string FieldUp = "Up";
         public const string FieldDown = "Down";
         public const string FieldOccupied = "Occupied";
-        public const string FieldVisited = "Visited";
-        public Unity.AI.Planner.DomainLanguage.TraitBased.TraitBasedObjectId Left;
-        public Unity.AI.Planner.DomainLanguage.TraitBased.TraitBasedObjectId Right;
-        public Unity.AI.Planner.DomainLanguage.TraitBased.TraitBasedObjectId Up;
-        public Unity.AI.Planner.DomainLanguage.TraitBased.TraitBasedObjectId Down;
+        public const string FieldStepsToEnd = "StepsToEnd";
+        public Unity.AI.Planner.Traits.TraitBasedObjectId Left;
+        public Unity.AI.Planner.Traits.TraitBasedObjectId Right;
+        public Unity.AI.Planner.Traits.TraitBasedObjectId Up;
+        public Unity.AI.Planner.Traits.TraitBasedObjectId Down;
         public System.Boolean Occupied;
-        public System.Int64 Visited;
+        public System.Int32 StepsToEnd;
 
         public void SetField(string fieldName, object value)
         {
             switch (fieldName)
             {
                 case nameof(Left):
-                    Left = (Unity.AI.Planner.DomainLanguage.TraitBased.TraitBasedObjectId)value;
+                    Left = (Unity.AI.Planner.Traits.TraitBasedObjectId)value;
                     break;
                 case nameof(Right):
-                    Right = (Unity.AI.Planner.DomainLanguage.TraitBased.TraitBasedObjectId)value;
+                    Right = (Unity.AI.Planner.Traits.TraitBasedObjectId)value;
                     break;
                 case nameof(Up):
-                    Up = (Unity.AI.Planner.DomainLanguage.TraitBased.TraitBasedObjectId)value;
+                    Up = (Unity.AI.Planner.Traits.TraitBasedObjectId)value;
                     break;
                 case nameof(Down):
-                    Down = (Unity.AI.Planner.DomainLanguage.TraitBased.TraitBasedObjectId)value;
+                    Down = (Unity.AI.Planner.Traits.TraitBasedObjectId)value;
                     break;
                 case nameof(Occupied):
                     Occupied = (System.Boolean)value;
                     break;
-                case nameof(Visited):
-                    Visited = (System.Int64)value;
+                case nameof(StepsToEnd):
+                    StepsToEnd = (System.Int32)value;
                     break;
                 default:
                     throw new ArgumentException($"Field \"{fieldName}\" does not exist on trait Waypoint.");
@@ -62,8 +64,8 @@ namespace Generated.AI.Planner.StateRepresentation
                     return Down;
                 case nameof(Occupied):
                     return Occupied;
-                case nameof(Visited):
-                    return Visited;
+                case nameof(StepsToEnd):
+                    return StepsToEnd;
                 default:
                     throw new ArgumentException($"Field \"{fieldName}\" does not exist on trait Waypoint.");
             }
@@ -71,12 +73,12 @@ namespace Generated.AI.Planner.StateRepresentation
 
         public bool Equals(Waypoint other)
         {
-            return Left == other.Left && Right == other.Right && Up == other.Up && Down == other.Down && Occupied == other.Occupied && Visited == other.Visited;
+            return Left == other.Left && Right == other.Right && Up == other.Up && Down == other.Down && Occupied == other.Occupied && StepsToEnd == other.StepsToEnd;
         }
 
         public override string ToString()
         {
-            return $"Waypoint\n  Left: {Left}\n  Right: {Right}\n  Up: {Up}\n  Down: {Down}\n  Occupied: {Occupied}\n  Visited: {Visited}";
+            return $"Waypoint\n  Left: {Left}\n  Right: {Right}\n  Up: {Up}\n  Down: {Down}\n  Occupied: {Occupied}\n  StepsToEnd: {StepsToEnd}";
         }
     }
 }

@@ -1,10 +1,10 @@
 using Unity.AI.Planner;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
+using Unity.AI.Planner.Traits;
 using Generated.AI.Planner.StateRepresentation;
 using Generated.AI.Planner.StateRepresentation.Match3Plan;
-using Generated.AI.Planner.StateRepresentation.Enums;
+using Generated.Semantic.Traits.Enums;
 
 namespace Generated.AI.Planner.Plans.Match3Plan
 {
@@ -22,7 +22,7 @@ namespace Generated.AI.Planner.Plans.Match3Plan
                 var GameObject = stateData.TraitBasedObjects[GameIndex];
             
                 
-                if (!(GameBuffer[GameObject.GameIndex].MoveCount > 10))
+                if (!(GameBuffer[GameObject.GameIndex].MoveCount > 3))
                     continue;
                 GameObjectIndices.Dispose();
                 GameFilter.Dispose();

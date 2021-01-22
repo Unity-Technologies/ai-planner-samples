@@ -9,7 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4733c0880a5a0ce4f94cc97cb9b0049b, type: 3}
+  m_Script: {fileID: 11500000, guid: 83c2836cfe3b2446da67909e4bcf860a, type: 3}
   m_Name: EscapePoint
   m_EditorClassIdentifier: 
-  m_Fields: []
+  m_Color: {r: 0.28, g: 1, b: 1, a: 1}
+  m_Properties: []
+  m_NextElementId: 0
+  references:
+    version: 1

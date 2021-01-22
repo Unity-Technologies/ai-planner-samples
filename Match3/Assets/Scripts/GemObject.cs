@@ -1,18 +1,11 @@
-﻿using UnityEngine;
-#if PLANNER_STATEREPRESENTATION_GENERATED
-using Generated.AI.Planner.StateRepresentation.Enums;
-#endif
+﻿using Generated.Semantic.Traits.Enums;
+using UnityEngine;
 
 public class GemObject : MonoBehaviour
 {
 #pragma warning disable 0649
-#if PLANNER_STATEREPRESENTATION_GENERATED
     [SerializeField]
     CellType m_Type;
-#else
-    [SerializeField]
-    int m_Type;
-#endif
 #pragma warning restore 0649
 
     MeshRenderer m_Renderer;
@@ -27,9 +20,7 @@ public class GemObject : MonoBehaviour
     public int X => m_X;
     public int Y => m_Y;
 
-#if PLANNER_STATEREPRESENTATION_GENERATED
     public CellType Type => m_Type;
-#endif
 
     public bool Destroyed => m_Destroyed;
 

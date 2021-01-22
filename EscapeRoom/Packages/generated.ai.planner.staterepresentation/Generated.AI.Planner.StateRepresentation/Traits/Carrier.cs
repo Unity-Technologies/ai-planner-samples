@@ -1,22 +1,24 @@
 using System;
+using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
-using Generated.AI.Planner.StateRepresentation.Enums;
+using Unity.AI.Planner.Traits;
+using Generated.Semantic.Traits.Enums;
 
 namespace Generated.AI.Planner.StateRepresentation
 {
     [Serializable]
-    public struct Carrier : ITrait, IEquatable<Carrier>
+    public struct Carrier : ITrait, IBufferElementData, IEquatable<Carrier>
     {
         public const string FieldCarried = "Carried";
-        public Unity.AI.Planner.DomainLanguage.TraitBased.TraitBasedObjectId Carried;
+        public Unity.AI.Planner.Traits.TraitBasedObjectId Carried;
 
         public void SetField(string fieldName, object value)
         {
             switch (fieldName)
             {
                 case nameof(Carried):
-                    Carried = (Unity.AI.Planner.DomainLanguage.TraitBased.TraitBasedObjectId)value;
+                    Carried = (Unity.AI.Planner.Traits.TraitBasedObjectId)value;
                     break;
                 default:
                     throw new ArgumentException($"Field \"{fieldName}\" does not exist on trait Carrier.");

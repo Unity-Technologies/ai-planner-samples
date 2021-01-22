@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba34515fc82b64f37966f612cca1f4c9, type: 3}
+  m_Script: {fileID: 11500000, guid: a93ef591de1cd6a42b724b9314379ad4, type: 3}
   m_Name: Clean
   m_EditorClassIdentifier: 
   m_ActionDefinitions:
-  - {fileID: 11400000, guid: 15b31357b16eb431ab185e64731408de, type: 2}
-  - {fileID: 11400000, guid: d6f17f5fbfa610c48a675f78ee316418, type: 2}
+  - {fileID: 11400000, guid: 17649b36885b6184284497d0178f55d4, type: 2}
+  - {fileID: 11400000, guid: edf2aa0ff46ac4a81afb2f2612e6b90a, type: 2}
   m_StateTerminationDefinitions: []
-  m_CustomHeuristic: AI.Planner.Actions.Clean.CustomVacuumRobotHeuristic
-  m_DefaultHeuristicLower: -100
-  m_DefaultHeuristicAverage: 0
-  m_DefaultHeuristicUpper: 100
+  m_CustomCumulativeRewardEstimator: AI.Planner.Actions.Clean.CustomVacuumRobotHeuristic
+  m_DefaultEstimateLower: -100
+  m_DefaultEstimateAverage: 0
+  m_DefaultEstimateUpper: 100
   DiscountFactor: 0.95

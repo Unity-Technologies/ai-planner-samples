@@ -1,11 +1,13 @@
 using System;
+using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
+using Unity.AI.Planner.Traits;
 
 namespace Generated.AI.Planner.StateRepresentation
 {
     [Serializable]
-    public struct Robot : ITrait, IEquatable<Robot>
+    public struct Robot : ITrait, IBufferElementData, IEquatable<Robot>
     {
 
         public void SetField(string fieldName, object value)

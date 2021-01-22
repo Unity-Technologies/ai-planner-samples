@@ -1,12 +1,15 @@
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Unity.AI.Planner;
-using Unity.AI.Planner.DomainLanguage.TraitBased;
+using Unity.AI.Planner.Traits;
 using Unity.AI.Planner.Jobs;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Jobs;
+using PlanningAgent = Unity.AI.Planner.Traits.PlanningAgent;
 
 namespace Generated.AI.Planner.StateRepresentation.Escape
 {
@@ -44,22 +47,25 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                 Index = 3;
             else if (typeIndex == TypeManager.GetTypeIndex<Carrier>())
                 Index = 4;
-            else if (typeIndex == TypeManager.GetTypeIndex<Carriable>())
+            else if (typeIndex == TypeManager.GetTypeIndex<Item>())
                 Index = 5;
             else if (typeIndex == TypeManager.GetTypeIndex<Position>())
                 Index = 6;
-            else if (typeIndex == TypeManager.GetTypeIndex<Item>())
+            else if (typeIndex == TypeManager.GetTypeIndex<Carriable>())
                 Index = 7;
             else if (typeIndex == TypeManager.GetTypeIndex<ActivationSwitch>())
                 Index = 8;
             else if (typeIndex == TypeManager.GetTypeIndex<EscapePoint>())
                 Index = 9;
+            else if (typeIndex == TypeManager.GetTypeIndex<PlanningAgent>())
+                Index = 10;
         }
     }
 
-    public struct TraitBasedObject : ITraitBasedObject
+    [StructLayout(LayoutKind.Sequential, Size=12)]
+    public struct TraitBasedObject : ITraitBasedObject, IEquatable<TraitBasedObject>
     {
-        public int Length => 10;
+        public int Length => 11;
 
         public byte this[int i]
         {
@@ -78,15 +84,17 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                     case 4:
                         return CarrierIndex;
                     case 5:
-                        return CarriableIndex;
+                        return ItemIndex;
                     case 6:
                         return PositionIndex;
                     case 7:
-                        return ItemIndex;
+                        return CarriableIndex;
                     case 8:
                         return ActivationSwitchIndex;
                     case 9:
                         return EscapePointIndex;
+                    case 10:
+                        return PlanningAgentIndex;
                 }
 
                 return Unset;
@@ -111,19 +119,22 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                         CarrierIndex = value;
                         break;
                     case 5:
-                        CarriableIndex = value;
+                        ItemIndex = value;
                         break;
                     case 6:
                         PositionIndex = value;
                         break;
                     case 7:
-                        ItemIndex = value;
+                        CarriableIndex = value;
                         break;
                     case 8:
                         ActivationSwitchIndex = value;
                         break;
                     case 9:
                         EscapePointIndex = value;
+                        break;
+                    case 10:
+                        PlanningAgentIndex = value;
                         break;
                 }
             }
@@ -138,11 +149,12 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
             ActivationLockIndex = Unset,
             KeyLockIndex = Unset,
             CarrierIndex = Unset,
-            CarriableIndex = Unset,
-            PositionIndex = Unset,
             ItemIndex = Unset,
+            PositionIndex = Unset,
+            CarriableIndex = Unset,
             ActivationSwitchIndex = Unset,
             EscapePointIndex = Unset,
+            PlanningAgentIndex = Unset,
         };
 
 
@@ -151,11 +163,12 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
         public byte ActivationLockIndex;
         public byte KeyLockIndex;
         public byte CarrierIndex;
-        public byte CarriableIndex;
-        public byte PositionIndex;
         public byte ItemIndex;
+        public byte PositionIndex;
+        public byte CarriableIndex;
         public byte ActivationSwitchIndex;
         public byte EscapePointIndex;
+        public byte PlanningAgentIndex;
 
 
         static readonly int s_CharacterTypeIndex = TypeManager.GetTypeIndex<Character>();
@@ -163,11 +176,12 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
         static readonly int s_ActivationLockTypeIndex = TypeManager.GetTypeIndex<ActivationLock>();
         static readonly int s_KeyLockTypeIndex = TypeManager.GetTypeIndex<KeyLock>();
         static readonly int s_CarrierTypeIndex = TypeManager.GetTypeIndex<Carrier>();
-        static readonly int s_CarriableTypeIndex = TypeManager.GetTypeIndex<Carriable>();
-        static readonly int s_PositionTypeIndex = TypeManager.GetTypeIndex<Position>();
         static readonly int s_ItemTypeIndex = TypeManager.GetTypeIndex<Item>();
+        static readonly int s_PositionTypeIndex = TypeManager.GetTypeIndex<Position>();
+        static readonly int s_CarriableTypeIndex = TypeManager.GetTypeIndex<Carriable>();
         static readonly int s_ActivationSwitchTypeIndex = TypeManager.GetTypeIndex<ActivationSwitch>();
         static readonly int s_EscapePointTypeIndex = TypeManager.GetTypeIndex<EscapePoint>();
+        static readonly int s_PlanningAgentTypeIndex = TypeManager.GetTypeIndex<PlanningAgent>();
 
         public bool HasSameTraits(TraitBasedObject other)
         {
@@ -198,8 +212,11 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
             for (int i = 0; i < componentTypes.Length; i++)
             {
                 var t = componentTypes[i];
-
-                if (t.TypeIndex == s_CharacterTypeIndex)
+                if (t == default || t.TypeIndex == 0)
+                {
+                    // This seems to be necessary for Burst compilation; Doesn't happen with non-Burst compilation
+                }
+                else if (t.TypeIndex == s_CharacterTypeIndex)
                 {
                     if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ CharacterIndex == Unset)
                         return false;
@@ -224,9 +241,9 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                     if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ CarrierIndex == Unset)
                         return false;
                 }
-                else if (t.TypeIndex == s_CarriableTypeIndex)
+                else if (t.TypeIndex == s_ItemTypeIndex)
                 {
-                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ CarriableIndex == Unset)
+                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ ItemIndex == Unset)
                         return false;
                 }
                 else if (t.TypeIndex == s_PositionTypeIndex)
@@ -234,9 +251,9 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                     if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ PositionIndex == Unset)
                         return false;
                 }
-                else if (t.TypeIndex == s_ItemTypeIndex)
+                else if (t.TypeIndex == s_CarriableTypeIndex)
                 {
-                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ ItemIndex == Unset)
+                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ CarriableIndex == Unset)
                         return false;
                 }
                 else if (t.TypeIndex == s_ActivationSwitchTypeIndex)
@@ -247,6 +264,11 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                 else if (t.TypeIndex == s_EscapePointTypeIndex)
                 {
                     if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ EscapePointIndex == Unset)
+                        return false;
+                }
+                else if (t.TypeIndex == s_PlanningAgentTypeIndex)
+                {
+                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ PlanningAgentIndex == Unset)
                         return false;
                 }
                 else
@@ -261,8 +283,11 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
             for (int i = 0; i < componentTypes.Length; i++)
             {
                 var t = componentTypes[i];
-
-                if (t.TypeIndex == s_CharacterTypeIndex)
+                if (t == default || t == null || t.TypeIndex == 0)
+                {
+                    // This seems to be necessary for Burst compilation; Doesn't happen with non-Burst compilation
+                }
+                else if (t.TypeIndex == s_CharacterTypeIndex)
                 {
                     if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ CharacterIndex == Unset)
                         return false;
@@ -287,9 +312,9 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                     if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ CarrierIndex == Unset)
                         return false;
                 }
-                else if (t.TypeIndex == s_CarriableTypeIndex)
+                else if (t.TypeIndex == s_ItemTypeIndex)
                 {
-                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ CarriableIndex == Unset)
+                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ ItemIndex == Unset)
                         return false;
                 }
                 else if (t.TypeIndex == s_PositionTypeIndex)
@@ -297,9 +322,9 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                     if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ PositionIndex == Unset)
                         return false;
                 }
-                else if (t.TypeIndex == s_ItemTypeIndex)
+                else if (t.TypeIndex == s_CarriableTypeIndex)
                 {
-                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ ItemIndex == Unset)
+                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ CarriableIndex == Unset)
                         return false;
                 }
                 else if (t.TypeIndex == s_ActivationSwitchTypeIndex)
@@ -312,11 +337,48 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                     if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ EscapePointIndex == Unset)
                         return false;
                 }
+                else if (t.TypeIndex == s_PlanningAgentTypeIndex)
+                {
+                    if (t.AccessModeType == ComponentType.AccessMode.Exclude ^ PlanningAgentIndex == Unset)
+                        return false;
+                }
                 else
                     throw new ArgumentException($"Incorrect trait type used in object query: {t}");
             }
 
             return true;
+        }
+
+        public bool Equals(TraitBasedObject other)
+        {
+
+                return CharacterIndex == other.CharacterIndex && WaypointIndex == other.WaypointIndex && ActivationLockIndex == other.ActivationLockIndex && KeyLockIndex == other.KeyLockIndex && CarrierIndex == other.CarrierIndex && ItemIndex == other.ItemIndex && PositionIndex == other.PositionIndex && CarriableIndex == other.CarriableIndex && ActivationSwitchIndex == other.ActivationSwitchIndex && EscapePointIndex == other.EscapePointIndex && PlanningAgentIndex == other.PlanningAgentIndex;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is TraitBasedObject other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+
+                    var hashCode = CharacterIndex.GetHashCode();
+                    
+                     hashCode = (hashCode * 397) ^ WaypointIndex.GetHashCode();
+                     hashCode = (hashCode * 397) ^ ActivationLockIndex.GetHashCode();
+                     hashCode = (hashCode * 397) ^ KeyLockIndex.GetHashCode();
+                     hashCode = (hashCode * 397) ^ CarrierIndex.GetHashCode();
+                     hashCode = (hashCode * 397) ^ ItemIndex.GetHashCode();
+                     hashCode = (hashCode * 397) ^ PositionIndex.GetHashCode();
+                     hashCode = (hashCode * 397) ^ CarriableIndex.GetHashCode();
+                     hashCode = (hashCode * 397) ^ ActivationSwitchIndex.GetHashCode();
+                     hashCode = (hashCode * 397) ^ EscapePointIndex.GetHashCode();
+                     hashCode = (hashCode * 397) ^ PlanningAgentIndex.GetHashCode();
+                return hashCode;
+            }
         }
     }
 
@@ -331,42 +393,45 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
         public DynamicBuffer<ActivationLock> ActivationLockBuffer;
         public DynamicBuffer<KeyLock> KeyLockBuffer;
         public DynamicBuffer<Carrier> CarrierBuffer;
-        public DynamicBuffer<Carriable> CarriableBuffer;
-        public DynamicBuffer<Position> PositionBuffer;
         public DynamicBuffer<Item> ItemBuffer;
+        public DynamicBuffer<Position> PositionBuffer;
+        public DynamicBuffer<Carriable> CarriableBuffer;
         public DynamicBuffer<ActivationSwitch> ActivationSwitchBuffer;
         public DynamicBuffer<EscapePoint> EscapePointBuffer;
+        public DynamicBuffer<PlanningAgent> PlanningAgentBuffer;
 
         static readonly int s_CharacterTypeIndex = TypeManager.GetTypeIndex<Character>();
         static readonly int s_WaypointTypeIndex = TypeManager.GetTypeIndex<Waypoint>();
         static readonly int s_ActivationLockTypeIndex = TypeManager.GetTypeIndex<ActivationLock>();
         static readonly int s_KeyLockTypeIndex = TypeManager.GetTypeIndex<KeyLock>();
         static readonly int s_CarrierTypeIndex = TypeManager.GetTypeIndex<Carrier>();
-        static readonly int s_CarriableTypeIndex = TypeManager.GetTypeIndex<Carriable>();
-        static readonly int s_PositionTypeIndex = TypeManager.GetTypeIndex<Position>();
         static readonly int s_ItemTypeIndex = TypeManager.GetTypeIndex<Item>();
+        static readonly int s_PositionTypeIndex = TypeManager.GetTypeIndex<Position>();
+        static readonly int s_CarriableTypeIndex = TypeManager.GetTypeIndex<Carriable>();
         static readonly int s_ActivationSwitchTypeIndex = TypeManager.GetTypeIndex<ActivationSwitch>();
         static readonly int s_EscapePointTypeIndex = TypeManager.GetTypeIndex<EscapePoint>();
+        static readonly int s_PlanningAgentTypeIndex = TypeManager.GetTypeIndex<PlanningAgent>();
 
-        public StateData(JobComponentSystem system, Entity stateEntity, bool readWrite = false)
+        public StateData(ExclusiveEntityTransaction transaction, Entity stateEntity)
         {
             StateEntity = stateEntity;
-            TraitBasedObjects = system.GetBufferFromEntity<TraitBasedObject>(!readWrite)[stateEntity];
-            TraitBasedObjectIds = system.GetBufferFromEntity<TraitBasedObjectId>(!readWrite)[stateEntity];
+            TraitBasedObjects = transaction.GetBuffer<TraitBasedObject>(stateEntity);
+            TraitBasedObjectIds = transaction.GetBuffer<TraitBasedObjectId>(stateEntity);
 
-            CharacterBuffer = system.GetBufferFromEntity<Character>(!readWrite)[stateEntity];
-            WaypointBuffer = system.GetBufferFromEntity<Waypoint>(!readWrite)[stateEntity];
-            ActivationLockBuffer = system.GetBufferFromEntity<ActivationLock>(!readWrite)[stateEntity];
-            KeyLockBuffer = system.GetBufferFromEntity<KeyLock>(!readWrite)[stateEntity];
-            CarrierBuffer = system.GetBufferFromEntity<Carrier>(!readWrite)[stateEntity];
-            CarriableBuffer = system.GetBufferFromEntity<Carriable>(!readWrite)[stateEntity];
-            PositionBuffer = system.GetBufferFromEntity<Position>(!readWrite)[stateEntity];
-            ItemBuffer = system.GetBufferFromEntity<Item>(!readWrite)[stateEntity];
-            ActivationSwitchBuffer = system.GetBufferFromEntity<ActivationSwitch>(!readWrite)[stateEntity];
-            EscapePointBuffer = system.GetBufferFromEntity<EscapePoint>(!readWrite)[stateEntity];
+            CharacterBuffer = transaction.GetBuffer<Character>(stateEntity);
+            WaypointBuffer = transaction.GetBuffer<Waypoint>(stateEntity);
+            ActivationLockBuffer = transaction.GetBuffer<ActivationLock>(stateEntity);
+            KeyLockBuffer = transaction.GetBuffer<KeyLock>(stateEntity);
+            CarrierBuffer = transaction.GetBuffer<Carrier>(stateEntity);
+            ItemBuffer = transaction.GetBuffer<Item>(stateEntity);
+            PositionBuffer = transaction.GetBuffer<Position>(stateEntity);
+            CarriableBuffer = transaction.GetBuffer<Carriable>(stateEntity);
+            ActivationSwitchBuffer = transaction.GetBuffer<ActivationSwitch>(stateEntity);
+            EscapePointBuffer = transaction.GetBuffer<EscapePoint>(stateEntity);
+            PlanningAgentBuffer = transaction.GetBuffer<PlanningAgent>(stateEntity);
         }
 
-        public StateData(int jobIndex, EntityCommandBuffer.Concurrent entityCommandBuffer, Entity stateEntity)
+        public StateData(int jobIndex, EntityCommandBuffer.ParallelWriter entityCommandBuffer, Entity stateEntity)
         {
             StateEntity = stateEntity;
             TraitBasedObjects = entityCommandBuffer.AddBuffer<TraitBasedObject>(jobIndex, stateEntity);
@@ -377,14 +442,15 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
             ActivationLockBuffer = entityCommandBuffer.AddBuffer<ActivationLock>(jobIndex, stateEntity);
             KeyLockBuffer = entityCommandBuffer.AddBuffer<KeyLock>(jobIndex, stateEntity);
             CarrierBuffer = entityCommandBuffer.AddBuffer<Carrier>(jobIndex, stateEntity);
-            CarriableBuffer = entityCommandBuffer.AddBuffer<Carriable>(jobIndex, stateEntity);
-            PositionBuffer = entityCommandBuffer.AddBuffer<Position>(jobIndex, stateEntity);
             ItemBuffer = entityCommandBuffer.AddBuffer<Item>(jobIndex, stateEntity);
+            PositionBuffer = entityCommandBuffer.AddBuffer<Position>(jobIndex, stateEntity);
+            CarriableBuffer = entityCommandBuffer.AddBuffer<Carriable>(jobIndex, stateEntity);
             ActivationSwitchBuffer = entityCommandBuffer.AddBuffer<ActivationSwitch>(jobIndex, stateEntity);
             EscapePointBuffer = entityCommandBuffer.AddBuffer<EscapePoint>(jobIndex, stateEntity);
+            PlanningAgentBuffer = entityCommandBuffer.AddBuffer<PlanningAgent>(jobIndex, stateEntity);
         }
 
-        public StateData Copy(int jobIndex, EntityCommandBuffer.Concurrent entityCommandBuffer)
+        public StateData Copy(int jobIndex, EntityCommandBuffer.ParallelWriter entityCommandBuffer)
         {
             var stateEntity = entityCommandBuffer.Instantiate(jobIndex, StateEntity);
             var traitBasedObjects = entityCommandBuffer.SetBuffer<TraitBasedObject>(jobIndex, stateEntity);
@@ -402,16 +468,18 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
             KeyLocks.CopyFrom(KeyLockBuffer.AsNativeArray());
             var Carriers = entityCommandBuffer.SetBuffer<Carrier>(jobIndex, stateEntity);
             Carriers.CopyFrom(CarrierBuffer.AsNativeArray());
-            var Carriables = entityCommandBuffer.SetBuffer<Carriable>(jobIndex, stateEntity);
-            Carriables.CopyFrom(CarriableBuffer.AsNativeArray());
-            var Positions = entityCommandBuffer.SetBuffer<Position>(jobIndex, stateEntity);
-            Positions.CopyFrom(PositionBuffer.AsNativeArray());
             var Items = entityCommandBuffer.SetBuffer<Item>(jobIndex, stateEntity);
             Items.CopyFrom(ItemBuffer.AsNativeArray());
+            var Positions = entityCommandBuffer.SetBuffer<Position>(jobIndex, stateEntity);
+            Positions.CopyFrom(PositionBuffer.AsNativeArray());
+            var Carriables = entityCommandBuffer.SetBuffer<Carriable>(jobIndex, stateEntity);
+            Carriables.CopyFrom(CarriableBuffer.AsNativeArray());
             var ActivationSwitchs = entityCommandBuffer.SetBuffer<ActivationSwitch>(jobIndex, stateEntity);
             ActivationSwitchs.CopyFrom(ActivationSwitchBuffer.AsNativeArray());
             var EscapePoints = entityCommandBuffer.SetBuffer<EscapePoint>(jobIndex, stateEntity);
             EscapePoints.CopyFrom(EscapePointBuffer.AsNativeArray());
+            var PlanningAgents = entityCommandBuffer.SetBuffer<PlanningAgent>(jobIndex, stateEntity);
+            PlanningAgents.CopyFrom(PlanningAgentBuffer.AsNativeArray());
 
             return new StateData
             {
@@ -424,15 +492,16 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                 ActivationLockBuffer = ActivationLocks,
                 KeyLockBuffer = KeyLocks,
                 CarrierBuffer = Carriers,
-                CarriableBuffer = Carriables,
-                PositionBuffer = Positions,
                 ItemBuffer = Items,
+                PositionBuffer = Positions,
+                CarriableBuffer = Carriables,
                 ActivationSwitchBuffer = ActivationSwitchs,
                 EscapePointBuffer = EscapePoints,
+                PlanningAgentBuffer = PlanningAgents,
             };
         }
 
-        public void AddObject(NativeArray<ComponentType> types, out TraitBasedObject traitBasedObject, TraitBasedObjectId objectId, NativeString64 name = default)
+        public void AddObject(NativeArray<ComponentType> types, out TraitBasedObject traitBasedObject, TraitBasedObjectId objectId, FixedString64 name = default)
         {
             traitBasedObject = TraitBasedObject.Default;
 #if DEBUG
@@ -467,20 +536,20 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                     CarrierBuffer.Add(default);
                     traitBasedObject.CarrierIndex = (byte) (CarrierBuffer.Length - 1);
                 }
-                else if (t.TypeIndex == s_CarriableTypeIndex)
+                else if (t.TypeIndex == s_ItemTypeIndex)
                 {
-                    CarriableBuffer.Add(default);
-                    traitBasedObject.CarriableIndex = (byte) (CarriableBuffer.Length - 1);
+                    ItemBuffer.Add(default);
+                    traitBasedObject.ItemIndex = (byte) (ItemBuffer.Length - 1);
                 }
                 else if (t.TypeIndex == s_PositionTypeIndex)
                 {
                     PositionBuffer.Add(default);
                     traitBasedObject.PositionIndex = (byte) (PositionBuffer.Length - 1);
                 }
-                else if (t.TypeIndex == s_ItemTypeIndex)
+                else if (t.TypeIndex == s_CarriableTypeIndex)
                 {
-                    ItemBuffer.Add(default);
-                    traitBasedObject.ItemIndex = (byte) (ItemBuffer.Length - 1);
+                    CarriableBuffer.Add(default);
+                    traitBasedObject.CarriableIndex = (byte) (CarriableBuffer.Length - 1);
                 }
                 else if (t.TypeIndex == s_ActivationSwitchTypeIndex)
                 {
@@ -492,16 +561,103 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                     EscapePointBuffer.Add(default);
                     traitBasedObject.EscapePointIndex = (byte) (EscapePointBuffer.Length - 1);
                 }
+                else if (t.TypeIndex == s_PlanningAgentTypeIndex)
+                {
+                    PlanningAgentBuffer.Add(default);
+                    traitBasedObject.PlanningAgentIndex = (byte) (PlanningAgentBuffer.Length - 1);
+                }
             }
 
             TraitBasedObjectIds.Add(objectId);
             TraitBasedObjects.Add(traitBasedObject);
         }
 
-        public void AddObject(NativeArray<ComponentType> types, out TraitBasedObject traitBasedObject, out TraitBasedObjectId objectId, NativeString64 name = default)
+        public void AddObject(NativeArray<ComponentType> types, out TraitBasedObject traitBasedObject, out TraitBasedObjectId objectId, FixedString64 name = default)
         {
             objectId = new TraitBasedObjectId() { Id = ObjectId.GetNext() };
             AddObject(types, out traitBasedObject, objectId, name);
+        }
+
+        public void ConvertAndSetPlannerTrait(Entity sourceEntity, EntityManager sourceEntityManager,
+            NativeArray<ComponentType> sourceTraitTypes, IDictionary<Entity, TraitBasedObjectId> entityToObjectId,
+            ref TraitBasedObject traitBasedObject)
+        {
+            unsafe
+            {
+                foreach (var type in sourceTraitTypes)
+                {
+                    if (type == typeof(Generated.Semantic.Traits.CharacterData))
+                    {
+                        var traitData = sourceEntityManager.GetComponentData<Generated.Semantic.Traits.CharacterData>(sourceEntity);
+                        var plannerTraitData = new Character();
+                        plannerTraitData.ID = traitData.ID;
+                        if (entityToObjectId.TryGetValue(traitData.Waypoint, out var Waypoint))
+                            plannerTraitData.Waypoint = Waypoint;
+                        SetTraitOnObject(plannerTraitData, ref traitBasedObject);
+                    }
+                    if (type == typeof(Generated.Semantic.Traits.WaypointData))
+                    {
+                        var traitData = sourceEntityManager.GetComponentData<Generated.Semantic.Traits.WaypointData>(sourceEntity);
+                        var plannerTraitData = new Waypoint();
+                        plannerTraitData.Occupied = traitData.Occupied;
+                        plannerTraitData.StepsToEnd = traitData.StepsToEnd;
+                        if (entityToObjectId.TryGetValue(traitData.Left, out var Left))
+                            plannerTraitData.Left = Left;
+                        if (entityToObjectId.TryGetValue(traitData.Right, out var Right))
+                            plannerTraitData.Right = Right;
+                        if (entityToObjectId.TryGetValue(traitData.Up, out var Up))
+                            plannerTraitData.Up = Up;
+                        if (entityToObjectId.TryGetValue(traitData.Down, out var Down))
+                            plannerTraitData.Down = Down;
+                        SetTraitOnObject(plannerTraitData, ref traitBasedObject);
+                    }
+                    if (type == typeof(Generated.Semantic.Traits.ActivationLockData))
+                    {
+                        var traitData = sourceEntityManager.GetComponentData<Generated.Semantic.Traits.ActivationLockData>(sourceEntity);
+                        var plannerTraitData = new ActivationLock();
+                        UnsafeUtility.CopyStructureToPtr(ref traitData, UnsafeUtility.AddressOf(ref plannerTraitData));
+                        SetTraitOnObject(plannerTraitData, ref traitBasedObject);
+                    }
+                    if (type == typeof(Generated.Semantic.Traits.CarrierData))
+                    {
+                        var traitData = sourceEntityManager.GetComponentData<Generated.Semantic.Traits.CarrierData>(sourceEntity);
+                        var plannerTraitData = new Carrier();
+                        if (entityToObjectId.TryGetValue(traitData.Carried, out var Carried))
+                            plannerTraitData.Carried = Carried;
+                        SetTraitOnObject(plannerTraitData, ref traitBasedObject);
+                    }
+                    if (type == typeof(Generated.Semantic.Traits.ItemData))
+                    {
+                        var traitData = sourceEntityManager.GetComponentData<Generated.Semantic.Traits.ItemData>(sourceEntity);
+                        var plannerTraitData = new Item();
+                        UnsafeUtility.CopyStructureToPtr(ref traitData, UnsafeUtility.AddressOf(ref plannerTraitData));
+                        SetTraitOnObject(plannerTraitData, ref traitBasedObject);
+                    }
+                    if (type == typeof(Generated.Semantic.Traits.PositionData))
+                    {
+                        var traitData = sourceEntityManager.GetComponentData<Generated.Semantic.Traits.PositionData>(sourceEntity);
+                        var plannerTraitData = new Position();
+                        if (entityToObjectId.TryGetValue(traitData.Waypoint, out var Waypoint))
+                            plannerTraitData.Waypoint = Waypoint;
+                        SetTraitOnObject(plannerTraitData, ref traitBasedObject);
+                    }
+                    if (type == typeof(Generated.Semantic.Traits.CarriableData))
+                    {
+                        var traitData = sourceEntityManager.GetComponentData<Generated.Semantic.Traits.CarriableData>(sourceEntity);
+                        var plannerTraitData = new Carriable();
+                        if (entityToObjectId.TryGetValue(traitData.CarriedBy, out var CarriedBy))
+                            plannerTraitData.CarriedBy = CarriedBy;
+                        SetTraitOnObject(plannerTraitData, ref traitBasedObject);
+                    }
+                    if (type == typeof(Generated.Semantic.Traits.ActivationSwitchData))
+                    {
+                        var traitData = sourceEntityManager.GetComponentData<Generated.Semantic.Traits.ActivationSwitchData>(sourceEntity);
+                        var plannerTraitData = new ActivationSwitch();
+                        UnsafeUtility.CopyStructureToPtr(ref traitData, UnsafeUtility.AddressOf(ref plannerTraitData));
+                        SetTraitOnObject(plannerTraitData, ref traitBasedObject);
+                    }
+                }
+            }
         }
 
         public void SetTraitOnObject(ITrait trait, ref TraitBasedObject traitBasedObject)
@@ -516,16 +672,18 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                 SetTraitOnObject(KeyLockTrait, ref traitBasedObject);
             else if (trait is Carrier CarrierTrait)
                 SetTraitOnObject(CarrierTrait, ref traitBasedObject);
-            else if (trait is Carriable CarriableTrait)
-                SetTraitOnObject(CarriableTrait, ref traitBasedObject);
-            else if (trait is Position PositionTrait)
-                SetTraitOnObject(PositionTrait, ref traitBasedObject);
             else if (trait is Item ItemTrait)
                 SetTraitOnObject(ItemTrait, ref traitBasedObject);
+            else if (trait is Position PositionTrait)
+                SetTraitOnObject(PositionTrait, ref traitBasedObject);
+            else if (trait is Carriable CarriableTrait)
+                SetTraitOnObject(CarriableTrait, ref traitBasedObject);
             else if (trait is ActivationSwitch ActivationSwitchTrait)
                 SetTraitOnObject(ActivationSwitchTrait, ref traitBasedObject);
             else if (trait is EscapePoint EscapePointTrait)
                 SetTraitOnObject(EscapePointTrait, ref traitBasedObject);
+            else if (trait is PlanningAgent PlanningAgentTrait)
+                SetTraitOnObject(PlanningAgentTrait, ref traitBasedObject);
             else 
                 throw new ArgumentException($"Trait {trait} of type {trait.GetType()} is not supported in this state representation.");
         }
@@ -542,16 +700,18 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                 SetTraitOnObjectAtIndex(KeyLockTrait, traitBasedObjectIndex);
             else if (trait is Carrier CarrierTrait)
                 SetTraitOnObjectAtIndex(CarrierTrait, traitBasedObjectIndex);
-            else if (trait is Carriable CarriableTrait)
-                SetTraitOnObjectAtIndex(CarriableTrait, traitBasedObjectIndex);
-            else if (trait is Position PositionTrait)
-                SetTraitOnObjectAtIndex(PositionTrait, traitBasedObjectIndex);
             else if (trait is Item ItemTrait)
                 SetTraitOnObjectAtIndex(ItemTrait, traitBasedObjectIndex);
+            else if (trait is Position PositionTrait)
+                SetTraitOnObjectAtIndex(PositionTrait, traitBasedObjectIndex);
+            else if (trait is Carriable CarriableTrait)
+                SetTraitOnObjectAtIndex(CarriableTrait, traitBasedObjectIndex);
             else if (trait is ActivationSwitch ActivationSwitchTrait)
                 SetTraitOnObjectAtIndex(ActivationSwitchTrait, traitBasedObjectIndex);
             else if (trait is EscapePoint EscapePointTrait)
                 SetTraitOnObjectAtIndex(EscapePointTrait, traitBasedObjectIndex);
+            else if (trait is PlanningAgent PlanningAgentTrait)
+                SetTraitOnObjectAtIndex(PlanningAgentTrait, traitBasedObjectIndex);
             else 
                 throw new ArgumentException($"Trait {trait} of type {trait.GetType()} is not supported in this state representation.");
         }
@@ -622,7 +782,8 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
             traitBuffer.RemoveAt(lastBufferIndex);
 
             // Update index for object with last trait in buffer
-            for (int i = 0; i < TraitBasedObjects.Length; i++)
+            var numObjects = TraitBasedObjects.Length;
+            for (int i = 0; i < numObjects; i++)
             {
                 var otherTraitBasedObject = TraitBasedObjects[i];
                 if (otherTraitBasedObject[objectTraitIndex] == lastBufferIndex)
@@ -634,7 +795,7 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
             }
 
             // Update traitBasedObject in buffer (ref is to a copy)
-            for (int i = 0; i < TraitBasedObjects.Length; i++)
+            for (int i = 0; i < numObjects; i++)
             {
                 if (traitBasedObject.Equals(TraitBasedObjects[i]))
                 {
@@ -659,11 +820,12 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
             RemoveTraitOnObject<ActivationLock>(ref traitBasedObject);
             RemoveTraitOnObject<KeyLock>(ref traitBasedObject);
             RemoveTraitOnObject<Carrier>(ref traitBasedObject);
-            RemoveTraitOnObject<Carriable>(ref traitBasedObject);
-            RemoveTraitOnObject<Position>(ref traitBasedObject);
             RemoveTraitOnObject<Item>(ref traitBasedObject);
+            RemoveTraitOnObject<Position>(ref traitBasedObject);
+            RemoveTraitOnObject<Carriable>(ref traitBasedObject);
             RemoveTraitOnObject<ActivationSwitch>(ref traitBasedObject);
             RemoveTraitOnObject<EscapePoint>(ref traitBasedObject);
+            RemoveTraitOnObject<PlanningAgent>(ref traitBasedObject);
 
             TraitBasedObjects.RemoveAt(objectIndex);
             TraitBasedObjectIds.RemoveAt(objectIndex);
@@ -728,7 +890,8 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
             traitBuffer.RemoveAt(lastBufferIndex);
 
             // Update index for object with last trait in buffer
-            for (int i = 0; i < TraitBasedObjects.Length; i++)
+            var numObjects = TraitBasedObjects.Length;
+            for (int i = 0; i < numObjects; i++)
             {
                 var otherTraitBasedObject = TraitBasedObjects[i];
                 if (otherTraitBasedObject[objectTraitIndex] == lastBufferIndex)
@@ -752,11 +915,12 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
             RemoveTraitOnObjectAtIndex<ActivationLock>(traitBasedObjectIndex);
             RemoveTraitOnObjectAtIndex<KeyLock>(traitBasedObjectIndex);
             RemoveTraitOnObjectAtIndex<Carrier>(traitBasedObjectIndex);
-            RemoveTraitOnObjectAtIndex<Carriable>(traitBasedObjectIndex);
-            RemoveTraitOnObjectAtIndex<Position>(traitBasedObjectIndex);
             RemoveTraitOnObjectAtIndex<Item>(traitBasedObjectIndex);
+            RemoveTraitOnObjectAtIndex<Position>(traitBasedObjectIndex);
+            RemoveTraitOnObjectAtIndex<Carriable>(traitBasedObjectIndex);
             RemoveTraitOnObjectAtIndex<ActivationSwitch>(traitBasedObjectIndex);
             RemoveTraitOnObjectAtIndex<EscapePoint>(traitBasedObjectIndex);
+            RemoveTraitOnObjectAtIndex<PlanningAgent>(traitBasedObjectIndex);
 
             TraitBasedObjects.RemoveAt(traitBasedObjectIndex);
             TraitBasedObjectIds.RemoveAt(traitBasedObjectIndex);
@@ -767,7 +931,8 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
 
         public NativeArray<int> GetTraitBasedObjectIndices(NativeList<int> traitBasedObjectIndices, NativeArray<ComponentType> traitFilter)
         {
-            for (var i = 0; i < TraitBasedObjects.Length; i++)
+            var numObjects = TraitBasedObjects.Length;
+            for (var i = 0; i < numObjects; i++)
             {
                 var traitBasedObject = TraitBasedObjects[i];
                 if (traitBasedObject.MatchesTraitFilter(traitFilter))
@@ -779,7 +944,8 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
 
         public NativeArray<int> GetTraitBasedObjectIndices(NativeList<int> traitBasedObjectIndices, params ComponentType[] traitFilter)
         {
-            for (var i = 0; i < TraitBasedObjects.Length; i++)
+            var numObjects = TraitBasedObjects.Length;
+            for (var i = 0; i < numObjects; i++)
             {
                 var traitBasedObject = TraitBasedObjects[i];
                 if (traitBasedObject.MatchesTraitFilter(traitFilter))
@@ -856,15 +1022,17 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                 case 4:
                     return CarrierBuffer.Reinterpret<T>();
                 case 5:
-                    return CarriableBuffer.Reinterpret<T>();
+                    return ItemBuffer.Reinterpret<T>();
                 case 6:
                     return PositionBuffer.Reinterpret<T>();
                 case 7:
-                    return ItemBuffer.Reinterpret<T>();
+                    return CarriableBuffer.Reinterpret<T>();
                 case 8:
                     return ActivationSwitchBuffer.Reinterpret<T>();
                 case 9:
                     return EscapePointBuffer.Reinterpret<T>();
+                case 10:
+                    return PlanningAgentBuffer.Reinterpret<T>();
             }
 
             return default;
@@ -884,11 +1052,12 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                 || ActivationLockBuffer.Length != rhsState.ActivationLockBuffer.Length
                 || KeyLockBuffer.Length != rhsState.KeyLockBuffer.Length
                 || CarrierBuffer.Length != rhsState.CarrierBuffer.Length
-                || CarriableBuffer.Length != rhsState.CarriableBuffer.Length
-                || PositionBuffer.Length != rhsState.PositionBuffer.Length
                 || ItemBuffer.Length != rhsState.ItemBuffer.Length
+                || PositionBuffer.Length != rhsState.PositionBuffer.Length
+                || CarriableBuffer.Length != rhsState.CarriableBuffer.Length
                 || ActivationSwitchBuffer.Length != rhsState.ActivationSwitchBuffer.Length
-                || EscapePointBuffer.Length != rhsState.EscapePointBuffer.Length)
+                || EscapePointBuffer.Length != rhsState.EscapePointBuffer.Length
+                || PlanningAgentBuffer.Length != rhsState.PlanningAgentBuffer.Length)
                 return false;
 
             var objectMap = new ObjectCorrespondence(TraitBasedObjectIds.Length, Allocator.Temp);
@@ -907,22 +1076,24 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                 || ActivationLockBuffer.Length != rhsState.ActivationLockBuffer.Length
                 || KeyLockBuffer.Length != rhsState.KeyLockBuffer.Length
                 || CarrierBuffer.Length != rhsState.CarrierBuffer.Length
-                || CarriableBuffer.Length != rhsState.CarriableBuffer.Length
-                || PositionBuffer.Length != rhsState.PositionBuffer.Length
                 || ItemBuffer.Length != rhsState.ItemBuffer.Length
+                || PositionBuffer.Length != rhsState.PositionBuffer.Length
+                || CarriableBuffer.Length != rhsState.CarriableBuffer.Length
                 || ActivationSwitchBuffer.Length != rhsState.ActivationSwitchBuffer.Length
-                || EscapePointBuffer.Length != rhsState.EscapePointBuffer.Length)
+                || EscapePointBuffer.Length != rhsState.EscapePointBuffer.Length
+                || PlanningAgentBuffer.Length != rhsState.PlanningAgentBuffer.Length)
                 return false;
 
             return TryGetObjectMapping(rhsState, objectMap);
         }
 
-        bool TryGetObjectMapping(StateData rhsState, ObjectCorrespondence objectMap)
+        internal bool TryGetObjectMapping(StateData rhsState, ObjectCorrespondence objectMap)
         {
             objectMap.Initialize(TraitBasedObjectIds, rhsState.TraitBasedObjectIds);
 
             bool statesEqual = true;
-            for (int lhsIndex = 0; lhsIndex < TraitBasedObjects.Length; lhsIndex++)
+            var numObjects = TraitBasedObjects.Length;
+            for (int lhsIndex = 0; lhsIndex < numObjects; lhsIndex++)
             {
                 var lhsId = TraitBasedObjectIds[lhsIndex].Id;
                 if (objectMap.TryGetValue(lhsId, out _)) // already matched
@@ -930,7 +1101,8 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
 
                 // todo lhsIndex to start? would require swapping rhs on assignments, though
                 bool matchFound = true;
-                for (var rhsIndex = 0; rhsIndex < rhsState.TraitBasedObjects.Length; rhsIndex++)
+
+                for (var rhsIndex = 0; rhsIndex < numObjects; rhsIndex++)
                 {
                     var rhsId = rhsState.TraitBasedObjectIds[rhsIndex].Id;
                     if (objectMap.ContainsRHS(rhsId)) // skip if already assigned todo optimize this
@@ -993,16 +1165,17 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
 
 
 
-
-
             if (traitBasedObjectLHS.ItemIndex != TraitBasedObject.Unset
                 && !ItemTraitAttributesEqual(ItemBuffer[traitBasedObjectLHS.ItemIndex], rhsState.ItemBuffer[traitBasedObjectRHS.ItemIndex]))
                 return false;
 
 
+
+
             if (traitBasedObjectLHS.ActivationSwitchIndex != TraitBasedObject.Unset
                 && !ActivationSwitchTraitAttributesEqual(ActivationSwitchBuffer[traitBasedObjectLHS.ActivationSwitchIndex], rhsState.ActivationSwitchBuffer[traitBasedObjectRHS.ActivationSwitchIndex]))
                 return false;
+
 
 
 
@@ -1019,7 +1192,7 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
         {
             return
                     one.Occupied == two.Occupied && 
-                    one.Visited == two.Visited;
+                    one.StepsToEnd == two.StepsToEnd;
         }
         
         bool ActivationLockTraitAttributesEqual(ActivationLock one, ActivationLock two)
@@ -1158,11 +1331,11 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                 }
             }
 
-            if (traitBasedObjectLHS.CarriableIndex != TraitBasedObject.Unset)
+            if (traitBasedObjectLHS.PositionIndex != TraitBasedObject.Unset)
             {
-                // The Ids to match for Carriable.CarriedBy
-                lhsRelationId = CarriableBuffer[traitBasedObjectLHS.CarriableIndex].CarriedBy.Id;
-                rhsRelationId = rhsState.CarriableBuffer[traitBasedObjectRHS.CarriableIndex].CarriedBy.Id;
+                // The Ids to match for Position.Waypoint
+                lhsRelationId = PositionBuffer[traitBasedObjectLHS.PositionIndex].Waypoint.Id;
+                rhsRelationId = rhsState.PositionBuffer[traitBasedObjectRHS.PositionIndex].Waypoint.Id;
 
                 if (lhsRelationId.Equals(ObjectId.None) ^ rhsRelationId.Equals(ObjectId.None))
                     return false;
@@ -1178,11 +1351,11 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                 }
             }
 
-            if (traitBasedObjectLHS.PositionIndex != TraitBasedObject.Unset)
+            if (traitBasedObjectLHS.CarriableIndex != TraitBasedObject.Unset)
             {
-                // The Ids to match for Position.Waypoint
-                lhsRelationId = PositionBuffer[traitBasedObjectLHS.PositionIndex].Waypoint.Id;
-                rhsRelationId = rhsState.PositionBuffer[traitBasedObjectRHS.PositionIndex].Waypoint.Id;
+                // The Ids to match for Carriable.CarriedBy
+                lhsRelationId = CarriableBuffer[traitBasedObjectLHS.CarriableIndex].CarriedBy.Id;
+                rhsRelationId = rhsState.CarriableBuffer[traitBasedObjectRHS.CarriableIndex].CarriedBy.Id;
 
                 if (lhsRelationId.Equals(ObjectId.None) ^ rhsRelationId.Equals(ObjectId.None))
                     return false;
@@ -1207,23 +1380,27 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
             // h = 3860031 + (h+y)*2779 + (h*y*2)   // from How to Hash a Set by Richard O’Keefe
             var stateHashValue = 3860031 + (397 + TraitBasedObjectIds.Length) * 2779 + (397 * TraitBasedObjectIds.Length * 2);
 
+            int bufferLength;
 
-            for (int i = 0; i < CharacterBuffer.Length; i++)
+            bufferLength = CharacterBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
             {
                 var element = CharacterBuffer[i];
                 var value = 397
                     ^ element.ID.GetHashCode();
                 stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
             }
-            for (int i = 0; i < WaypointBuffer.Length; i++)
+            bufferLength = WaypointBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
             {
                 var element = WaypointBuffer[i];
                 var value = 397
                     ^ element.Occupied.GetHashCode()
-                    ^ element.Visited.GetHashCode();
+                    ^ element.StepsToEnd.GetHashCode();
                 stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
             }
-            for (int i = 0; i < ActivationLockBuffer.Length; i++)
+            bufferLength = ActivationLockBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
             {
                 var element = ActivationLockBuffer[i];
                 var value = 397
@@ -1231,41 +1408,54 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                     ^ (int) element.ActivationB;
                 stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
             }
-            for (int i = 0; i < KeyLockBuffer.Length; i++)
+            bufferLength = KeyLockBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
             {
                 var value = 397;
                 stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
             }
-            for (int i = 0; i < CarrierBuffer.Length; i++)
+            bufferLength = CarrierBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
             {
                 var value = 397;
                 stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
             }
-            for (int i = 0; i < CarriableBuffer.Length; i++)
-            {
-                var value = 397;
-                stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
-            }
-            for (int i = 0; i < PositionBuffer.Length; i++)
-            {
-                var value = 397;
-                stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
-            }
-            for (int i = 0; i < ItemBuffer.Length; i++)
+            bufferLength = ItemBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
             {
                 var element = ItemBuffer[i];
                 var value = 397
                     ^ (int) element.Type;
                 stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
             }
-            for (int i = 0; i < ActivationSwitchBuffer.Length; i++)
+            bufferLength = PositionBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
+            {
+                var value = 397;
+                stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
+            }
+            bufferLength = CarriableBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
+            {
+                var value = 397;
+                stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
+            }
+            bufferLength = ActivationSwitchBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
             {
                 var element = ActivationSwitchBuffer[i];
                 var value = 397
                     ^ (int) element.Type;
                 stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
             }
-            for (int i = 0; i < EscapePointBuffer.Length; i++)
+            bufferLength = EscapePointBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
+            {
+                var value = 397;
+                stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
+            }
+            bufferLength = PlanningAgentBuffer.Length;
+            for (int i = 0; i < bufferLength; i++)
             {
                 var value = 397;
                 stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
@@ -1280,7 +1470,8 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                 return string.Empty;
 
             var sb = new StringBuilder();
-            for (var traitBasedObjectIndex = 0; traitBasedObjectIndex < TraitBasedObjects.Length; traitBasedObjectIndex++)
+            var numObjects = TraitBasedObjects.Length;
+            for (var traitBasedObjectIndex = 0; traitBasedObjectIndex < numObjects; traitBasedObjectIndex++)
             {
                 var traitBasedObject = TraitBasedObjects[traitBasedObjectIndex];
                 sb.AppendLine(TraitBasedObjectIds[traitBasedObjectIndex].ToString());
@@ -1309,7 +1500,7 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
 
                 traitIndex = traitBasedObject[i++];
                 if (traitIndex != TraitBasedObject.Unset)
-                    sb.AppendLine(CarriableBuffer[traitIndex].ToString());
+                    sb.AppendLine(ItemBuffer[traitIndex].ToString());
 
                 traitIndex = traitBasedObject[i++];
                 if (traitIndex != TraitBasedObject.Unset)
@@ -1317,7 +1508,7 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
 
                 traitIndex = traitBasedObject[i++];
                 if (traitIndex != TraitBasedObject.Unset)
-                    sb.AppendLine(ItemBuffer[traitIndex].ToString());
+                    sb.AppendLine(CarriableBuffer[traitIndex].ToString());
 
                 traitIndex = traitBasedObject[i++];
                 if (traitIndex != TraitBasedObject.Unset)
@@ -1326,6 +1517,10 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                 traitIndex = traitBasedObject[i++];
                 if (traitIndex != TraitBasedObject.Unset)
                     sb.AppendLine(EscapePointBuffer[traitIndex].ToString());
+
+                traitIndex = traitBasedObject[i++];
+                if (traitIndex != TraitBasedObject.Unset)
+                    sb.AppendLine(PlanningAgentBuffer[traitIndex].ToString());
 
                 sb.AppendLine();
             }
@@ -1336,23 +1531,27 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
 
     public struct StateDataContext : ITraitBasedStateDataContext<TraitBasedObject, StateEntityKey, StateData>
     {
-        internal EntityCommandBuffer.Concurrent EntityCommandBuffer;
+        public bool IsCreated;
+        internal EntityCommandBuffer.ParallelWriter EntityCommandBuffer;
         internal EntityArchetype m_StateArchetype;
         internal int JobIndex;
 
-        [ReadOnly] public BufferFromEntity<TraitBasedObject> TraitBasedObjects;
-        [ReadOnly] public BufferFromEntity<TraitBasedObjectId> TraitBasedObjectIds;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<TraitBasedObject> TraitBasedObjects;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<TraitBasedObjectId> TraitBasedObjectIds;
 
-        [ReadOnly] public BufferFromEntity<Character> CharacterData;
-        [ReadOnly] public BufferFromEntity<Waypoint> WaypointData;
-        [ReadOnly] public BufferFromEntity<ActivationLock> ActivationLockData;
-        [ReadOnly] public BufferFromEntity<KeyLock> KeyLockData;
-        [ReadOnly] public BufferFromEntity<Carrier> CarrierData;
-        [ReadOnly] public BufferFromEntity<Carriable> CarriableData;
-        [ReadOnly] public BufferFromEntity<Position> PositionData;
-        [ReadOnly] public BufferFromEntity<Item> ItemData;
-        [ReadOnly] public BufferFromEntity<ActivationSwitch> ActivationSwitchData;
-        [ReadOnly] public BufferFromEntity<EscapePoint> EscapePointData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<Character> CharacterData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<Waypoint> WaypointData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<ActivationLock> ActivationLockData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<KeyLock> KeyLockData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<Carrier> CarrierData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<Item> ItemData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<Position> PositionData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<Carriable> CarriableData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<ActivationSwitch> ActivationSwitchData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<EscapePoint> EscapePointData;
+        [ReadOnly,NativeDisableContainerSafetyRestriction] public BufferFromEntity<PlanningAgent> PlanningAgentData;
+
+        [NativeDisableContainerSafetyRestriction,ReadOnly] ObjectCorrespondence m_ObjectCorrespondence;
 
         public StateDataContext(JobComponentSystem system, EntityArchetype stateArchetype)
         {
@@ -1365,14 +1564,17 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
             ActivationLockData = system.GetBufferFromEntity<ActivationLock>(true);
             KeyLockData = system.GetBufferFromEntity<KeyLock>(true);
             CarrierData = system.GetBufferFromEntity<Carrier>(true);
-            CarriableData = system.GetBufferFromEntity<Carriable>(true);
-            PositionData = system.GetBufferFromEntity<Position>(true);
             ItemData = system.GetBufferFromEntity<Item>(true);
+            PositionData = system.GetBufferFromEntity<Position>(true);
+            CarriableData = system.GetBufferFromEntity<Carriable>(true);
             ActivationSwitchData = system.GetBufferFromEntity<ActivationSwitch>(true);
             EscapePointData = system.GetBufferFromEntity<EscapePoint>(true);
+            PlanningAgentData = system.GetBufferFromEntity<PlanningAgent>(true);
 
             m_StateArchetype = stateArchetype;
             JobIndex = 0;
+            m_ObjectCorrespondence = default;
+            IsCreated = true;
         }
 
         public StateData GetStateData(StateEntityKey stateKey)
@@ -1390,11 +1592,12 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                 ActivationLockBuffer = ActivationLockData[stateEntity],
                 KeyLockBuffer = KeyLockData[stateEntity],
                 CarrierBuffer = CarrierData[stateEntity],
-                CarriableBuffer = CarriableData[stateEntity],
-                PositionBuffer = PositionData[stateEntity],
                 ItemBuffer = ItemData[stateEntity],
+                PositionBuffer = PositionData[stateEntity],
+                CarriableBuffer = CarriableData[stateEntity],
                 ActivationSwitchBuffer = ActivationSwitchData[stateEntity],
                 EscapePointBuffer = EscapePointData[stateEntity],
+                PlanningAgentBuffer = PlanningAgentData[stateEntity],
             };
         }
 
@@ -1420,7 +1623,13 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
 
         public bool Equals(StateData x, StateData y)
         {
-            return x.Equals(y);
+            if (x.TraitBasedObjectIds.Length != y.TraitBasedObjectIds.Length)
+                return false;
+
+            if (!m_ObjectCorrespondence.IsCreated)
+                m_ObjectCorrespondence = new ObjectCorrespondence(x.TraitBasedObjectIds.Length, Allocator.Temp);
+
+            return x.TryGetObjectMapping(y, m_ObjectCorrespondence);
         }
 
         public int GetHashCode(StateData obj)
@@ -1432,28 +1641,64 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
     [DisableAutoCreation, AlwaysUpdateSystem]
     public class StateManager : JobComponentSystem, ITraitBasedStateManager<TraitBasedObject, StateEntityKey, StateData, StateDataContext>
     {
-        public ExclusiveEntityTransaction ExclusiveEntityTransaction;
+        public new EntityManager EntityManager
+        {
+            get
+            {
+                if (!m_EntityTransactionActive)
+                    BeginEntityExclusivity();
+
+                return ExclusiveEntityTransaction.EntityManager;
+            }
+        }
+
+        ExclusiveEntityTransaction m_ExclusiveEntityTransaction;
+        public ExclusiveEntityTransaction ExclusiveEntityTransaction
+        {
+            get
+            {
+                if (!m_EntityTransactionActive)
+                    BeginEntityExclusivity();
+
+                return m_ExclusiveEntityTransaction;
+            }
+        }
+
+        StateDataContext m_StateDataContext;
+        public StateDataContext StateDataContext
+        {
+            get
+            {
+                if (m_StateDataContext.IsCreated)
+                    return m_StateDataContext;
+
+                m_StateDataContext = new StateDataContext(this, m_StateArchetype);
+                return m_StateDataContext;
+            }
+        }
+
         public event Action Destroying;
 
         List<EntityCommandBuffer> m_EntityCommandBuffers;
         EntityArchetype m_StateArchetype;
+        bool m_EntityTransactionActive = false;
 
         protected override void OnCreate()
         {
-            m_StateArchetype = EntityManager.CreateArchetype(typeof(State), typeof(TraitBasedObject), typeof(TraitBasedObjectId), typeof(HashCode),
+            m_StateArchetype = base.EntityManager.CreateArchetype(typeof(State), typeof(TraitBasedObject), typeof(TraitBasedObjectId), typeof(HashCode),
                 typeof(Character),
                 typeof(Waypoint),
                 typeof(ActivationLock),
                 typeof(KeyLock),
                 typeof(Carrier),
-                typeof(Carriable),
-                typeof(Position),
                 typeof(Item),
+                typeof(Position),
+                typeof(Carriable),
                 typeof(ActivationSwitch),
-                typeof(EscapePoint));
+                typeof(EscapePoint),
+                typeof(PlanningAgent));
 
             m_EntityCommandBuffers = new List<EntityCommandBuffer>();
-            BeginEntityExclusivity();
         }
 
         protected override void OnDestroy()
@@ -1473,32 +1718,21 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
 
         public StateData CreateStateData()
         {
-            EndEntityExclusivity();
-            var stateEntity = EntityManager.CreateEntity(m_StateArchetype);
-            BeginEntityExclusivity();
-            return new StateData(this, stateEntity, true);
+            var stateEntity = ExclusiveEntityTransaction.CreateEntity(m_StateArchetype);
+            return new StateData(ExclusiveEntityTransaction, stateEntity);;
         }
 
         public StateData GetStateData(StateEntityKey stateKey, bool readWrite = false)
         {
-            return !Enabled || !EntityManager.Exists(stateKey.Entity) ?
-                default : new StateData(this, stateKey.Entity, readWrite);
+            return !Enabled || !ExclusiveEntityTransaction.Exists(stateKey.Entity) ?
+                default : new StateData(ExclusiveEntityTransaction, stateKey.Entity);
         }
 
         public void DestroyState(StateEntityKey stateKey)
         {
             var stateEntity = stateKey.Entity;
-            if (EntityManager != null && EntityManager.IsCreated && EntityManager.Exists(stateEntity))
-            {
-                EndEntityExclusivity();
-                EntityManager.DestroyEntity(stateEntity);
-                BeginEntityExclusivity();
-            }
-        }
-
-        public StateDataContext GetStateDataContext()
-        {
-            return new StateDataContext(this, m_StateArchetype);
+            if (ExclusiveEntityTransaction.Exists(stateEntity))
+                ExclusiveEntityTransaction.DestroyEntity(stateEntity);
         }
 
         public StateEntityKey GetStateDataKey(StateData stateData)
@@ -1508,28 +1742,26 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
 
         public StateData CopyStateData(StateData stateData)
         {
-            EndEntityExclusivity();
-            var copyStateEntity = EntityManager.Instantiate(stateData.StateEntity);
-            BeginEntityExclusivity();
-            return new StateData(this, copyStateEntity, true);
+            var copyStateEntity = ExclusiveEntityTransaction.Instantiate(stateData.StateEntity);
+            return new StateData(ExclusiveEntityTransaction, copyStateEntity);
         }
 
         public StateEntityKey CopyState(StateEntityKey stateKey)
         {
-            EndEntityExclusivity();
-            var copyStateEntity = EntityManager.Instantiate(stateKey.Entity);
-            BeginEntityExclusivity();
-            var stateData = GetStateData(stateKey);
+            var copyStateEntity = ExclusiveEntityTransaction.Instantiate(stateKey.Entity);
+            var stateData = new StateData(ExclusiveEntityTransaction, copyStateEntity);
             return new StateEntityKey { Entity = copyStateEntity, HashCode = stateData.GetHashCode()};
         }
 
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
-            if (!EntityManager.ExclusiveEntityTransactionDependency.IsCompleted)
-                return inputDeps;
+            var jobDependencyHandle = ExclusiveEntityTransaction.EntityManager.ExclusiveEntityTransactionDependency;
+            if (jobDependencyHandle.IsCompleted)
+            {
+                jobDependencyHandle.Complete();
+                ClearECBs();
+            }
 
-            EntityManager.ExclusiveEntityTransactionDependency.Complete();
-            ClearECBs();
             return inputDeps;
         }
 
@@ -1554,12 +1786,16 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
 
         void BeginEntityExclusivity()
         {
-            ExclusiveEntityTransaction = EntityManager.BeginExclusiveEntityTransaction();
+            m_StateDataContext = new StateDataContext(this, m_StateArchetype);
+            m_ExclusiveEntityTransaction = base.EntityManager.BeginExclusiveEntityTransaction();
+            m_EntityTransactionActive = true;
         }
 
         void EndEntityExclusivity()
         {
-            EntityManager.EndExclusiveEntityTransaction();
+            base.EntityManager.EndExclusiveEntityTransaction();
+            m_EntityTransactionActive = false;
+            m_StateDataContext = default;
         }
     }
 
@@ -1570,12 +1806,9 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
 
         public JobHandle Schedule(JobHandle inputDeps)
         {
-            var entityManager = StateManager.EntityManager;
-            inputDeps = JobHandle.CombineDependencies(inputDeps, entityManager.ExclusiveEntityTransactionDependency);
-
-            var stateDataContext = StateManager.GetStateDataContext();
+            var stateDataContext = StateManager.StateDataContext;
             var ecb = StateManager.GetEntityCommandBuffer();
-            stateDataContext.EntityCommandBuffer = ecb.ToConcurrent();
+            stateDataContext.EntityCommandBuffer = ecb.AsParallelWriter();
             var destroyStatesJobHandle = new DestroyStatesJob<StateEntityKey, StateData, StateDataContext>()
             {
                 StateDataContext = stateDataContext,
@@ -1588,6 +1821,7 @@ namespace Generated.AI.Planner.StateRepresentation.Escape
                 EntityCommandBuffer = ecb
             }.Schedule(destroyStatesJobHandle);
 
+            var entityManager = StateManager.ExclusiveEntityTransaction.EntityManager;
             entityManager.ExclusiveEntityTransactionDependency = playbackECBJobHandle;
             return playbackECBJobHandle;
         }

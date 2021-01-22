@@ -4,8 +4,10 @@
         "Unity.AI.Planner",
         "Unity.Entities",
         "Unity.Collections",
+        "Generated.AI.Planner.StateRepresentation",
         "AI.Planner.Custom",
-        "Generated.AI.Planner.StateRepresentation"
+        "Unity.Semantic.Traits",
+        "Generated.Semantic.Traits"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -13,12 +15,26 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "SEMANTIC_TRAITS_GENERATED",
+        "PLANNER_STATE_REPRESENTATION_GENERATED",
+        "PLANNER_PLANS_GENERATED"
+    ],
     "versionDefines": [
+        {
+            "name": "generated.semantic.traits",
+            "expression": "0.0",
+            "define": "SEMANTIC_TRAITS_GENERATED"
+        },
         {
             "name": "generated.ai.planner.staterepresentation",
             "expression": "0.0",
-            "define": "PLANNER_STATEREPRESENTATION_GENERATED"
+            "define": "PLANNER_STATE_REPRESENTATION_GENERATED"
+        },
+        {
+            "name": "generated.ai.planner.plans",
+            "expression": "0.0",
+            "define": "PLANNER_PLANS_GENERATED"
         }
     ],
     "noEngineReferences": false
