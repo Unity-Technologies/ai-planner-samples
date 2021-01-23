@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.unity.ai.planner": "0.3.0-preview.1",
+    "com.unity.ai.planner": "0.3.0-preview.2",
     "com.unity.ext.nunit": "1.0.5",
     "com.unity.ide.rider": "1.2.1",
     "com.unity.ide.visualstudio": "2.0.5",
