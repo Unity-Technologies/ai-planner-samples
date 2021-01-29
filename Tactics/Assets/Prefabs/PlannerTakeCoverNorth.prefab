@@ -138,8 +138,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Query:
     m_QueryGroups:
-    - m_Filters:
-      - id: 0
+    - m_Filters: []
       m_Quantifier: 0
       m_QuantifierLimit: 0
       m_QuantifierScorer:
